@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Principal";
+}
+
+<style>
+
+</style>
+
+<div class="jumbotron">
+    <h1>Trippin in</h1>
+    <p class="lead">Acesta este aplicatia studio-ului T-RIP etc niste text pe aici ca sa arate frumos cat ma gandesc ce sa pun defapt :)</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Sunt un buton &raquo;</a></p>
+    <div class="card border-dark mb-3" style="max-width: fit-content;">
+        <div class="card-header">Youtube API</div>
+        <div class="card-body">
+
+            <h4 class="card-title">Statistici despre canal</h4>
+            YouTube Subscribers
+            <div class="card-text" id="subscriberCount"></div>
+
+            YouTube Video Views
+            <div class="card-text" id="viewCount"></div>
+
+            YouTube Video Count
+            <div class="card-text" id="videoCount"></div>
+        </div>
+
+        <script>
+
+
+            const APIKey = 'AIzaSyA_60odxWTJP9vKUsF58ebUrLEmVVGe4cw';
+            const Userid = 'UCS-cRAaG-qEHjI1wSAEvVyQ';
+            const subscriberCount = document.getElementById('subscriberCount');
+            const viewCount = document.getElementById('viewCount');
+            const videoCount = document.getElementById('videoCount');
+
+
+
+            let getdata = () => {
+
+                fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${Userid}&key=${APIKey}`)
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then(data => {
+                        console.log(data);
+                        subscriberCount.innerHTML = data["items"][0].statistics.subscriberCount;
+                        viewCount.innerHTML = data["items"][0].statistics.viewCount;
+                        videoCount.innerHTML = data["items"][0].statistics.videoCount;
+
+                    })
+
+            }
+
+            getdata();
+        </script>
+
+    </div>
+   
+</div>
+<asp:ListBox runat="server"></asp:ListBox>

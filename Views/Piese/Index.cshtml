@@ -1,0 +1,40 @@
+﻿<style>
+    .buttonsForTables {
+        background-color: #0d1117;
+    }
+    .titletabele {
+    display:inline;
+    padding:0px;
+
+    }
+</style>
+
+<div class="tabelDiv">
+    <div class="buttonsForTables">
+        <h2 class="titletabele">Piese</h2>
+        <button type="button" style=" background-color: #21262d; margin-left:20px; margin-bottom:15px" class="btn btn-secondary">Adauga</button>
+        <button type="button" style=" background-color: #21262d; margin-left:20px; margin-bottom:15px" class="btn btn-secondary">Update</button>
+        <button type="button" style=" background-color: #21262d; margin-left:20px; margin-bottom:15px" class="btn btn-secondary">Sterge</button>
+        <button type="button" style=" background-color: #21262d; margin-left:20px; margin-bottom:15px" class="btn btn-secondary">Load</button>
+
+    </div>
+    <div class="TabeleNebune">
+        <table class="table table-hover">
+            <tr>
+                <th class="table-dark">Nume Piesa</th>
+                <th class="table-dark">Key</th>
+                <th class="table-dark">BPM</th>
+            </tr>
+            @foreach (var piesa in Model.Piese)
+            {
+
+                <tr>
+                    <td>@Html.ActionLink($"{piesa.Name}", "Detalii", "Piese", new { id = piesa.Id }, null) </td>
+                    <td>@piesa.Key</td>
+                    <td>@piesa.Bpm</td>
+
+                </tr>
+            }
+        </table>
+    </div>
+</div>

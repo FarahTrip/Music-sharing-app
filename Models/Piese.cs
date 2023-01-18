@@ -1,6 +1,4 @@
-﻿using Trippin_Website.Models;
-
-namespace Trippin_Website
+﻿namespace Trippin_Website
 {
     public class Piese
     {
@@ -10,7 +8,7 @@ namespace Trippin_Website
         public string Key { get; set; }
         public int Bpm { get; set; }
         public string Style { get; set; }
-        public Beat Beat { get; set; }
+
 
     }
 }

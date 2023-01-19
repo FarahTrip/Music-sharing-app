@@ -521,6 +521,10 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PieseController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.cs" />
+    <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.designer.cs">
+      <DependentUpon>202301192242575_AddedBeaturiIntoDB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -572,6 +576,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\upload-file.png" />
     <Content Include="Content\Retusuri.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -629,7 +634,8 @@
     <Content Include="Views\Piese\Detalii.cshtml" />
     <Content Include="Views\Piese\Index.cshtml" />
     <Content Include="Views\Clienti\Index.cshtml" />
-    <Content Include="Views\Upload\UploadFile.cshtml" />
+    <Content Include="Views\Upload\UploadPiesa.cshtml" />
+    <Content Include="Views\Clienti\Detalii.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
@@ -669,6 +675,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301182101402_AddingBeatIdForLinkInPiese.resx">
       <DependentUpon>202301182101402_AddingBeatIdForLinkInPiese.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301192242575_AddedBeaturiIntoDB.resx">
+      <DependentUpon>202301192242575_AddedBeaturiIntoDB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

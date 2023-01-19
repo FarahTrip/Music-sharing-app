@@ -12,12 +12,12 @@ namespace Trippin_Website.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult UploadFile()
+        public ActionResult UploadPiesa()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file)
+        public ActionResult UploadPiesa(HttpPostedFileBase file)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace Trippin_Website.Controllers
                 return View();
             }
         }
+
     }
 }
 

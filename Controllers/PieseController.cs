@@ -36,9 +36,6 @@ namespace Trippin_Website.Controllers
             {
                 return View(piese);
             }
-
         }
-
-
     }
 }

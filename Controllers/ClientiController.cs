@@ -1,17 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers
 {
     public class ClientiController : Controller
     {
-        // GET: Clienti
+        private ApplicationDbContext _context;
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+        public ClientiController()
+        {
+            _context = new ApplicationDbContext();
+
+        }
         public ActionResult Index()
         {
-            return View();
+            var clienti = _context.Clienti.Include(c => c.MembershipType).ToList();
+            return View(clienti);
+        }
+
+        [Route("Clienti/detalii/{id?}")]
+        public ActionResult Detalii(int? id)
+        {
+            var clienti = _context.Clienti.SingleOrDefault(c => c.Id == id);
+
+            if (id == null || id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(clienti);
+            }
         }
     }
 }

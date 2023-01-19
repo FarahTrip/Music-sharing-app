@@ -29,3 +29,8 @@
     margin-bottom: unset;
     padding-bottom: 0.6rem;
 }
+
+a
+{
+    text-decoration:none;
+}

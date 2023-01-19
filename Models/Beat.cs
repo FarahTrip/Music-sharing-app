@@ -8,6 +8,5 @@
         public string Key { get; set; }
         public int Bpm { get; set; }
         public string Style { get; set; }
-
     }
 }

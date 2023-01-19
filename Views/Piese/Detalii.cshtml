@@ -1,14 +1,30 @@
-﻿
-
-@{
+﻿@{
     ViewBag.Title = "Detalii";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    var fileName = "";
+    if (IsPost && Request.Files.Count > 0)
+    {
+        var fileSavePath = "";
+        var uploadedFile = Request.Files[0];
+        fileName = Path.GetFileName(uploadedFile.FileName);
+        fileSavePath = Server.MapPath("~/App_Data/PieseFolder/" + fileName);
+        uploadedFile.SaveAs(fileSavePath);
+    }
 }
 
-
-
-<h2> 
-        @Model.Name
+<h2>
+    @Model.Name
 </h2>
-
+<title>FileUpload - Single-File Example</title>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" asp-for="UploadedFile" />
+    <input type="submit" />
+    @if (IsPost && Request.Files.Count > 0)
+    {
+        <span>File uploaded!</span><br />
+    }
+    @if (IsPost && Request.Files.Count <= 0)
+    {
+        <span>No file selected!</span><br />
+    }
+</form>

@@ -8,7 +8,6 @@
         public string Key { get; set; }
         public int Bpm { get; set; }
         public string Style { get; set; }
-        public Piese Piesa { get; set; }
 
     }
 }

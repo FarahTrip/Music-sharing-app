@@ -22,6 +22,7 @@ namespace Trippin_Website.Models
     {
         public DbSet<Piese> Piese { get; set; }
         public DbSet<Client> Clienti { get; set; }
+        public DbSet<MembershipType> MembershipType { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -8,6 +8,6 @@ namespace Trippin_Website.Models
         public string Name { get; set; }
         public List<Piese> Piese { get; set; }
 
-
+        public int PieseId { get; set; }
     }
 }

@@ -1,14 +1,14 @@
-﻿@model Trippin_Website.ViewModels.songbeatartistViewModel
+﻿
 
 @{
     ViewBag.Title = "Detalii";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int ID = Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]) - 1;
+
 }
 
 
 
 <h2> 
-        @Model.Piese.ElementAt(ID).Name
+        @Model.Name
 </h2>
 

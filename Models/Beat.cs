@@ -1,4 +1,6 @@
-﻿namespace Trippin_Website.Models
+﻿using System;
+
+namespace Trippin_Website.Models
 {
     public class Beat
     {
@@ -8,5 +10,6 @@
         public string Key { get; set; }
         public int Bpm { get; set; }
         public string Style { get; set; }
+        public DateTime DateAdded { get; set; }
     }
 }

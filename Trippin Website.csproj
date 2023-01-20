@@ -537,6 +537,14 @@
     <Compile Include="Migrations\202301200023308_AddDateTimeNullable.designer.cs">
       <DependentUpon>202301200023308_AddDateTimeNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301200111379_DateAddedInBeat-uri.cs" />
+    <Compile Include="Migrations\202301200111379_DateAddedInBeat-uri.designer.cs">
+      <DependentUpon>202301200111379_DateAddedInBeat-uri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301200126183_removingUnecesaryAsigmentInDateAddedField.cs" />
+    <Compile Include="Migrations\202301200126183_removingUnecesaryAsigmentInDateAddedField.designer.cs">
+      <DependentUpon>202301200126183_removingUnecesaryAsigmentInDateAddedField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -589,6 +597,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\upload-file.png" />
+    <Content Include="Content\Images\very polite kat.png" />
     <Content Include="Content\Retusuri.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -648,6 +657,7 @@
     <Content Include="Views\Clienti\Index.cshtml" />
     <Content Include="Views\Upload\UploadPiesa.cshtml" />
     <Content Include="Views\Clienti\Detalii.cshtml" />
+    <Content Include="Views\Beaturi\Detalii.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
@@ -699,6 +709,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301200023308_AddDateTimeNullable.resx">
       <DependentUpon>202301200023308_AddDateTimeNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301200111379_DateAddedInBeat-uri.resx">
+      <DependentUpon>202301200111379_DateAddedInBeat-uri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301200126183_removingUnecesaryAsigmentInDateAddedField.resx">
+      <DependentUpon>202301200126183_removingUnecesaryAsigmentInDateAddedField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

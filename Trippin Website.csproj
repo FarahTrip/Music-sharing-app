@@ -525,6 +525,18 @@
     <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.designer.cs">
       <DependentUpon>202301192242575_AddedBeaturiIntoDB.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301192340254_AddNamePropertyIntoMembershiptype.cs" />
+    <Compile Include="Migrations\202301192340254_AddNamePropertyIntoMembershiptype.designer.cs">
+      <DependentUpon>202301192340254_AddNamePropertyIntoMembershiptype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301200011186_AddBirthDateToClients.cs" />
+    <Compile Include="Migrations\202301200011186_AddBirthDateToClients.designer.cs">
+      <DependentUpon>202301200011186_AddBirthDateToClients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301200023308_AddDateTimeNullable.cs" />
+    <Compile Include="Migrations\202301200023308_AddDateTimeNullable.designer.cs">
+      <DependentUpon>202301200023308_AddDateTimeNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -678,6 +690,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301192242575_AddedBeaturiIntoDB.resx">
       <DependentUpon>202301192242575_AddedBeaturiIntoDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301192340254_AddNamePropertyIntoMembershiptype.resx">
+      <DependentUpon>202301192340254_AddNamePropertyIntoMembershiptype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301200011186_AddBirthDateToClients.resx">
+      <DependentUpon>202301200011186_AddBirthDateToClients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301200023308_AddDateTimeNullable.resx">
+      <DependentUpon>202301200023308_AddDateTimeNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

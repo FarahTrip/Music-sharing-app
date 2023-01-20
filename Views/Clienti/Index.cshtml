@@ -54,13 +54,24 @@
             <tr>
                 <th>Nume</th>
                 <th>Este subscribed?</th>
+                <th>Tip de subscriptie</th>
                 <th>Discount%</th>
             </tr>
             @foreach (var client in Model)
             {
                 <tr>
                     <td><a href="@Url.Action("Detalii", "Clienti", new { id = client.Id })">@client.Name</a></td>
-                    <td>@client.IsSubscribed</td>
+                    <td>
+                        @if (client.IsSubscribed)
+                        {<p>Da, este un zeu! </p> }
+                        else
+                        {
+                            <p>Nu, e putin bulangiu!</p>
+                        }
+
+                    <td>
+                    @client.MembershipType.Name
+                    </td>
                     <td>@client.MembershipType.DiscoutRate%</td>
                 </tr>
             }

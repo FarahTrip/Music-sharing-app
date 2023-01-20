@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Trippin_Website.Models
 {
@@ -11,5 +12,7 @@ namespace Trippin_Website.Models
         public bool IsSubscribed { get; set; }
         public MembershipType MembershipType { get; set; }
         public byte MembershipTypeId { get; set; }
+        public DateTime? BirthDate { get; set; }
+
     }
 }

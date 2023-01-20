@@ -26,7 +26,7 @@ namespace Trippin_Website.Controllers
         [Route("Clienti/detalii/{id?}")]
         public ActionResult Detalii(int? id)
         {
-            var clienti = _context.Clienti.SingleOrDefault(c => c.Id == id);
+            var clienti = _context.Clienti.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
 
             if (id == null || id == 0)
             {

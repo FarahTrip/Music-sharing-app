@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Trippin_Website.Models;
+using Trippin_Website.ViewModels;
 
 namespace Trippin_Website.Controllers
 {
@@ -26,17 +29,76 @@ namespace Trippin_Website.Controllers
         [Route("Beaturi/detalii/{id?}")]
         public ActionResult Detalii(int? id)
         {
-            var beaturi = _context.Beaturi.SingleOrDefault(c => c.Id == id);
-
+            var beaturi = _context.Beaturi.Include(c => c.Style).SingleOrDefault(c => c.Id == id);
             if (id == null || id == 0)
             {
                 return RedirectToAction("Index");
             }
+            var viewModel = new BeatViewModel
+            {
+                Beat = beaturi,
+                Styles = _context.StyleOf.ToList()
+            };
+            return View(viewModel);
+        }
+
+        public ActionResult Edit()
+        {
+            var beaturi = _context.Beaturi.ToList();
+            return View(beaturi);
+        }
+
+
+        public ActionResult AdaugaNou()
+        {
+            var StiluriList = _context.StyleOf.ToList();
+            var viewModel = new BeatViewModel
+            {
+                Styles = StiluriList,
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        public ActionResult Creeaza(Beat Beat)
+        {
+            _context.Beaturi.Add(Beat);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+        public ActionResult Modifica(Beat Beat)
+        {
+            var CurrentDateTime = DateTime.Now;
+            var BeatInDb = _context.Beaturi.Single(c => c.Id == Beat.Id);
+            BeatInDb.Name = Beat.Name;
+            BeatInDb.Key = Beat.Key;
+            BeatInDb.Style = Beat.Style;
+            BeatInDb.Description = Beat.Description;
+            BeatInDb.Bpm = Beat.Bpm;
+            BeatInDb.Modified = CurrentDateTime;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Beaturi");
+
+
+        }
+
+        public ActionResult EditBeat(int Id)
+        {
+            var beat = _context.Beaturi.SingleOrDefault(c => c.Id == Id);
+            if (beat == null)
+            {
+                return HttpNotFound();
+            }
             else
             {
-                return View(beaturi);
-            }
+                var viewModel = new BeatViewModel
+                {
+                    Beat = beat,
+                    Styles = _context.StyleOf.ToList()
+                };
+                return View(viewModel);
 
+            }
         }
     }
 }

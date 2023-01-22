@@ -24,6 +24,9 @@ namespace Trippin_Website.Models
         public DbSet<Client> Clienti { get; set; }
         public DbSet<MembershipType> MembershipType { get; set; }
         public DbSet<Beat> Beaturi { get; set; }
+        public DbSet<StyleOf> StyleOf { get; set; }
+
+
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

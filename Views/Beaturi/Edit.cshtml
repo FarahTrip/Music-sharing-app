@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     var CurrentDateTime = DateTime.Now;
 }
 <style>
@@ -39,20 +39,28 @@
 
     a {
         text-decoration: none !important;
+
+    }
+    #EditBeatBtn:hover  {
+        background-color: #8D679E !important;
+        color: white;
+    }
+    #EditBeatBtn a:hover {
         color: white;
     }
     button a:hover {
         color: white !important
     }
+    
 </style>
 
 <div class="tabelDiv">
     <h2 class="titletabele">Beat-uri</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Beaturi")</button>
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Editeaza", "Edit", "Beaturi")</button>
+        <button type="button"  class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Beaturi")</button>
+        <button type="button"  class="btn btn-outline-info">@Html.ActionLink("Editeaza", "Edit", "Beaturi")</button>
         <button type="button" class="btn btn-outline-info">Sterge</button>
-        <button type="button" class="btn btn-outline-info">Load</button>
+        <button type="button"  class="btn btn-outline-info">Load</button>
     </div>
     <div class="TabeleNebune">
         <table class="table table-hover">
@@ -65,7 +73,11 @@
             {
                 var timeSpan = CurrentDateTime - beat.Created;
                 <tr>
-                    <td><a href="@Url.Action("Detalii", "Beaturi", new { id = beat.Id })">@beat.Name</a> @if (timeSpan.TotalDays < 1) {<span class="badge rounded-pill bg-info">Nou</span> } @if (beat.Modified != null) {<span class="badge rounded-pill bg-light">Modificat</span> } </td>
+                    <td>
+                        <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.Id })">@beat.Name</a> @if (timeSpan.TotalDays < 1)
+                        {<span class="badge rounded-pill bg-info">Nou</span>} @if (beat.Modified != null)
+                        {<span class="badge rounded-pill bg-light">Modificat</span>} <button id="EditBeatBtn" style="border-color: #8D679E;" type="button" class="btn btn-outline-danger">@Html.ActionLink("Editeaza", "EditBeat", new { id = beat.Id })</button>
+                    </td>
 
                     <td>@beat.Bpm bpm</td>
                     <td>@beat.Key</td>

@@ -1,0 +1,45 @@
+﻿
+
+@model Trippin_Website.ViewModels.BeatViewModel
+@{
+    ViewBag.Title = "AdaugaNou";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
+
+
+    @using (Html.BeginForm("Modifica", "Beaturi"))
+    {
+        <h2 style="text-align: center; display:block">Modifica beat-ul</h2>
+        @Html.HiddenFor(m => m.Beat.Created, new { @Value = DateTime.Now })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Beat.Name)
+            @Html.TextBoxFor(m => m.Beat.Name, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Beat.Key)
+            @Html.TextBoxFor(m => m.Beat.Key, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Beat.Bpm)
+            @Html.TextBoxFor(m => m.Beat.Bpm, new { @class = "form-control", @type = "number" })
+        </div>
+        <div class="form-group">
+            <label for="Description">Descriere</label>
+            @Html.TextAreaFor(m => m.Beat.Description, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label for="StyleId">Stilul</label>
+            @Html.DropDownListFor(m => m.Beat.StyleId, new SelectList(Model.Styles, "Id", "Name"), new { @class = "form-control" })
+        </div>
+        @Html.HiddenFor(m => m.Beat.Id)
+
+        <button type="submit" class="btn btn-secondary">
+            Submit
+        </button>
+
+    }
+
+</div>

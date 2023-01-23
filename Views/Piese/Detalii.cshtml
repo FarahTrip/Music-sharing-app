@@ -1,8 +1,115 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Detalii";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    var links = new List<string>() { "https://i.ibb.co/L6Zmh08/Issan-Newton-occult-magician-1.png", "https://i.ibb.co/G9PgRw0/donut-women.png", "https://i.ibb.co/9cVwD8t/gasmask-samurai.png", "https://i.ibb.co/Xk3HCn1/clow-2.png", "https://i.ibb.co/7bJr4zh/indian-aborigen.png", "https://i.ibb.co/J2R7Svb/cyborg-crab.png", "https://i.ibb.co/7kRkMJD/monkey-man-1.png", "https://i.ibb.co/WV9QyjK/monkey-man-2.png", "https://i.ibb.co/ZBDnD9C/underwater-cave.png", "https://i.ibb.co/w0pdbpL/sticky-cripsy-stripsy-on-a-dipsy-mipsy.png", "https://i.ibb.co/Y8m7Yj5/Sad-shrek-travis-scott.png", "https://i.ibb.co/KNpqdFc/hamster-god.png", "https://i.ibb.co/hy8GtG6/green-buddha-in-flames.png", "https://i.ibb.co/J7WFc8Z/cute-but-wierd-purple-chinchilla.png", "https://i.ibb.co/G3SXfWV/plague-doctor-1.png", "https://i.ibb.co/ZHtjHsT/creepy-child-1.png", "https://i.ibb.co/c8vzrYv/cursed-elmo.png", "https://i.ibb.co/j33zrtt/creepy-humanoid.png", "https://i.ibb.co/Hqgv7Ms/RA-1.png", "https://i.ibb.co/MD7wkXs/diferente.png", "https://i.ibb.co/CbnDsxm/very-polite-kat.png", "https://i.ibb.co/VxdK6Xs/humanoid-machine.png", "https://i.ibb.co/7vVFDFz/monkeygod.png", "https://i.ibb.co/4Pzrpx0/wideangle-arabic-town-2.png", "https://i.ibb.co/R35gxXC/group-of-powerful-witches-1-restored.png", "https://i.ibb.co/DCZKQVG/Child-od-the-rain-4.png", "https://i.ibb.co/nPGpRdm/purple-dimension-3.png", "https://i.ibb.co/r0wSRbN/interdimensional-train-3.png", "https://i.ibb.co/vJp0cQ8/purple-dimension-2.png", "https://i.ibb.co/fnpLvn1/purple-dimension-1.png", "https://i.ibb.co/GJZGcBG/Cute-chinchilla.png", "https://i.ibb.co/25JN9T8/crispy-strips-ocean-1.png", "https://i.ibb.co/9TRN3Cm/crystalized-mushroom.png", "https://i.ibb.co/4YP2kpS/space-cereals-2.png", "https://i.ibb.co/HK9xRDz/space-cereals.png", "https://i.ibb.co/j8NJfpm/skull-ship.png" };
+    var randomnumber = new Random();
+    var resultrandom = randomnumber.Next(0, links.Count);
 
-<h2>
-    @Model.Name
-</h2>
+    var DateTimeForConverting = Model.Piese.DateCreated;
+    string DateConvertedString = DateTimeForConverting.ToString("dd/MM/yyyy");
+
+
+
+    var CurrentPiesaId = Model.Piese.StyleId;
+    var listofStyles = new List<string>();
+    foreach (var StyleName in Model.Style)
+    {
+        listofStyles.Add(StyleName.Name);
+    }
+    var CurrentDateTime = DateTime.Now;
+    var timeSpan = CurrentDateTime - Model.Piese.DateCreated;
+}
+<style>
+    .card * {
+        text-align: center;
+        background-color: #0d1117;
+    }
+
+    .card img {
+        width: 50%;
+        height: 50%;
+        object-fit: cover;
+        margin: auto;
+    }
+</style>
+
+<div class="displayInfo" style="display: flex; justify-content: center; align-items: center; margin-top: 30px ">
+    <div class="card mb-3">
+        <h3 class="card-header">
+            @Model.Piese.Name  @if (timeSpan.TotalDays < 3)
+            {<span class="badge rounded-pill bg-info">Nou</span>}
+        </h3>
+        <div class="card-body">
+        </div>
+        <img src="@links.ElementAt(resultrandom);" alt="Alternate Text" />
+        <div class="card-body">
+            @if (Model.Piese.Description == null)
+            {
+                <p class="card-text">Nu este adaugata nici o descriere!</p>
+            }
+            else
+            {
+                <p class="card-text">@Model.Piese.Description</p>
+            }
+
+            <p style="margin-bottom: 3px">
+                @if (Model.Piese.IsBanger == true)
+
+                {<span style="margin-bottom: 0px !important" class="badge rounded-pill bg-success">Banger Alert!</span>}
+            </p>
+            <div style="background-color: #0d1117;">
+                <audio style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                    <source src="~/Content/Audio/cairo.wav" type="audio/wav" />
+                </audio>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
+            @if (Model.Piese.Key == null)
+            {
+                <li class="list-group-item">Key : Nu este setata</li>
+            }
+            else
+            {
+                <li class="list-group-item">Key : @Model.Piese.Key</li>
+            }
+
+
+            @if (Model.Style == null)
+            {
+                <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+            }
+            else
+            {
+                <li class="list-group-item">Stil : @listofStyles[CurrentPiesaId - 1]</li>
+            }
+
+            <li class="list-group-item">Seed poza : @resultrandom</li>
+        </ul>
+
+        <div class="card-footer text-muted">
+
+            @if (Model.Piese.DateCreated == null)
+            {
+                <label>Ai creat defapt acest beat?</label>
+            }
+            else
+            {
+                <label>Date created : </label>
+                <label style="display:block">~@DateConvertedString~</label>
+            }
+            @if (Model.Piese.DateModified != null)
+            {
+                var DateTimeForConverting2 = Model.Piese.DateModified;
+                string DateConvertedString2 = DateTimeForConverting2.ToString("dd/MM/yyyy");
+                string DateConvertedString3 = DateTimeForConverting2.ToString("HH:mm");
+                <label>Last Modified : </label>
+                <label style="display:block">~@DateConvertedString2 la ora @DateConvertedString3~</label>
+
+            }
+
+
+        </div>
+    </div>
+</div>

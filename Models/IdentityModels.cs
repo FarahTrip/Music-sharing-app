@@ -25,6 +25,7 @@ namespace Trippin_Website.Models
         public DbSet<MembershipType> MembershipType { get; set; }
         public DbSet<Beat> Beaturi { get; set; }
         public DbSet<StyleOf> StyleOf { get; set; }
+        public DbSet<PieseFileNames> PieseFileNames { get; set; }
 
 
 

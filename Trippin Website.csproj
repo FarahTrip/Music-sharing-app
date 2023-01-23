@@ -569,6 +569,18 @@
     <Compile Include="Migrations\202301211949055_DateCreatedNotNullable.designer.cs">
       <DependentUpon>202301211949055_DateCreatedNotNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301230056362_DateTimeToPiesePlusBooleanBanger.cs" />
+    <Compile Include="Migrations\202301230056362_DateTimeToPiesePlusBooleanBanger.designer.cs">
+      <DependentUpon>202301230056362_DateTimeToPiesePlusBooleanBanger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301232007585_AddingPieseFileNames.cs" />
+    <Compile Include="Migrations\202301232007585_AddingPieseFileNames.designer.cs">
+      <DependentUpon>202301232007585_AddingPieseFileNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301232012348_PiesaFileNamePropertyToPiesa.cs" />
+    <Compile Include="Migrations\202301232012348_PiesaFileNamePropertyToPiesa.designer.cs">
+      <DependentUpon>202301232012348_PiesaFileNamePropertyToPiesa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -610,18 +622,23 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Piese.cs" />
+    <Compile Include="Models\PieseFileNames.cs" />
     <Compile Include="Models\StyleOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\NewBeatViewModel.cs" />
+    <Compile Include="ViewModels\PieseAndPieseFileNamesViewModel.cs" />
+    <Compile Include="ViewModels\PieseStiluriViewModel.cs" />
     <Compile Include="ViewModels\songbeatartistViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Audio\cairo.wav" />
     <Content Include="Content\bootstrap-cyborg.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\cload-upload.png" />
     <Content Include="Content\Images\upload-file.png" />
     <Content Include="Content\Images\very polite kat.png" />
     <Content Include="Content\Retusuri.css" />
@@ -687,10 +704,12 @@
     <Content Include="Views\Beaturi\AdaugaNou.cshtml" />
     <Content Include="Views\Beaturi\Edit.cshtml" />
     <Content Include="Views\Beaturi\EditBeat.cshtml" />
+    <Content Include="Views\Piese\AdaugaNou.cshtml" />
+    <Content Include="Views\Upload\AddFileNameToDb.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
-    <Folder Include="UploadedFiles\" />
+    <Folder Include="Piese-Uploaded\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -759,6 +778,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301211949055_DateCreatedNotNullable.resx">
       <DependentUpon>202301211949055_DateCreatedNotNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301230056362_DateTimeToPiesePlusBooleanBanger.resx">
+      <DependentUpon>202301230056362_DateTimeToPiesePlusBooleanBanger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301232007585_AddingPieseFileNames.resx">
+      <DependentUpon>202301232007585_AddingPieseFileNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301232012348_PiesaFileNamePropertyToPiesa.resx">
+      <DependentUpon>202301232012348_PiesaFileNamePropertyToPiesa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

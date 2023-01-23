@@ -1,0 +1,46 @@
+﻿@model Trippin_Website.ViewModels.PieseStiluriViewModel
+@{
+    ViewBag.Title = "AdaugaNou";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
+
+
+    @using (Html.BeginForm("Creeaza", "Piese"))
+    {
+        <h2 style="text-align: center; display:block">Adauga o noua piesa</h2>
+        @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Name)
+            @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Key)
+            @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Bpm)
+            @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
+        </div>
+        <div class="form-group">
+            <label for="Description">Descriere</label>
+            @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label for="StyleId">Stilul</label>
+            @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
+        </div>
+        <div  class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
+            @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
+        </div>
+
+
+        <button type="submit" class="btn btn-secondary">
+            Submit
+        </button>
+
+    }
+
+</div>

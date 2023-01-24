@@ -706,6 +706,7 @@
     <Content Include="Views\Beaturi\EditBeat.cshtml" />
     <Content Include="Views\Piese\AdaugaNou.cshtml" />
     <Content Include="Views\Upload\AddFileNameToDb.cshtml" />
+    <Content Include="Views\Piese\AlegePiesa.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />

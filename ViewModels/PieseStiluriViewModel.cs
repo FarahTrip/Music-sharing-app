@@ -7,5 +7,6 @@ namespace Trippin_Website.ViewModels
     {
         public Piese Piese { get; set; }
         public List<StyleOf> Style { get; set; }
+        public List<PieseFileNames> PieseFileNames { get; set; }
     }
 }

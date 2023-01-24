@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Trippin_Website.Models;
@@ -28,7 +29,7 @@ namespace Trippin_Website.Controllers
         [Route("Piese/detalii/{id?}")]
         public ActionResult Detalii(int? id)
         {
-            var piese = _context.Piese.Include(c => c.Style).SingleOrDefault(c => c.Id == id);
+            var piese = _context.Piese.Include(c => c.Style).Include(c => c.PiesaFileName).SingleOrDefault(c => c.Id == id);
             if (id == null || id == 0)
             {
                 return RedirectToAction("Index");
@@ -36,10 +37,13 @@ namespace Trippin_Website.Controllers
             var viewModel = new PieseStiluriViewModel
             {
                 Piese = piese,
-                Style = _context.StyleOf.ToList()
+                Style = _context.StyleOf.ToList(),
+                PieseFileNames = _context.PieseFileNames.ToList()
+
             };
             return View(viewModel);
         }
+
         public ActionResult AdaugaNou()
         {
             var Stiluri = _context.StyleOf.ToList();
@@ -54,6 +58,38 @@ namespace Trippin_Website.Controllers
             _context.Piese.Add(piese);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public ActionResult ModificaFileName(Piese piese)
+        {
+            var CurrentDateTime = DateTime.Now;
+            var PiesaInDB = _context.Piese.Single(c => c.Id == piese.Id);
+
+            try
+            {
+                PiesaInDB.PiesaFileNameId = piese.PiesaFileNameId;
+                PiesaInDB.DateModified = CurrentDateTime;
+                _context.SaveChanges();
+                return RedirectToAction("Detalii", "Piese", new { piese.Id });
+            }
+            catch
+            {
+                return Content("Eroare in sloboz");
+            }
+
+        }
+        public ActionResult AlegePiesa(int? id)
+        {
+            var piese = _context.Piese.SingleOrDefault(c => c.Id == id);
+            if (id == null || id == 0)
+            {
+                return RedirectToAction("Detalii");
+            }
+            var viewModel = new PieseAndPieseFileNamesViewModel
+            {
+                Piese = piese,
+                PieseFileNames = _context.PieseFileNames.ToList()
+            };
+            return View(viewModel);
         }
     }
 }

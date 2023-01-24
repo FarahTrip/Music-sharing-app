@@ -11,12 +11,24 @@
 
 
 
-    var CurrentPiesaId = Model.Piese.StyleId;
+    var CurrentStyleId = Model.Piese.StyleId;
+    var CurrentFileId = Model.Piese.PiesaFileNameId;
+
+
+    var listofFiles = new List<string>();
+    foreach (var FileName in Model.PieseFileNames)
+    {
+        listofFiles.Add(FileName.Name);
+    }
+
+
     var listofStyles = new List<string>();
     foreach (var StyleName in Model.Style)
     {
         listofStyles.Add(StyleName.Name);
     }
+
+
     var CurrentDateTime = DateTime.Now;
     var timeSpan = CurrentDateTime - Model.Piese.DateCreated;
 }
@@ -31,6 +43,14 @@
         height: 50%;
         object-fit: cover;
         margin: auto;
+    }
+
+    button a {
+        background-color: #0d1117;
+    }
+    button a:hover {
+        color: white !important;
+        background-color: #93c !important;
     }
 </style>
 
@@ -53,17 +73,16 @@
                 <p class="card-text">@Model.Piese.Description</p>
             }
 
+
+
             <p style="margin-bottom: 3px">
                 @if (Model.Piese.IsBanger == true)
 
                 {<span style="margin-bottom: 0px !important" class="badge rounded-pill bg-success">Banger Alert!</span>}
             </p>
-            <div style="background-color: #0d1117;">
-                <audio style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                    <source src="~/Content/Audio/cairo.wav" type="audio/wav" />
-                </audio>
-            </div>
+       
         </div>
+        <button type="button" class="btn btn-outline-info"><a style="text-b" href="@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })">Alege Piesa</a> </button>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
             @if (Model.Piese.Key == null)
@@ -82,11 +101,33 @@
             }
             else
             {
-                <li class="list-group-item">Stil : @listofStyles[CurrentPiesaId - 1]</li>
+                <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+
+            }
+        <div style="background-color: #0d1117;">
+            @if (Model.Piese.PiesaFileName != null)
+            {
+                <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                    <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                </audio>
             }
 
-            <li class="list-group-item">Seed poza : @resultrandom</li>
-        </ul>
+        </div>   
+            ----------------------------------------------------------------------------------
+    
+
+                @if (Model.Piese.PiesaFileNameId != null)
+                {
+                   <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>  
+            }
+            else
+            {
+                <li> Nu ai selectat inca fisierul!</li>
+            }
+                ----------------------------------------------------------------------------------
+                <li class="list-group-item">Seed poza : @resultrandom</li>
+            </ul>
+
 
         <div class="card-footer text-muted">
 

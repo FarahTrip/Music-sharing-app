@@ -23,7 +23,16 @@ namespace Trippin_Website.Controllers
         public ActionResult Index()
         {
             var piese = _context.Piese.ToList();
-            return View(piese);
+            var Stiluri = _context.StyleOf.ToList();
+            var PieseFileNames = _context.PieseFileNames.ToList();
+            var pieseModel = new PieseAllViewModel()
+            {
+                Piese = piese,
+                PieseFileNames = PieseFileNames,
+                Stiluri = Stiluri,
+            };
+
+            return View(pieseModel);
         }
 
         [Route("Piese/detalii/{id?}")]
@@ -90,6 +99,47 @@ namespace Trippin_Website.Controllers
                 PieseFileNames = _context.PieseFileNames.ToList()
             };
             return View(viewModel);
+        }
+
+        public ActionResult Modifica()
+        {
+            var piese = _context.Piese.ToList();
+            var Stiluri = _context.StyleOf.ToList();
+            var PieseFileNames = _context.PieseFileNames.ToList();
+            var pieseModel = new PieseAllViewModel()
+            {
+                Piese = piese,
+                PieseFileNames = PieseFileNames,
+                Stiluri = Stiluri,
+            };
+
+            return View(pieseModel);
+        }
+
+        public ActionResult ModificaPiesa(int id)
+        {
+            var piesa = _context.Piese.SingleOrDefault(c => c.Id == id);
+            var stiluri = _context.StyleOf.ToList();
+            var Model = new PieseStiluriViewModel()
+            {
+                Piese = piesa,
+                Style = stiluri
+            };
+            return View(Model);
+        }
+        public ActionResult ModificaSaved(PieseStiluriViewModel PiesaModel)
+        {
+            var CurrentDateTime = DateTime.Now;
+            var PieseInDb = _context.Piese.Single(c => c.Id == PiesaModel.Piese.Id);
+            PieseInDb.Name = PiesaModel.Piese.Name;
+            PieseInDb.Key = PiesaModel.Piese.Key;
+            PieseInDb.Style = PiesaModel.Piese.Style;
+            PieseInDb.Description = PiesaModel.Piese.Description;
+            PieseInDb.Bpm = PiesaModel.Piese.Bpm;
+            PieseInDb.DateModified = CurrentDateTime;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Piese");
+
         }
     }
 }

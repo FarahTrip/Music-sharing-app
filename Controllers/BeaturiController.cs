@@ -79,7 +79,6 @@ namespace Trippin_Website.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Beaturi");
 
-
         }
 
         public ActionResult EditBeat(int Id)

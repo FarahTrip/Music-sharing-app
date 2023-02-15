@@ -1,0 +1,44 @@
+﻿
+@model Trippin_Website.ViewModels.PieseStiluriViewModel
+
+@{
+    ViewBag.Title = "AdaugaNou";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
+
+
+    @using (Html.BeginForm("ModificaSaved", "Piese"))
+    {
+        <h2 style="text-align: center; display:block">Modifica beat-ul</h2>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Name)
+            @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Key)
+            @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Piese.Bpm)
+            @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
+        </div>
+        <div class="form-group">
+            <label for="Description">Descriere</label>
+            @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label for="StyleId">Stilul</label>
+            @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
+        </div>
+        @Html.HiddenFor(m => m.Piese.Id)
+
+        <button type="submit" class="btn btn-secondary">
+            Submit
+        </button>
+
+    }
+
+</div>

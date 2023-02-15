@@ -1,5 +1,7 @@
 ﻿@{ 
     var CurrentDateTime = DateTime.Now;
+    var Stiluri = Model.Stiluri;
+    var PieseFileNames = Model.PieseFileNames;
 }
 
 <style>
@@ -46,7 +48,7 @@
     <h2 class="titletabele">Piese</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
-        <button type="button" class="btn btn-outline-info">Update</button>
+        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
         <button type="button" class="btn btn-outline-info">Sterge</button>
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
     </div>
@@ -56,8 +58,10 @@
                 <th>Nume Piesa</th>
                 <th>Key</th>
                 <th>BPM</th>
-            </tr>
-            @foreach (var piesa in Model)
+                <th>Stil</th>
+                <th>Nume Fisier</th>
+            </tr> 
+            @foreach (var piesa in Model.Piese)
             {
                 var timeSpan = CurrentDateTime - piesa.DateCreated;
                 <tr>
@@ -69,6 +73,15 @@
                     </td>
                     <td>@piesa.Key</td>
                     <td>@piesa.Bpm</td>
+                    <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                    @if (piesa.PiesaFileNameId == null)
+                    {
+                        <td>Nu este selectat fisier!</td>
+                    }
+                    else
+                    {
+                        <td>@Model.PieseFileNames[piesa.PiesaFileNameId - 1].Name</td>
+                    }
                 </tr>
             }
         </table>

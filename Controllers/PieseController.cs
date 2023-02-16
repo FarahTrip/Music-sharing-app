@@ -62,6 +62,8 @@ namespace Trippin_Website.Controllers
             };
             return View(viewModel);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Creeaza(Piese piese)
         {
             if (!ModelState.IsValid)
@@ -125,16 +127,20 @@ namespace Trippin_Website.Controllers
             return View(pieseModel);
         }
         //----------------------------------------------------------------------- come back here 
+
+
         public ActionResult ModificaPiesa(int id)
         {
+
             if (!ModelState.IsValid)
             {
-
-                var ModelForValidation = new PieseStiluriViewModel()
+                var piesaForValidation = _context.Piese.SingleOrDefault(c => c.Id == id);
+                var ModelForValidation = new PieseStiluriViewModel
                 {
-
+                    Piese = piesaForValidation,
+                    Style = _context.StyleOf.ToList()
                 };
-
+                return View(ModelForValidation);
             }
             var piesa = _context.Piese.SingleOrDefault(c => c.Id == id);
             var stiluri = _context.StyleOf.ToList();
@@ -145,6 +151,8 @@ namespace Trippin_Website.Controllers
             };
             return View(Model);
         }
+
+        [ValidateAntiForgeryToken]
         public ActionResult ModificaSaved(PieseStiluriViewModel PiesaModel)
         {
             var CurrentDateTime = DateTime.Now;

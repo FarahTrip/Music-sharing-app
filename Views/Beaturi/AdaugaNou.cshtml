@@ -4,6 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+<style>
+    .field-validation-error {
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #c00
+    }
+
+    .input-validation-error {
+        border: 2px solid rgb(237, 36, 29, 0.91);
+    }
+</style>
 
 <div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
@@ -15,14 +27,17 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Beat.Name)
             @Html.TextBoxFor(m => m.Beat.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Beat.Name)
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Beat.Key)
             @Html.TextBoxFor(m => m.Beat.Key, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Beat.Key)
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Beat.Bpm)
             @Html.TextBoxFor(m => m.Beat.Bpm, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(m => m.Beat.Bpm)
         </div>
         <div class="form-group">
             <label for="Description">Descriere</label>
@@ -30,14 +45,21 @@
         </div>
         <div class="form-group">
             <label for="StyleId">Stilul</label>
-            @Html.DropDownListFor(m => m.Beat.StyleId, new SelectList(Model.Styles, "Id", "Name"), new { @class = "form-control"})
+            @Html.DropDownListFor(m => m.Beat.StyleId, new SelectList(Model.Styles, "Id", "Name"), new { @class = "form-control" })
         </div>
-
+        @Html.AntiForgeryToken()
 
         <button type="submit" class="btn btn-secondary">
             Submit
         </button>
 
+
+
+    }
+
+    @section scripts
+{
+        @Scripts.Render("~/bundles/jqueryval")
     }
 
 </div>

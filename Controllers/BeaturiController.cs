@@ -51,6 +51,7 @@ namespace Trippin_Website.Controllers
 
         public ActionResult AdaugaNou()
         {
+
             var StiluriList = _context.StyleOf.ToList();
             var viewModel = new BeatViewModel
             {
@@ -59,8 +60,18 @@ namespace Trippin_Website.Controllers
             return View(viewModel);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Creeaza(Beat Beat)
         {
+            if (!ModelState.IsValid)
+            {
+                var Stiluri = _context.StyleOf.ToList();
+                var viewModelForState = new BeatViewModel
+                {
+                    Styles = Stiluri,
+                };
+                return View("AdaugaNou", viewModelForState);
+            }
             _context.Beaturi.Add(Beat);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -78,7 +89,6 @@ namespace Trippin_Website.Controllers
             BeatInDb.Modified = CurrentDateTime;
             _context.SaveChanges();
             return RedirectToAction("Index", "Beaturi");
-
         }
 
         public ActionResult EditBeat(int Id)

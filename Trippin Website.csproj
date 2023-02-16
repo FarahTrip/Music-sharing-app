@@ -585,6 +585,10 @@
     <Compile Include="Migrations\202302161241277_RequiredFieldOnKey.designer.cs">
       <DependentUpon>202302161241277_RequiredFieldOnKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302161509252_BeaturiValidationTags.cs" />
+    <Compile Include="Migrations\202302161509252_BeaturiValidationTags.designer.cs">
+      <DependentUpon>202302161509252_BeaturiValidationTags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -800,6 +804,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302161241277_RequiredFieldOnKey.resx">
       <DependentUpon>202302161241277_RequiredFieldOnKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302161509252_BeaturiValidationTags.resx">
+      <DependentUpon>202302161509252_BeaturiValidationTags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

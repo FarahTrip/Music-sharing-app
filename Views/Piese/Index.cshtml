@@ -1,7 +1,6 @@
 ﻿@{ 
     var CurrentDateTime = DateTime.Now;
     var Stiluri = Model.Stiluri;
-    var PieseFileNames = Model.PieseFileNames;
 }
 
 <style>
@@ -59,7 +58,6 @@
                 <th>Key</th>
                 <th>BPM</th>
                 <th>Stil</th>
-                <th>Nume Fisier</th>
             </tr> 
             @foreach (var piesa in Model.Piese)
             {
@@ -74,14 +72,6 @@
                     <td>@piesa.Key</td>
                     <td>@piesa.Bpm</td>
                     <td>@Stiluri[piesa.StyleId - 1].Name</td>
-                    @if (piesa.PiesaFileNameId == null)
-                    {
-                        <td>Nu este selectat fisier!</td>
-                    }
-                    else
-                    {
-                        <td>@Model.PieseFileNames[piesa.PiesaFileNameId - 1].Name</td>
-                    }
                 </tr>
             }
         </table>

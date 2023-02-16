@@ -64,6 +64,15 @@ namespace Trippin_Website.Controllers
         }
         public ActionResult Creeaza(Piese piese)
         {
+            if (!ModelState.IsValid)
+            {
+                var PieseModel = new PieseStiluriViewModel()
+                {
+                    Piese = piese,
+                    Style = _context.StyleOf.ToList(),
+                };
+                return View("AdaugaNou", PieseModel);
+            }
             _context.Piese.Add(piese);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -115,9 +124,18 @@ namespace Trippin_Website.Controllers
 
             return View(pieseModel);
         }
-
+        //----------------------------------------------------------------------- come back here 
         public ActionResult ModificaPiesa(int id)
         {
+            if (!ModelState.IsValid)
+            {
+
+                var ModelForValidation = new PieseStiluriViewModel()
+                {
+
+                };
+
+            }
             var piesa = _context.Piese.SingleOrDefault(c => c.Id == id);
             var stiluri = _context.StyleOf.ToList();
             var Model = new PieseStiluriViewModel()

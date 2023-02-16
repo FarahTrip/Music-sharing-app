@@ -35,3 +35,7 @@ a
     text-decoration:none;
 }
 
+.field-validation-error {
+    color: #c00 !important
+}
+

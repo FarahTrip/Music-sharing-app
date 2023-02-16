@@ -581,6 +581,10 @@
     <Compile Include="Migrations\202301232012348_PiesaFileNamePropertyToPiesa.designer.cs">
       <DependentUpon>202301232012348_PiesaFileNamePropertyToPiesa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302161241277_RequiredFieldOnKey.cs" />
+    <Compile Include="Migrations\202302161241277_RequiredFieldOnKey.designer.cs">
+      <DependentUpon>202302161241277_RequiredFieldOnKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -793,6 +797,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301232012348_PiesaFileNamePropertyToPiesa.resx">
       <DependentUpon>202301232012348_PiesaFileNamePropertyToPiesa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302161241277_RequiredFieldOnKey.resx">
+      <DependentUpon>202302161241277_RequiredFieldOnKey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

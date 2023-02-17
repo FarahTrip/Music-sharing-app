@@ -70,6 +70,7 @@ namespace Trippin_Website.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             _Context.Piese.Remove(piesa);
+            _Context.SaveChanges();
         }
     }
 }

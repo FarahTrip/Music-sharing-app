@@ -532,6 +532,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\API\BeaturiAPIController.cs" />
     <Compile Include="Controllers\API\PieseAPIController.cs" />
     <Compile Include="Controllers\ArtistiController.cs" />
     <Compile Include="Controllers\BeaturiController.cs" />
@@ -740,6 +741,7 @@
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
     <Folder Include="Piese-Uploaded\" />
+    <Folder Include="Views\BeaturiAPI\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

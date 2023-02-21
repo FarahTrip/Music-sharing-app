@@ -64,7 +64,7 @@ namespace Trippin_Website.Controllers.API
             _context.SaveChanges();
         }
 
-
+        [HttpDelete]
         public IHttpActionResult DeleteBeat(int id)
         {
             var beatToDelete = _context.Beaturi.SingleOrDefault(c => c.Id == id);

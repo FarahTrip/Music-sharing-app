@@ -1,15 +1,34 @@
-﻿@{ 
+﻿@{
     var CurrentDateTime = DateTime.Now;
     var Stiluri = Model.Stiluri;
 }
 
 <style>
- 
+    .TabeleNebune
+    {
+        height: 560px;
+    }
+
+    .dataTables_length {
+        display: inline;
+        background-color: #0d1117;
+        width: fit-content;
+    }
+
+    #Piese_wrapper {
+        background-color: #0d1117;
+    }
+
+    #Piese_filter {
+        display: inline;
+        float: right;
+        background-color: #0d1117;
+    }
     .buttonsForTables {
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: center; 
-        align-items: center; 
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
     }
 
     .titletabele {
@@ -17,29 +36,43 @@
         padding: 20px;
         color: white;
     }
+
     table {
-        width: 100%; 
+        width: 100%;
     }
+
     th, td {
         padding: 8px;
         text-align: left;
         border-bottom: 1px solid #726285;
     }
+
     th {
         background-color: #21262d;
         color: white;
     }
+
     .btn {
         margin: 8px;
         background-color: #21262d;
         color: white;
     }
+
     a {
         text-decoration: none !important;
         color: white;
     }
+
     button a:hover {
         color: white !important
+    }
+
+    #EditButton {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+        height: 30px;
+        padding-top: 0px;
+        padding-bottom: 0px;
     }
 </style>
 
@@ -48,32 +81,48 @@
     <div class="buttonsForTables" style="background-color: #0d1117">
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
-        <button type="button" class="btn btn-outline-info">Sterge</button>
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
     </div>
     <div class="TabeleNebune">
-        <table class="table table-hover">
-            <tr>
-                <th>Nume Piesa</th>
-                <th>Key</th>
-                <th>BPM</th>
-                <th>Stil</th>
-            </tr> 
-            @foreach (var piesa in Model.Piese)
-            {
-                var timeSpan = CurrentDateTime - piesa.DateCreated;
+        <table id="Piese" class="table table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
-                        {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
-                        {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
-                        {<span class="badge rounded-pill bg-success">Banger</span>}
-                    </td>
-                    <td>@piesa.Key</td>
-                    <td>@piesa.Bpm</td>
-                    <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                    <th>Nume Piesa</th>
+                    <th>Key</th>
+                    <th>BPM</th>
+                    <th>Stil</th>
+
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var piesa in Model.Piese)
+                {
+                    var timeSpan = CurrentDateTime - piesa.DateCreated;
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
+                            {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
+                            {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
+                            {<span class="badge rounded-pill bg-success">Banger</span>}
+
+                        </td>
+                        <td>@piesa.Key</td>
+                        <td>@piesa.Bpm</td>
+                        <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </div>
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $("#Piese").DataTable();
+          
+        });
+    </script>
+}

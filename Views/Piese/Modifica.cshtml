@@ -65,29 +65,67 @@
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
     </div>
     <div class="TabeleNebune">
-        <table class="table table-hover">
-            <tr>
-                <th>Nume Piesa</th>
-                <th>Key</th>
-                <th>BPM</th>
-                <th>Stil</th>
-            </tr>
-            @foreach (var piesa in Model.Piese)
-            {
-                var timeSpan = CurrentDateTime - piesa.DateCreated;
+        <table id="Piese"class="table table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
-                        {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
-                        {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
-                        {<span class="badge rounded-pill bg-success">Banger</span>}
-                    <button id="EditButton" type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "ModificaPiesa", new { id = piesa.Id })</button>
-                    </td>
-                    <td>@piesa.Key</td>
-                    <td>@piesa.Bpm</td>
-                    <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                    <th>Nume Piesa</th>
+                    <th>Key</th>
+                    <th>BPM</th>
+                    <th>Stil</th>
+                    <th>Modifica</th>
+                    <th>Sterge</th>
+
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var piesa in Model.Piese)
+                {
+                    var timeSpan = CurrentDateTime - piesa.DateCreated;
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
+                            {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
+                            {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
+                            {<span class="badge rounded-pill bg-success">Banger</span>}
+
+                        </td>
+                        <td>@piesa.Key</td>
+                        <td>@piesa.Bpm</td>
+                        <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                        <td>
+                            <button id="EditButton" type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "ModificaPiesa", new { id = piesa.Id })</button>
+                        </td>
+                        <td><button data-piese-id="@piesa.Id" id="EditButton" type="button" class="btn btn-danger sterge-btn">Sterge</button></td>
+
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
-</div>
+</div> 
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $("#Piese").DataTable();
+            $("#Piese .sterge-btn").on("click", function ()       
+            {
+                var button = $(this);
+
+                if (confirm("Vrei sa stergi piesa?"))
+                {
+                    $.ajax({
+                        url: "/API/PieseAPI/" + $(this).attr("data-piese-id"),
+                        method: "DELETE",
+                        contentType: 'application/json',
+                        success: function () {
+                            button.parents("tr").remove();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    }

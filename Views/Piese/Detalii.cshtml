@@ -31,6 +31,7 @@
 
     var CurrentDateTime = DateTime.Now;
     var timeSpan = CurrentDateTime - Model.Piese.DateCreated;
+
 }
 <style>
     .card * {
@@ -46,111 +47,165 @@
     }
 
     button a {
-        background-color: #0d1117;
+       
     }
-    button a:hover {
-        color: white !important;
-        background-color: #93c !important;
+
+    body {
+        background-image: url('/Content/Images/linesDark2.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
     }
+
+
 </style>
 
-<div class="displayInfo" style="display: flex; justify-content: center; align-items: center; margin-top: 30px ">
-    <div class="card mb-3">
-        <h3 class="card-header">
-            @Model.Piese.Name  @if (timeSpan.TotalDays < 3)
-            {<span class="badge rounded-pill bg-info">Nou</span>}
-        </h3>
-        <div class="card-body">
-        </div>
-        <img src="@links.ElementAt(resultrandom);" alt="Alternate Text" />
-        <div class="card-body">
-            @if (Model.Piese.Description == null)
-            {
-                <p class="card-text">Nu este adaugata nici o descriere!</p>
-            }
-            else
-            {
-                <p class="card-text">@Model.Piese.Description</p>
-            }
 
+<body>
 
+    <div class="BackGroundImageContent">
+        <div class="displayInfo" style="display: flex; justify-content: center; align-items: center; margin-top: 30px ">
+            <div class="card mb-3">
+                <h3 class="card-header">
+                    @Model.Piese.Name  @if (timeSpan.TotalDays < 3)
+                    {<span class="badge rounded-pill bg-info">Nou</span>}
+                </h3>
+                <div class="card-body">
+                </div>
+                <img src="@links.ElementAt(resultrandom);" alt="Alternate Text" />
+                <div class="card-body">
 
-            <p style="margin-bottom: 3px">
-                @if (Model.Piese.IsBanger == true)
+                    @{
+                        var description = Model.Piese.Description.Replace("\n", "<br/>");
+                        var lines = description.Split(new string[] { "<br/>" }, StringSplitOptions.None).Length;
+                    }
 
-                {<span style="margin-bottom: 0px !important" class="badge rounded-pill bg-success">Banger Alert!</span>}
-            </p>
-       
-        </div>
-        <button type="button" class="btn btn-outline-info"><a style="text-b" href="@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })">Alege Piesa</a> </button>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
-            @if (Model.Piese.Key == null)
-            {
-                <li class="list-group-item">Key : Nu este setata</li>
-            }
-            else
-            {
-                <li class="list-group-item">Key : @Model.Piese.Key</li>
-            }
+                    @if (lines > 4)
+                    {
+                        <p class="card-text description" id="description">@Html.Raw(description)</p>
+                        <a href="#" class="show-more-link" onclick="document.querySelector('.card-text.description').classList.toggle('full'); console.log('Clicked!'); return false;">Arata mai mult</a>
+                    }
+                    else
+                    {
+                        <p class="card-text description full" id="description">@Html.Raw(description)</p>
+                    }
 
+                    <p style="margin-bottom: 3px">
+                        @if (Model.Piese.IsBanger == true)
 
-            @if (Model.Style == null)
-            {
-                <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
-            }
-            else
-            {
-                <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+                        {<span style="margin-bottom: 0px !important" class="badge rounded-pill bg-success">Banger Alert!</span>}
+                    </p>
 
-            }
-        <div style="background-color: #0d1117;">
-            @if (Model.Piese.PiesaFileName != null)
-            {
-                <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                    <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
-                </audio>
-            }
-
-        </div>   
-            ----------------------------------------------------------------------------------
-    
-
-                @if (Model.Piese.PiesaFileNameId != null)
+                </div>
+                @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
                 {
-                   <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>  
-            }
-            else
-            {
-                <li> Nu ai selectat inca fisierul!</li>
-            }
-                ----------------------------------------------------------------------------------
-                <li class="list-group-item">Seed poza : @resultrandom</li>
-            </ul>
+                    <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })'">Alege piesa</button>
+                }
+                else
+                {
+            <button type="button" class="btn btn-outline-info" onclick="if(confirm('Nu ai drepturi sa schimbi piesa dar merci de incercare tho!')) { } else { event.preventDefault(); }">Alege piesa</button>
+                }
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
+                    @if (Model.Piese.Key == null)
+                    {
+                        <li class="list-group-item">Key : Nu este setata</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Key : @Model.Piese.Key</li>
+                    }
 
 
-        <div class="card-footer text-muted">
+                    @if (Model.Style == null)
+                    {
+                        <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
 
-            @if (Model.Piese.DateCreated == null)
-            {
-                <label>Ai creat defapt acest beat?</label>
-            }
-            else
-            {
-                <label>Date created : </label>
-                <label style="display:block">~@DateConvertedString~</label>
-            }
-            @if (Model.Piese.DateModified != null)
-            {
-                var DateTimeForConverting2 = Model.Piese.DateModified;
-                string DateConvertedString2 = DateTimeForConverting2.ToString("dd/MM/yyyy");
-                string DateConvertedString3 = DateTimeForConverting2.ToString("HH:mm");
-                <label>Last Modified : </label>
-                <label style="display:block">~@DateConvertedString2 la ora @DateConvertedString3~</label>
+                    }
+                    <div style="background-color: #0d1117;">
+                        @if (Model.Piese.PiesaFileName != null)
+                        {
 
-            }
+                            if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
+                            {
+                                <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                                    <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                                </audio>
+                            }
+                            else
+                            {
+                    <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                        <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                    </audio>
+                            }
+
+                        }
+
+                    </div>
+                    ------------------------------------------------------------------------------------------
 
 
+                    @if (Model.Piese.PiesaFileNameId != null)
+                    {
+                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
+                        {
+                            <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>
+                        }
+                        else
+                        {
+                            <br />
+                            @Model.Piese.PiesaFileName.Name
+                            <br />
+                        }
+                    }
+                    else
+                    {
+                        <li> Nu ai selectat inca fisierul!</li>
+                    }
+                    ------------------------------------------------------------------------------------------
+                    <li class="list-group-item">Seed poza : @resultrandom</li>
+                </ul>
+
+
+                <div class="card-footer text-muted">
+
+                    @if (Model.Piese.DateCreated == null)
+                    {
+                        <label>Ai creat defapt acest beat?</label>
+                    }
+                    else
+                    {
+                        <label>Date created : </label>
+                        <label style="display:block">~@DateConvertedString~</label>
+                    }
+                    @if (Model.Piese.DateModified != null)
+                    {
+                        var DateTimeForConverting2 = Model.Piese.DateModified;
+                        string DateConvertedString2 = DateTimeForConverting2.ToString("dd/MM/yyyy");
+                        string DateConvertedString3 = DateTimeForConverting2.ToString("HH:mm");
+                        <label>Last Modified : </label>
+                        <label style="display:block">~@DateConvertedString2 la ora @DateConvertedString3~</label>
+
+                    }
+
+
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</body>
+
+<script>
+    var description = document.getElementById('description');
+    var lineHeight = parseInt(window.getComputedStyle(description).getPropertyValue('line-height'));
+    var height = parseInt(window.getComputedStyle(description).getPropertyValue('height'));
+    var numLines = height / lineHeight;
+    if (numLines < 4) {
+        document.querySelector('.show-more-link').style.display = 'none';
+    } else {
+        document.querySelector('.show-more-link').style.display = 'block';
+    }
+</script>

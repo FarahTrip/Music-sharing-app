@@ -1,87 +1,39 @@
-﻿@{
+﻿
+
+@{
+
     var CurrentDateTime = DateTime.Now;
     var Stiluri = Model.Stiluri;
+
 }
 
 <style>
-    .TabeleNebune
-    {
-        height: 560px;
-    }
 
-    .dataTables_length {
-        display: inline;
-        background-color: #0d1117;
-        width: fit-content;
-    }
-
-    #Piese_wrapper {
-        background-color: #0d1117;
-    }
-
-    #Piese_filter {
-        display: inline;
-        float: right;
-        background-color: #0d1117;
-    }
-    .buttonsForTables {
+    .container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
     }
 
-    .titletabele {
-        text-align: center;
-        padding: 20px;
-        color: white;
+    .card {
+        margin-right: 20px;
     }
 
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #726285;
-    }
-
-    th {
-        background-color: #21262d;
-        color: white;
-    }
-
-    .btn {
-        margin: 8px;
-        background-color: #21262d;
-        color: white;
-    }
-
-    a {
-        text-decoration: none !important;
-        color: white;
-    }
-
-    button a:hover {
-        color: white !important
-    }
-
-    #EditButton {
-        margin-top: 0px !important;
-        margin-bottom: 0px !important;
-        height: 30px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-    }
 </style>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="tabelDiv">
     <h2 class="titletabele">Piese</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
+        @if (User.IsInRole("Admin"))
+        {
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
+        }
+        else
+            {
+    <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
+            }
     </div>
     <div class="TabeleNebune">
         <table id="Piese" class="table table-hover">
@@ -90,6 +42,7 @@
                     <th>Nume Piesa</th>
                     <th>Key</th>
                     <th>BPM</th>
+                    <th>Date Created</th>
                     <th>Stil</th>
 
                 </tr>
@@ -100,6 +53,10 @@
                     var timeSpan = CurrentDateTime - piesa.DateCreated;
                     <tr>
                         <td>
+                            @{ 
+                                var DateFormater = piesa.DateCreated;
+                                string DateFormated = DateFormater.ToString("dd/MM/yyyy");
+                            } 
                             <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
                             {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
                             {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
@@ -108,6 +65,7 @@
                         </td>
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
+                        <td>@DateFormated</td>
                         <td>@Stiluri[piesa.StyleId - 1].Name</td>
                     </tr>
                 }
@@ -119,10 +77,20 @@
 @section scripts
 {
 
-    <script>
-        $(document).ready(function () {
-            $("#Piese").DataTable();
-          
+<script>
+    $(document).ready(function () {
+        $("#Piese").DataTable({
+            "order": [[3, "desc"]],
+            language: {
+                lengthMenu: 'Arata _MENU_ piese',
+                search: 'Cauta :',
+                info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
+                paginate: {
+                    previous: 'Pagina anterioara', 
+                    next: 'Pagina urmatoare' 
+                },
+            }
         });
-    </script>
+    });
+</script>
 }

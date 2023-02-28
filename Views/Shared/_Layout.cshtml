@@ -7,6 +7,21 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
+<style>
+    #RegisterBtn
+    {
+        display: inline-block;
+    }
+    #LoginBtn
+    {
+        display: inline;
+      
+    }
+    .nav navbar-nav
+    {
+        background-color: red;
+    }
+</style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -18,32 +33,74 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link active" @Html.ActionLink("Home", "Index", "Home")
-                            <span class="visually-hidden">(current)</span>
-                        </a>
+                <span class="visually-hidden">(current)</span>
+            </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @Html.ActionLink("Piese", "Index", "Piese")</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @Html.ActionLink("Beat-uri", "Index", "Beaturi")</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @Html.ActionLink("Artisti", "Contact", "Home")</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @Html.ActionLink("Clienti", "Index", "Clienti")</a>
-                    </li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Piese")">
+                                <span>Piese</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Beaturi")">
+                                <span>Beat-uri</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Contact", "Home")">
+                                <span>Artisti</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Clienti")">
+                                <span>Clienti</span>
+                            </a>
+                        </li>
+                    }
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-sm-2" type="search" placeholder="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form>
+
+
+                @using Microsoft.AspNet.Identity
+                @if (Request.IsAuthenticated)
+                {
+                    <buttonclass ="btn btn-outline-info" type="button"> </buttonclass>
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        @Html.ActionLink("Salut " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+
+                        <button class="btn btn-outline-info"><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></button>
+
+                    }
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <button id="RegisterBtn" class="btn btn-outline-info" type="button">@Html.ActionLink("Inregistrează-te", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) </button>
+                        <button id="LoginBtn" class="btn btn-outline-info" type="button"> @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
+                    </ul>
+                }
+
+                @*          <form class="d-flex">
+            <input class="form-control me-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>*@
+            </div>
+        </div>
     </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Farah nebunul</p>
+            <p style="display: block !important">&copy; @DateTime.Now.Year - Farah nebunul</p>
         </footer>
 </div>
     @Scripts.Render("~/bundles/jquery")

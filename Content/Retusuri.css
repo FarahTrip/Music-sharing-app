@@ -39,3 +39,192 @@ a
     color: #c00 !important
 }
 
+
+.TabeleNebune {
+    height: 530px;
+    overflow: auto;
+    background-color: #0d1117;
+}
+
+.dataTables_length {
+    display: inline;
+    background-color: #0d1117;
+    width: fit-content;
+}
+
+#Piese_wrapper {
+    background-color: #0d1117;
+}
+
+#Piese_filter {
+    display: inline;
+    float: right;
+}
+
+.table.dataTable thead .sorting_asc:after {
+    content: "";
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    margin-left: 5px;
+    opacity: 1;
+    background-image: url("/Content/Images/up.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.table.dataTable thead .sorting:after {
+    content: "";
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    margin-left: 5px;
+    opacity: 1;
+    background-image: url("/Content/Images/stand-by.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.table.dataTable thead .sorting_desc:after {
+    content: "";
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    margin-left: 5px;
+    opacity: 1;
+    background-image: url("/Content/Images/down.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+
+#Piese_filter {
+    display: inline;
+    float: right;
+    background-color: #0d1117;
+}
+
+.buttonsForTables {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.titletabele {
+    text-align: center;
+    padding: 20px;
+    color: white;
+}
+
+table {
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #726285;
+}
+
+th {
+    background-color: #21262d;
+    color: white;
+}
+
+.btn {
+    margin: 8px;
+    background-color: #21262d;
+    color: white;
+}
+
+a {
+    text-decoration: none !important;
+    color: white;
+}
+
+button a:hover {
+    color: white !important
+}
+
+#EditButton {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    height: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.paginate_button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #21262d;
+    background-image: none;
+    border: 1px solid #9933cc;
+    border-radius: 4px;
+    color: white;
+}
+
+    .paginate_button:hover {
+        background-color: #f5f5f5;
+        border-color: #adadad;
+    }
+
+
+    .paginate_button.active, .paginate_button.active:hover {
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        color: #fff;
+        outline: none;
+    }
+
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+    margin-top: 0.5rem;
+    text-align: right;
+    display: inline-block;
+}
+
+.dataTables_wrapper .dataTables_info {
+    display: inline;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+
+.card-text.description {
+    height: calc(1.2em * 5); 
+    overflow: hidden;
+
+}
+
+    .card-text.description.full {
+        height: auto;
+        overflow: visible;
+    }
+
+.show-more-link
+{
+    margin-bottom: 7px;
+}
+
+
+
+.DiscordApi {
+    margin-left: 20px;
+}
+
+audio
+{
+    width:450px;
+
+}

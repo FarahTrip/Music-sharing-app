@@ -4,55 +4,14 @@
 }
 
 <style>
-
-    .buttonsForTables {
+    .container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
     }
 
-    .titletabele {
-        text-align: center;
-        padding: 20px;
-        color: white;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #726285;
-    }
-
-    th {
-        background-color: #21262d;
-        color: white;
-    }
-
-    .btn {
-        margin: 8px;
-        background-color: #21262d;
-        color: white;
-    }
-
-    a {
-        text-decoration: none !important;
-        color: white;
-    }
-
-    button a:hover {
-        color: white !important
-    }
-    #EditButton {
-        margin-top: 0px !important;
-        margin-bottom: 0px !important;
-        height: 30px;
-        padding-top:0px;
-        padding-bottom:0px;
+    .card {
+        margin-right: 20px;
     }
 </style>
 
@@ -72,6 +31,7 @@
                     <th>Key</th>
                     <th>BPM</th>
                     <th>Stil</th>
+                    <th>Date Created</th>
                     <th>Modifica</th>
                     <th>Sterge</th>
 
@@ -89,9 +49,14 @@
                             {<span class="badge rounded-pill bg-success">Banger</span>}
 
                         </td>
+                        @{ 
+                            var DateFormater = piesa.DateCreated;
+                            string DateFormated = DateFormater.ToString("dd/M/yyyy");
+                        }
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
                         <td>@Stiluri[piesa.StyleId - 1].Name</td>
+                        <td>@DateFormated</td>
                         <td>
                             <button id="EditButton" type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "ModificaPiesa", new { id = piesa.Id })</button>
                         </td>
@@ -109,7 +74,18 @@
 
     <script>
         $(document).ready(function () {
-            $("#Piese").DataTable();
+            $("#Piese").DataTable({
+                "order": [[4, "desc"]],
+                language: {
+                    lengthMenu: 'Arata _MENU_ piese',
+                    search: 'Cauta :',
+                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
+                    paginate: {
+                        previous: 'Pagina anterioara',
+                        next: 'Pagina urmatoare'
+                    },
+                }
+            });
             $("#Piese .sterge-btn").on("click", function ()       
             {
                 var button = $(this);

@@ -44,37 +44,62 @@
     .next-btn {
         right: 10px;
     }
+
+    .NuELogatContainer {
+        margin: 5rem;
+        height: 35rem;
+        border: 1px solid #cc0000;
+        border-radius: 15px;
+        background-color: #0d1117;
+        text-align: center;
+        padding-top: 1.5rem;
+    }
+
+    .acces-denied {
+        margin-top: 3rem;
+        height: 20rem;
+        width: 20rem;
+    }
+
+    #LoginBtn2 {
+        display: block;
+        margin: 0 auto;
+        margin-top: 2.4rem;
+    }
 </style>
 
-<div class="carousel-container">
-    <div class="carousel-slide">
-        <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
-        <img src="~/Content/Image-Carrousel/banner-la-misto.jpg">
-        <img src="https://i.ibb.co/kySpmh0/R.jpg">
-    </div>
-    <button class="prev-btn">&#8249;</button>
-    <button class="next-btn">&#8250;</button>
-</div>
-<script src="~/Scripts/Carrousel.js"></script>
 
-<div class="jumbotron">
-    <p class="lead">Acesta este aplicatia studio-ului T-RIP etc niste text pe aici ca sa arate frumos cat ma gandesc ce sa pun defapt :)</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Sunt un buton &raquo;</a></p>
-    <div class="card border-dark mb-3" style="max-width: fit-content;">
-        <div class="card-header">Youtube API</div>
-        <div class="card-body">
 
-            <h4 class="card-title">Statistici despre canal</h4>
-            YouTube Subscribers
-            <div class="card-text" id="subscriberCount"></div>
-
-            YouTube Video Views
-            <div class="card-text" id="viewCount"></div>
-
-            YouTube Video Count
-            <div class="card-text" id="videoCount"></div>
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
+            <img src="~/Content/Image-Carrousel/banner-la-misto.jpg">
+            <img src="https://i.ibb.co/kySpmh0/R.jpg">
         </div>
+        <button class="prev-btn">&#8249;</button>
+        <button class="next-btn">&#8250;</button>
+    </div>
+    <script src="~/Scripts/Carrousel.js"></script>
+    <div class="jumbotron">
 
+        <div class="container">
+            <div class="card border-dark mb-3" style="max-width: fit-content;">
+                <div class="card-header">Youtube API</div>
+                <div class="card-body">
+                    <h4 class="card-title">Statistici despre canal</h4>
+                    YouTube Subscribers
+                    <div class="card-text" id="subscriberCount"></div>
+                    YouTube Video Views
+                    <div class="card-text" id="viewCount"></div>
+                    YouTube Video Count
+                    <div class="card-text" id="videoCount"></div>
+                </div>
+            </div>
+            <iframe class="DiscordApi" src="https://discord.com/widget?id=1078680165258899526&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
         <script>
 
 
@@ -105,8 +130,23 @@
         </script>
 
     </div>
-</div>
 
+
+}
+else
+{
+    <div class="NuELogatContainer">
+        <h2>Trebuie să fii logat ca să ai acces!</h2>
+        <img class="acces-denied" src="https://img.icons8.com/plasticine/256/restriction-shield.png" alt="Alternate Text" />
+        <button id="LoginBtn2" class="btn btn-outline-info" type="button"> @Html.ActionLink("Loghează-te", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
+    </div>
+
+}
+
+@if (User.IsInRole("Admin"))
+            {
+                <p>Bine ai venit faraoane!</p>
+            }
 
 
 <asp:ListBox runat="server"></asp:ListBox>

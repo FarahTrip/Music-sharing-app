@@ -1,0 +1,24 @@
+﻿
+@model Trippin_Website.ViewModels.CreateRoleViewModel
+
+@{
+    ViewBag.Title = "Creaza rol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Creeaza rol</h2>
+
+<form action="/" method="post">
+
+    <div class="form-group">
+
+        <label>@Html.LabelFor(m => m.RoleName)</label>
+        @Html.TextBoxFor(m => m.RoleName)
+        @Html.ValidationMessageFor(m => m.RoleName)
+
+        <button type="submit" class="btn btn-secondary">
+            Submit
+        </button>
+    </div>
+
+</form>

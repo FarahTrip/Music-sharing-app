@@ -1,0 +1,123 @@
+﻿
+@using Microsoft.AspNet.Identity;
+
+<style>
+    #ProfilePic {
+        height: 250px;
+        width: 250px;
+        background-size: contain;
+        border-radius: 50%;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .Profile-wrapper {
+        margin-top: 50px;
+        background-color: #0d1117;
+        border-radius: 15px;
+    }
+
+    .file-input {
+        margin-top: 20px;
+    }
+
+    .submit-button-container {
+        margin-top: 10px;
+    }
+
+    .form-message {
+        margin-top: 5px;
+        font-size: 14px;
+        color: red;
+    }
+
+    .delete-profile-picture {
+        margin-top: 10px;
+        display: block;
+        color: red;
+        font-size: 14px;
+    }
+
+    .owner-message {
+        margin-top: 20px;
+        font-size: 18px;
+        color: green;
+    }
+
+    .not-owner-message {
+        margin-top: 20px;
+        font-size: 18px;
+        color: red;
+    }
+
+    .user-name {
+        margin-top: 10px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .user-id {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #999;
+    }
+
+</style>
+
+@{
+
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="Profile-wrapper text-center">
+    @if (Model.ProfilePicture != null)
+    {
+        <img id="ProfilePic" src="~/Content/Images/User Profiles Images/@Model.ProfilePicture" alt="Alternate Text" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; object-position: center;">
+    }
+    else
+    {
+        <img id="ProfilePic" src="~/Content/Images/No-profile-picture.jpg" alt="Alternate Text" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; object-position: center;">
+    }
+
+    @if (Model.Id == User.Identity.GetUserId())
+    {
+
+
+        if (Model.ProfilePicture == null)
+        {
+            using (Html.BeginForm("UploadProfilePicture", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <p class="file-input">
+                    @Html.TextBox("file", "", new { type = "file" })<br />
+                </p>
+                <div class="submit-button-container">
+                    <input class="submit-button" type="submit" value="Incarca" />
+                    <p class="form-message">@ViewBag.Message</p>
+                </div>
+            }
+        }
+        else
+        {
+            <a href="@Url.Action("DeleteProfilePicture", "UsersManagement")" class="delete-profile-picture">Sterge poza</a>
+        }
+
+        <h2 class="user-name">@Model.UserName</h2>
+        <p class="user-id">@Model.Id</p>
+
+        <h4 class="owner-message">Esti cel care detine acest cont</h4>
+
+
+
+    }
+    else
+    {
+        <h2 class="user-name">@Model.UserName</h2>
+        <p class="user-id">@Model.Id</p>
+        <h4 class="not-owner-message">Nu esti cel care detine acest cont!</h4>
+    }
+
+
+</div>

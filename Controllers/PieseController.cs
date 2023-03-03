@@ -20,6 +20,8 @@ namespace Trippin_Website.Controllers
 
         }
         // GET: Piese
+
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult Index()
         {
             var piese = _context.Piese.ToList();
@@ -35,11 +37,12 @@ namespace Trippin_Website.Controllers
             return View(pieseModel);
         }
 
+        [AllowAnonymous]
         [Route("Piese/detalii/{id?}")]
-        public ActionResult Detalii(int? id)
+        public ActionResult Detalii(Guid? id)
         {
             var piese = _context.Piese.Include(c => c.Style).Include(c => c.PiesaFileName).SingleOrDefault(c => c.Id == id);
-            if (id == null || id == 0)
+            if (id == null)
             {
                 return RedirectToAction("Index");
             }
@@ -53,6 +56,7 @@ namespace Trippin_Website.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult AdaugaNou()
         {
             var Stiluri = _context.StyleOf.ToList();
@@ -64,6 +68,7 @@ namespace Trippin_Website.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult Creeaza(Piese piese)
         {
             if (!ModelState.IsValid)
@@ -75,10 +80,16 @@ namespace Trippin_Website.Controllers
                 };
                 return View("AdaugaNou", PieseModel);
             }
+
+            piese.Id = Guid.NewGuid();
             _context.Piese.Add(piese);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
+
+
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult ModificaFileName(Piese piese)
         {
             var CurrentDateTime = DateTime.Now;
@@ -97,10 +108,11 @@ namespace Trippin_Website.Controllers
             }
 
         }
-        public ActionResult AlegePiesa(int? id)
+        [Authorize(Roles = "Admin, Producer")]
+        public ActionResult AlegePiesa(Guid? id)
         {
             var piese = _context.Piese.SingleOrDefault(c => c.Id == id);
-            if (id == null || id == 0)
+            if (id == null)
             {
                 return RedirectToAction("Detalii");
             }
@@ -112,6 +124,7 @@ namespace Trippin_Website.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult Modifica()
         {
             var piese = _context.Piese.ToList();
@@ -126,10 +139,9 @@ namespace Trippin_Website.Controllers
 
             return View(pieseModel);
         }
-        //----------------------------------------------------------------------- come back here 
 
-
-        public ActionResult ModificaPiesa(int id)
+        [Authorize(Roles = "Admin, Producer")]
+        public ActionResult ModificaPiesa(Guid id)
         {
 
             if (!ModelState.IsValid)
@@ -153,15 +165,17 @@ namespace Trippin_Website.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Producer")]
         public ActionResult ModificaSaved(PieseStiluriViewModel PiesaModel)
         {
             var CurrentDateTime = DateTime.Now;
             var PieseInDb = _context.Piese.Single(c => c.Id == PiesaModel.Piese.Id);
             PieseInDb.Name = PiesaModel.Piese.Name;
             PieseInDb.Key = PiesaModel.Piese.Key;
-            PieseInDb.Style = PiesaModel.Piese.Style;
+            PieseInDb.StyleId = PiesaModel.Piese.StyleId;
             PieseInDb.Description = PiesaModel.Piese.Description;
             PieseInDb.Bpm = PiesaModel.Piese.Bpm;
+            PieseInDb.IsBanger = PiesaModel.Piese.IsBanger;
             PieseInDb.DateModified = CurrentDateTime;
             _context.SaveChanges();
             return RedirectToAction("Index", "Piese");

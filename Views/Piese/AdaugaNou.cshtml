@@ -24,6 +24,8 @@
 
         @using (Html.BeginForm("Creeaza", "Piese"))
         {
+
+            @Html.HiddenFor(m => m.Piese.Id)
             <h2 style="text-align: center; display:block">Adauga o noua piesa</h2>
             @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
             <div class="form-group">
@@ -53,6 +55,7 @@
                 @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
             </div>
             @Html.AntiForgeryToken()
+
 
             <button type="submit" class="btn btn-secondary">
                 Submit

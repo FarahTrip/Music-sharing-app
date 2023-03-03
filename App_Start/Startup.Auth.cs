@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Owin;
 using System;
 using Trippin_Website.Models;
@@ -45,9 +46,9 @@ namespace Trippin_Website
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            app.UseMicrosoftAccountAuthentication(
+            clientId: "59b282a9-0308-4a12-ab5c-857753e799e5",
+            clientSecret: "6d606f77-2ba9-4152-89a3-535ca9d94395");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
@@ -57,11 +58,11 @@ namespace Trippin_Website
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "648306622595-b4m137i33rcff0gp2duk9313e8sjm97g.apps.googleusercontent.com",
+                ClientSecret = "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"
+            });
         }
     }
 }

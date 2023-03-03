@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Principal";
+    var userId = User.Identity.GetUserId();
 }
 <style>
     .carousel-container {
@@ -48,7 +49,7 @@
     .NuELogatContainer {
         margin: 5rem;
         height: 35rem;
-        border: 1px solid #cc0000;
+        border: 1px solid #9933cc;
         border-radius: 15px;
         background-color: #0d1117;
         text-align: center;
@@ -73,6 +74,9 @@
 @using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
+
+
+
     <div class="carousel-container">
         <div class="carousel-slide">
             <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
@@ -83,6 +87,9 @@
         <button class="next-btn">&#8250;</button>
     </div>
     <script src="~/Scripts/Carrousel.js"></script>
+
+    <h3>@userId</h3>
+
     <div class="jumbotron">
 
         <div class="container">
@@ -101,7 +108,6 @@
             <iframe class="DiscordApi" src="https://discord.com/widget?id=1078680165258899526&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
         <script>
-
 
             const APIKey = 'AIzaSyA_60odxWTJP9vKUsF58ebUrLEmVVGe4cw';
             const Userid = 'UCS-cRAaG-qEHjI1wSAEvVyQ';
@@ -144,9 +150,12 @@ else
 }
 
 @if (User.IsInRole("Admin"))
-            {
-                <p>Bine ai venit faraoane!</p>
-            }
+{
+    <p>Bine ai venit faraoane!</p>
+}
 
+<script>
+
+</script>
 
 <asp:ListBox runat="server"></asp:ListBox>

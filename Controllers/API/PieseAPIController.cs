@@ -7,6 +7,7 @@ using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers.API
 {
+    [Authorize(Roles = "Admin")]
     public class PieseAPIController : ApiController
     {
         private ApplicationDbContext _Context;
@@ -19,7 +20,7 @@ namespace Trippin_Website.Controllers.API
             var piese = _Context.Piese.ToList();
             return piese;
         }
-        public Piese GetPiesa(int id)
+        public Piese GetPiesa(Guid id)
         {
             var piesa = _Context.Piese.FirstOrDefault(c => c.Id == id);
 
@@ -43,7 +44,7 @@ namespace Trippin_Website.Controllers.API
             return Created(new Uri(Request.RequestUri + "/" + PiesaPassed.Id), PiesaPassed);
         }
         [HttpPut]
-        public void UpdatePiesa(int id, Piese piese)
+        public void UpdatePiesa(Guid id, Piese piese)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -61,8 +62,10 @@ namespace Trippin_Website.Controllers.API
 
             _Context.SaveChanges();
         }
+
+
         [HttpDelete]
-        public void DeletePiesa(int id, Piese Piesa)
+        public void DeletePiesa(Guid id, Piese Piesa)
         {
             var piesa = _Context.Piese.FirstOrDefault(c => c.Id == id);
 

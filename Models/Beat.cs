@@ -28,6 +28,11 @@ namespace Trippin_Website.Models
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
 
+        public bool IsBanger { get; set; }
+
+        [DataType(DataType.Url)]
+        public string BeatLink { get; set; }
+
 
     }
 }

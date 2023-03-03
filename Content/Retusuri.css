@@ -56,6 +56,7 @@ a
     background-color: #0d1117;
 }
 
+
 #Piese_filter {
     display: inline;
     float: right;
@@ -101,6 +102,17 @@ a
 
 #Piese_filter {
     display: inline;
+    float: right;
+    background-color: #0d1117;
+}
+#Beaturi_filter {
+    display: inline !important;
+    float: right;
+    background-color: #0d1117;
+}
+
+#Conturi_filter {
+    display: inline !important;
     float: right;
     background-color: #0d1117;
 }
@@ -228,3 +240,41 @@ audio
     width:450px;
 
 }
+
+
+.sub-menu-wrap {
+    position: absolute;
+    top: 100%;
+    right:1%;
+    z-index: 99 !important;
+    display: flex;
+    align-items: center;
+    max-height: 0px;
+    overflow:hidden;
+    transition: max-height 0.5s;
+
+}
+
+    .sub-menu-wrap.open-menu
+    {
+        max-height: 400px;
+    }
+
+.sub-menu {
+    background: #21262d;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    float:right;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+
+}
+
+.sub-menu h5 {
+text-align: center;
+}
+

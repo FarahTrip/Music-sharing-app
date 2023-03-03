@@ -1,12 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Trippin_Website.Models;
 
 namespace Trippin_Website
 {
     public class Piese
     {
-        public int Id { get; set; }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid? Id { get; set; }
 
         [Required(ErrorMessage = "Nu ai introdus numele piesei!")]
         public string Name { get; set; }

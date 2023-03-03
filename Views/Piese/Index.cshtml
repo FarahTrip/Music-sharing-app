@@ -24,16 +24,16 @@
 <div class="tabelDiv">
     <h2 class="titletabele">Piese</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
         {
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
         }
         else
-            {
-    <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
-            }
+        {
+            <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
+        }
     </div>
     <div class="TabeleNebune">
         <table id="Piese" class="table table-hover">
@@ -44,7 +44,6 @@
                     <th>BPM</th>
                     <th>Date Created</th>
                     <th>Stil</th>
-
                 </tr>
             </thead>
             <tbody>

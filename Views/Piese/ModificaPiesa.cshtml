@@ -50,12 +50,17 @@
             <label for="StyleId">Stilul</label>
             @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
         </div>
+        <div class=“checkbox”>
+            @Html.CheckBoxFor(m => m.Piese.IsBanger)	E banger?
+        </div>
         @Html.HiddenFor(m => m.Piese.Id)
 
         <button type="submit" class="btn btn-secondary">
             Submit
         </button>
         @Html.AntiForgeryToken()
+
+
     }
 
 
@@ -64,5 +69,6 @@
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
+ 
 }
 

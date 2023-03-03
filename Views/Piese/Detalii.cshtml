@@ -75,7 +75,7 @@
                 <div class="card-body">
 
                     @{
-                        var description = Model.Piese.Description.Replace("\n", "<br/>");
+                        var description = Model.Piese?.Description?.Replace("\n", "<br/>") ?? "";
                         var lines = description.Split(new string[] { "<br/>" }, StringSplitOptions.None).Length;
                     }
 
@@ -96,78 +96,84 @@
                     </p>
 
                 </div>
-                @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
+                @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
                 {
                     <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })'">Alege piesa</button>
                 }
                 else
                 {
-            <button type="button" class="btn btn-outline-info" onclick="if(confirm('Nu ai drepturi sa schimbi piesa dar merci de incercare tho!')) { } else { event.preventDefault(); }">Alege piesa</button>
+                    <button type="button" class="btn btn-outline-info" onclick="if(confirm('Nu ai drepturi sa schimbi piesa dar merci de incercare tho!')) { } else { event.preventDefault(); }">Alege piesa</button>
                 }
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
-                    @if (Model.Piese.Key == null)
-                    {
-                        <li class="list-group-item">Key : Nu este setata</li>
-                    }
-                    else
-                    {
-                        <li class="list-group-item">Key : @Model.Piese.Key</li>
-                    }
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
+                @if (Model.Piese.Key == null)
+                {
+                    <li class="list-group-item">Key : Nu este setata</li>
+                }
+                else
+                {
+                    <li class="list-group-item">Key : @Model.Piese.Key</li>
+                }
 
 
-                    @if (Model.Style == null)
-                    {
-                        <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
-                    }
-                    else
-                    {
-                        <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
 
-                    }
-                    <div style="background-color: #0d1117;">
-                        @if (Model.Piese.PiesaFileName != null)
+
+                @if (Model.Style == null)
+                {
+                    <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+                }
+                else
+                {
+                    <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+
+                }
+                <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
+                <div style="background-color: #0d1117;">
+                    @if (Model.Piese.PiesaFileName != null)
+                    {
+
+                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
                         {
-
-                            if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
-                            {
-                                <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
-                                    <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
-                                </audio>
-                            }
-                            else
-                            {
-                    <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                        <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
-                    </audio>
-                            }
-
-                        }
-
-                    </div>
-                    ------------------------------------------------------------------------------------------
-
-
-                    @if (Model.Piese.PiesaFileNameId != null)
-                    {
-                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin))
-                        {
-                            <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>
+                            <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                                <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                            </audio>
                         }
                         else
                         {
-                            <br />
-                            @Model.Piese.PiesaFileName.Name
-                            <br />
+                            <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                                <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                            </audio>
                         }
+
+                    }
+
+                </div>
+
+
+
+                ------------------------------------------------------------------------------------------
+
+
+                @if (Model.Piese.PiesaFileNameId != null)
+                {
+                    if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
+                    {
+                        <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>
                     }
                     else
                     {
-                        <li> Nu ai selectat inca fisierul!</li>
+                        <br />
+                        @Model.Piese.PiesaFileName.Name
+                        <br />
                     }
-                    ------------------------------------------------------------------------------------------
-                    <li class="list-group-item">Seed poza : @resultrandom</li>
-                </ul>
+                }
+                else
+                {
+                    <li> Nu ai selectat inca fisierul!</li>
+                }
+                ------------------------------------------------------------------------------------------
+                <li class="list-group-item">Seed poza : @resultrandom</li>
+            </ul>
 
 
                 <div class="card-footer text-muted">
@@ -208,4 +214,23 @@
     } else {
         document.querySelector('.show-more-link').style.display = 'block';
     }
+</script>
+
+<script>
+    document.getElementById("copy-link").addEventListener("click", function (event) {
+        event.preventDefault();
+        navigator.clipboard.writeText(window.location.href);
+        var message = document.createElement("div");
+        message.innerText = "Copiat!";
+        message.style.position = "fixed";
+        message.style.top = (event.clientY - 20) + "px";
+        message.style.left = (event.clientX - 30) + "px";
+        message.style.backgroundColor = "#9933cc";
+        message.style.padding = "5px";
+        message.style.borderRadius = "5px";
+        document.body.appendChild(message);
+        setTimeout(function () {
+            document.body.removeChild(message);
+        }, 2000);
+    });
 </script>

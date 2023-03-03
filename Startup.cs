@@ -9,6 +9,7 @@ namespace Trippin_Website
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+
         }
     }
 }

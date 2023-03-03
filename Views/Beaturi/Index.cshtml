@@ -1,76 +1,95 @@
-﻿@{ 
-    var CurrentDateTime = DateTime.Now;
+﻿@model Trippin_Website.ViewModels.BeaturiViewModel
+
+@{
+
+
+        var CurrentDateTime = DateTime.Now;
+        var Stiluri = Model.Stiluri;
+
+
 }
+
 <style>
 
-    .buttonsForTables {
+    .container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
     }
 
-    .titletabele {
-        text-align: center;
-        padding: 20px;
-        color: white;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #726285;
-    }
-
-    th {
-        background-color: #21262d;
-        color: white;
-    }
-
-    .btn {
-        margin: 8px;
-        background-color: #21262d;
-        color: white;
-    }
-
-    a {
-        text-decoration: none !important;
-        color: white;
-    }
-    button a:hover {
-        color: white !important
+    .card {
+        margin-right: 20px;
     }
 </style>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="tabelDiv">
     <h2 class="titletabele">Beat-uri</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Beaturi")</button>
-        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Editeaza", "Edit", "Beaturi")</button>
-        <button type="button" class="btn btn-outline-info">Sterge</button>
-        <button type="button" class="btn btn-outline-info">Upload</button>
+        @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
+        {
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
+        }
+        else
+        {
+            <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
+        }
     </div>
     <div class="TabeleNebune">
-        <table class="table table-hover">
-            <tr>
-                <th>Nume</th>
-                <th>BPM</th>
-                <th>Key</th>
-            </tr>
-            @foreach (var beat in Model)
-            {
-                var timeSpan = CurrentDateTime - beat.Created;
+        <table id="Beaturi" class="table table-hover">
+            <thead>
                 <tr>
-                    <td><a href="@Url.Action("Detalii", "Beaturi", new { id = beat.Id })">@beat.Name</a> @if (timeSpan.TotalDays < 1) {<span class="badge rounded-pill bg-info">Nou</span> } @if (beat.Modified != null) {<span class="badge rounded-pill bg-light">Modificat</span> } </td>
-
-                    <td>@beat.Bpm bpm</td>
-                    <td>@beat.Key</td>
+                    <th>Nume Piesa</th>
+                    <th>Key</th>
+                    <th>BPM</th>
+                    <th>Date Created</th>
+                    <th>Stil</th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var beat in Model.Beaturi)
+                {
+                    var timeSpan = CurrentDateTime - beat.Created;
+                    <tr>
+                        <td>
+                            @{
+                                var DateFormater = beat.Created;
+                                string DateFormated = DateFormater.ToString("dd/MM/yyyy");
+                            }
+                            <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.Id })">@beat.Name</a>  @if (timeSpan.TotalDays < 3)
+                            {<span class="badge rounded-pill bg-info">Nou</span>} @if (beat.Modified != null)
+                            {<span class="badge rounded-pill bg-light">Modificat</span>} @if (beat.IsBanger == true)
+                            {<span class="badge rounded-pill bg-success">Banger</span>}
+
+                        </td>
+                        <td>@beat.Key</td>
+                        <td>@beat.Bpm</td>
+                        <td>@DateFormated</td>
+                        <td>@Stiluri[beat.StyleId - 1].Name</td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </div>
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $("#Beaturi").DataTable({
+                "order": [[3, "desc"]],
+                language: {
+                    lengthMenu: 'Arata _MENU_ piese',
+                    search: 'Cauta :',
+                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
+                    paginate: {
+                        previous: 'Pagina anterioara',
+                        next: 'Pagina urmatoare'
+                    },
+                }
+            });
+        });
+    </script>
+}

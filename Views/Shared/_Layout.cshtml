@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+
+    /*  var ListOfUsers = Model.Users;*/
+    var userId = User.Identity.GetUserId();
+    /*    var user = ListOfUsers.SingleOrDefault(m => m.Id == userId);*/
+   
+
+}
+
+
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,18 +20,39 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <style>
-    #RegisterBtn
-    {
+    #RegisterBtn {
         display: inline-block;
     }
-    #LoginBtn
-    {
+
+    #LoginBtn {
         display: inline;
-      
     }
-    .nav navbar-nav
-    {
+
+    .nav navbar-nav {
         background-color: red;
+    }
+
+    #profilepic {
+        width: fit-content;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    #profilepicmenu {
+        display: block;
+        width: fit-content;
+        height: 80px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
+    .right-menu-profile {
+        margin: 7px;
+    }
+
+    .logout-btn {
+        display: block;
+        margin: 0 auto;
     }
 </style>
 <body>
@@ -35,6 +68,7 @@
                         <a class="nav-link active" @Html.ActionLink("Home", "Index", "Home")
                 <span class="visually-hidden">(current)</span>
             </a>
+
                     </li>
 
                     @if (User.Identity.IsAuthenticated)
@@ -51,58 +85,158 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Contact", "Home")">
-                                <span>Artisti</span>
-                            </a>
-                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "Clienti")">
                                 <span>Clienti</span>
                             </a>
                         </li>
+
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "UsersManagement")">
+                                    <span>Manageriaza conturi</span>
+                                </a>
+                            </li>
+                        }
                     }
+
                 </ul>
 
+                <div class="right-menu-profile">
 
-                @using Microsoft.AspNet.Identity
-                @if (Request.IsAuthenticated)
-                {
-                    <buttonclass ="btn btn-outline-info" type="button"> </buttonclass>
-                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        @Html.AntiForgeryToken()
+                        <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
 
+                        @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
 
-                        @Html.ActionLink("Salut " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-
-                        <button class="btn btn-outline-info"><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></button>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <span class="badge rounded-pill bg-info">Admin</span>
+                        }
+                        else if (User.IsInRole("Producer"))
+                        {
+                            <span class="badge rounded-pill bg-primary">Producer</span>
+                        }
 
                     }
-                }
-                else
-                {
-                    <ul class="nav navbar-nav navbar-right">
-                        <button id="RegisterBtn" class="btn btn-outline-info" type="button">@Html.ActionLink("Inregistrează-te", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) </button>
-                        <button id="LoginBtn" class="btn btn-outline-info" type="button"> @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
-                    </ul>
-                }
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <button id="RegisterBtn" class="btn btn-outline-info" type="button">@Html.ActionLink("Inregistrează-te", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) </button>
+                            <button id="LoginBtn" class="btn btn-outline-info" type="button"> @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
+                        </ul>
+                    }
+
+
+
+                </div>
+
 
                 @*          <form class="d-flex">
-            <input class="form-control me-sm-2" type="search" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>*@
+                        <input class="form-control me-sm-2" type="search" placeholder="Search">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    </form>*@
+
+
+
             </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="sub-menu-wrap" id="subMenu">
+                    <div class="sub-menu">
+                        <div class="user-info">
+                            <img id="profilepicmenu" src="~/Content/Images/No-profile-picture.jpg" alt="Alternate Text" />
+                            <h4>
+                                @User.Identity.GetUserName()
+                            </h4>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="badge rounded-pill bg-info">Admin</span>
+                            }
+                            else if (User.IsInRole("Producer"))
+                            {
+                                <span class="badge rounded-pill bg-primary">Producer</span>
+                            }
+                        </div>
+                        <hr />
+
+                        @using Microsoft.AspNet.Identity
+                        @if (Request.IsAuthenticated)
+                        {
+
+
+                            <buttonclass ="btn btn-outline-info" type="button"> </buttonclass>
+
+
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <h5> <a href="@Url.Action("Profile", "UsersManagement", new {id = User.Identity.GetUserId()})">Profil</a></h5>
+                                <h5> @Html.ActionLink("Setari", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</h5>
+
+
+
+                                <button class="btn btn-outline-info logout-btn"><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></button>
+                            }
+
+
+                        }
+                    </div>
+                </div>
+            }
+
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p style="display: block !important">&copy; @DateTime.Now.Year - Farah nebunul</p>
+            <p style="display: block !important">&copy; @DateTime.Now.Year - Farah nebunul </p>
         </footer>
-</div>
+    </div>
+
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+        let subMenu = document.getElementById("subMenu");
+
+        function toggleMenu() {
+            subMenu.classList.toggle("open-menu")
+        }
+
+
+        $(document).ready(function () {
+            var userId = "@userId"; 
+    $.get("/api/Conturi/" + userId, function (data) {
+
+        $("#username").text(data.userName);
+        $("#email").text(data.email);
+        if (data.profilePicture == null) {
+            $("#profilepic").attr("src", "/Content/Images/No-profile-picture.jpg");
+            $("#profilepicmenu").attr("src", "/Content/Images/No-profile-picture.jpg");
+        }
+        else {
+            $("#profilepic").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
+            $("#profilepicmenu").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
+        }
+
+    })
+    .fail(function () {
+        alert("Error retrieving user data.");s
+    });
+});
+        </script>
+
+    }
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

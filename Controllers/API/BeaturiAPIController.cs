@@ -6,6 +6,7 @@ using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers.API
 {
+    [Authorize(Roles = "Admin, Producer")]
     public class BeaturiAPIController : ApiController
     {
         // GET: BeaturiAPI

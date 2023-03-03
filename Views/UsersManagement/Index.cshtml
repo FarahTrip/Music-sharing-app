@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+
+@model Trippin_Website.ViewModels.UserListViewModel
+
+
+<h1>User Management</h1>
+
+<table id="Conturi">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Schimba rol</th>
+            <th>Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            var roleName = "";
+            if (user.Roles.Any())
+            {
+                var roleId = user.Roles.FirstOrDefault().RoleId;
+                roleName = ((IEnumerable<IdentityRole>)ViewBag.Roles).Single(x => x.Id == roleId).Name;
+            }
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @Html.DropDownList(
+           "roles",
+           new SelectList(
+               ((IEnumerable<IdentityRole>)ViewBag.Roles).Concat(new List<IdentityRole> { new IdentityRole { Id = "", Name = "Nici un rol" } }),
+               "Id",
+               "Name",
+               user.Roles.FirstOrDefault()?.RoleId),
+           "Selecteaza rol",
+           new { @class = "role-dropdown", data_user_id = user.Id })
+                </td>
+                <td>@roleName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".role-dropdown").on("change", function () {
+                var userId = $(this).data("user-id");
+                var roleId = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("ChangeRole", "UsersManagement")',
+                    type: 'POST',
+                    data: { userId: userId, roleId: roleId },
+                    success: function (data) {
+                        alert("Rolul a fost updatat cu succes!");
+                    },
+                    error: function () {
+                        alert("A aparut o eroare!");
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $("#Conturi").DataTable({
+                "order": [[1, "desc"]],
+                language: {
+                    lengthMenu: 'Arata _MENU_ conturi',
+                    search: 'Cauta :',
+                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ conturi',
+                    paginate: {
+                        previous: 'Pagina anterioara',
+                        next: 'Pagina urmatoare'
+                    },
+                }
+            });
+        });
+    </script>
+}

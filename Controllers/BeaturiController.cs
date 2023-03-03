@@ -22,8 +22,13 @@ namespace Trippin_Website.Controllers
         // GET: Piese
         public ActionResult Index()
         {
-            var beaturi = _context.Beaturi.ToList();
-            return View(beaturi);
+            var viewModel = new BeaturiViewModel()
+            {
+                Beaturi = _context.Beaturi.ToList(),
+                Stiluri = _context.StyleOf.ToList()
+
+            };
+            return View(viewModel);
         }
 
         [Route("Beaturi/detalii/{id?}")]

@@ -8,6 +8,11 @@ namespace Trippin_Website.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
     }
 
     public class ExternalLoginListViewModel
@@ -49,9 +54,8 @@ namespace Trippin_Website.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string UsernameCont { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +68,10 @@ namespace Trippin_Website.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Username")]
+        public string UsernameCont { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

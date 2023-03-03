@@ -69,8 +69,11 @@
     <Reference Include="Microsoft.AspNetCore.Authorization.Policy, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNetCore.Authorization.Policy.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Authorization.Policy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNetCore.Cryptography.Internal.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=7.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Cryptography.Internal.7.0.3\lib\net462\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=7.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.7.0.3\lib\net462\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.DataProtection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNetCore.DataProtection.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.DataProtection.dll</HintPath>
@@ -175,8 +178,8 @@
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Configuration.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.7.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
@@ -193,20 +196,26 @@
     <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Hosting.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.Identity.Core, Version=7.0.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Identity.Core.7.0.3\lib\net462\Microsoft.Extensions.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Localization, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Localization.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Localization.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Localization.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Localization.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Extensions.Logging.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Logging, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Logging.7.0.0\lib\net462\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Logging.Abstractions.7.0.0\lib\net462\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.ObjectPool, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.ObjectPool.2.2.0\lib\netstandard2.0\Microsoft.Extensions.ObjectPool.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Extensions.Options.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Options, Version=7.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Options.7.0.1\lib\net462\Microsoft.Extensions.Options.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Primitives, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Primitives.7.0.0\lib\net462\Microsoft.Extensions.Primitives.dll</HintPath>
@@ -236,7 +245,7 @@
       <HintPath>packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+      <HintPath>packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -246,8 +255,8 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.7.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
@@ -463,6 +472,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -532,7 +544,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\API\BeaturiAPIController.cs" />
+    <Compile Include="Controllers\API\ConturiController.cs" />
     <Compile Include="Controllers\API\PieseAPIController.cs" />
     <Compile Include="Controllers\ArtistiController.cs" />
     <Compile Include="Controllers\BeaturiController.cs" />
@@ -541,6 +555,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PieseController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="DTOS\PieseDTO.cs" />
     <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.cs" />
     <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.designer.cs">
@@ -610,6 +625,38 @@
     <Compile Include="Migrations\202302272239389_SeedUsers.designer.cs">
       <DependentUpon>202302272239389_SeedUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302281200444_AddingGuidToPieseInsteadOfIntForID.cs" />
+    <Compile Include="Migrations\202302281200444_AddingGuidToPieseInsteadOfIntForID.designer.cs">
+      <DependentUpon>202302281200444_AddingGuidToPieseInsteadOfIntForID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302281235433_2ndAttemptToAddGuid.cs" />
+    <Compile Include="Migrations\202302281235433_2ndAttemptToAddGuid.designer.cs">
+      <DependentUpon>202302281235433_2ndAttemptToAddGuid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302281250334_3rdAttemptGuid.cs" />
+    <Compile Include="Migrations\202302281250334_3rdAttemptGuid.designer.cs">
+      <DependentUpon>202302281250334_3rdAttemptGuid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302281401019_UsernameToAccount.cs" />
+    <Compile Include="Migrations\202302281401019_UsernameToAccount.designer.cs">
+      <DependentUpon>202302281401019_UsernameToAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302281403554_addingUsernameToAccount.cs" />
+    <Compile Include="Migrations\202302281403554_addingUsernameToAccount.designer.cs">
+      <DependentUpon>202302281403554_addingUsernameToAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303011550265_MoreFieldsInBeats.cs" />
+    <Compile Include="Migrations\202303011550265_MoreFieldsInBeats.designer.cs">
+      <DependentUpon>202303011550265_MoreFieldsInBeats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303030006489_AddingProfilePictureNames.cs" />
+    <Compile Include="Migrations\202303030006489_AddingProfilePictureNames.designer.cs">
+      <DependentUpon>202303030006489_AddingProfilePictureNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.cs" />
+    <Compile Include="Migrations\202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.designer.cs">
+      <DependentUpon>202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -647,6 +694,7 @@
     <Compile Include="Models\Artisti.cs" />
     <Compile Include="Models\Beat.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\IdentityExtensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
@@ -657,11 +705,15 @@
     <Compile Include="Models\StyleOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BeaturiViewModel.cs" />
+    <Compile Include="ViewModels\CreateRoleViewModel.cs" />
     <Compile Include="ViewModels\NewBeatViewModel.cs" />
     <Compile Include="ViewModels\PieseAllViewModel.cs" />
     <Compile Include="ViewModels\PieseAndPieseFileNamesViewModel.cs" />
     <Compile Include="ViewModels\PieseStiluriViewModel.cs" />
+    <Compile Include="ViewModels\SingleUserViewModel.cs" />
     <Compile Include="ViewModels\songbeatartistViewModel.cs" />
+    <Compile Include="ViewModels\UserListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Audio\cairo.wav" />
@@ -785,10 +837,11 @@
     <Content Include="Content\Images\linesDark.svg" />
     <Content Include="Content\Images\linesDark2.svg" />
     <Content Include="Content\Images\linesDarkGood.png" />
+    <Content Include="Content\Images\No-profile-picture.jpg" />
     <Content Include="Content\Images\pastile.jpg" />
     <Content Include="Content\Images\stand-by.png" />
     <Content Include="Content\Images\up.png" />
-    <Content Include="Content\Images\upload-file.png" />
+    <Content Include="Content\Images\Upload.svg" />
     <Content Include="Content\Images\very polite kat.png" />
     <Content Include="Content\Retusuri.css" />
     <Content Include="favicon.ico" />
@@ -927,11 +980,16 @@
     <Content Include="Views\Piese\AlegePiesa.cshtml" />
     <Content Include="Views\Piese\Modifica.cshtml" />
     <Content Include="Views\Piese\ModificaPiesa.cshtml" />
+    <Content Include="Views\UsersManagement\Index.cshtml" />
+    <Content Include="Views\Administration\CreateRole.cshtml" />
+    <Content Include="Views\UsersManagement\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
+    <Folder Include="Content\Images\User Profiles Images\" />
     <Folder Include="Piese-Uploaded\" />
     <Folder Include="Views\BeaturiAPI\" />
+    <Folder Include="Views\Conturi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -1018,6 +1076,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302272239389_SeedUsers.resx">
       <DependentUpon>202302272239389_SeedUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302281200444_AddingGuidToPieseInsteadOfIntForID.resx">
+      <DependentUpon>202302281200444_AddingGuidToPieseInsteadOfIntForID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302281235433_2ndAttemptToAddGuid.resx">
+      <DependentUpon>202302281235433_2ndAttemptToAddGuid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302281250334_3rdAttemptGuid.resx">
+      <DependentUpon>202302281250334_3rdAttemptGuid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302281401019_UsernameToAccount.resx">
+      <DependentUpon>202302281401019_UsernameToAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302281403554_addingUsernameToAccount.resx">
+      <DependentUpon>202302281403554_addingUsernameToAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303011550265_MoreFieldsInBeats.resx">
+      <DependentUpon>202303011550265_MoreFieldsInBeats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303030006489_AddingProfilePictureNames.resx">
+      <DependentUpon>202303030006489_AddingProfilePictureNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.resx">
+      <DependentUpon>202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

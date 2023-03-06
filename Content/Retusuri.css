@@ -258,6 +258,7 @@ audio
     .sub-menu-wrap.open-menu
     {
         max-height: 400px;
+        
     }
 
 .sub-menu {
@@ -265,11 +266,13 @@ audio
     padding: 20px;
     margin: 10px;
     border-radius: 10px;
-    float:right;
+    float: right;
+    min-width: 350px;
 }
 
 .user-info {
     display: flex;
+    block-size: fit-content;
     align-items: center;
 
 }

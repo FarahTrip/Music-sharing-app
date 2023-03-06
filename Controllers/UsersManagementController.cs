@@ -22,6 +22,7 @@ namespace Trippin_Website.Controllers
         {
             _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            _context = new ApplicationDbContext();
         }
 
         [Authorize(Roles = "Admin")]
@@ -45,7 +46,19 @@ namespace Trippin_Website.Controllers
         {
 
             var user = _userManager.Users.SingleOrDefault(c => c.Id == Id);
-            return View(user);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var Model = new User_Content_ViewModel
+            {
+                User = user,
+                Piese = _context.Piese.ToList()
+            };
+
+            return View(Model);
+
         }
 
         public ActionResult DeleteProfilePicture()
@@ -53,6 +66,12 @@ namespace Trippin_Website.Controllers
             var userId = User.Identity.GetUserId();
 
             var user = _userManager.FindById(userId);
+
+            var Model = new User_Content_ViewModel
+            {
+                User = user,
+                Piese = _context.Piese.ToList()
+            };
 
             string path = Path.Combine(Server.MapPath("~/Content/Images/User Profiles Images/"), user.ProfilePicture);
             if ((System.IO.File.Exists(path)))
@@ -62,7 +81,7 @@ namespace Trippin_Website.Controllers
             user.ProfilePicture = null;
             _userManager.Update(user);
 
-            return View("Profile", user);
+            return View("Profile", Model);
         }
 
 

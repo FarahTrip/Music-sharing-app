@@ -12,14 +12,6 @@
 
 
     var CurrentStyleId = Model.Piese.StyleId;
-    var CurrentFileId = Model.Piese.PiesaFileNameId;
-
-
-    var listofFiles = new List<string>();
-    foreach (var FileName in Model.PieseFileNames)
-    {
-        listofFiles.Add(FileName.Name);
-    }
 
 
     var listofStyles = new List<string>();
@@ -129,19 +121,19 @@
                 }
                 <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
                 <div style="background-color: #0d1117;">
-                    @if (Model.Piese.PiesaFileName != null)
+                    @if (Model.Piese.FileName != null)
                     {
 
                         if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
                         {
                             <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
-                                <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                                <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
                             </audio>
                         }
                         else
                         {
                             <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                                <source src="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name" type="audio/wav" />
+                                <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
                             </audio>
                         }
 
@@ -154,16 +146,16 @@
                 ------------------------------------------------------------------------------------------
 
 
-                @if (Model.Piese.PiesaFileNameId != null)
+                @if (Model.Piese.FileName != null)
                 {
                     if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
                     {
-                        <a runat="server" href="~/Piese-Uploaded/@Model.Piese.PiesaFileName.Name">@Model.Piese.PiesaFileName.Name</a>
+                        <a runat="server" href="~/Piese-Uploaded/@Model.Piese.FileName">@Model.Piese.FileName</a>
                     }
                     else
                     {
                         <br />
-                        @Model.Piese.PiesaFileName.Name
+                        @Model.Piese.FileName
                         <br />
                     }
                 }

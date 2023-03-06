@@ -6,7 +6,7 @@ using Trippin_Website.Models;
 namespace Trippin_Website.Controllers.API
 {
 
-
+    [Authorize]
     public class ConturiController : ApiController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,6 +24,10 @@ namespace Trippin_Website.Controllers.API
             if (!ModelState.IsValid)
             {
                 return NotFound();
+            }
+            if (id != User.Identity.GetUserId())
+            {
+                return BadRequest();
             }
 
             var user = _userManager.FindById(id);

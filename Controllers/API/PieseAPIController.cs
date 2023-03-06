@@ -1,19 +1,25 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Http;
 using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers.API
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class PieseAPIController : ApiController
     {
         private ApplicationDbContext _Context;
+        private readonly UserManager<ApplicationUser> _userManager;
         public PieseAPIController()
         {
             _Context = new ApplicationDbContext();
+            _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
         }
         public IEnumerable<Piese> GetPiese()
         {
@@ -65,15 +71,31 @@ namespace Trippin_Website.Controllers.API
 
 
         [HttpDelete]
-        public void DeletePiesa(Guid id, Piese Piesa)
+        public IHttpActionResult DeletePiesa(Guid id)
         {
             var piesa = _Context.Piese.FirstOrDefault(c => c.Id == id);
 
             if (piesa == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            _Context.Piese.Remove(piesa);
-            _Context.SaveChanges();
+            var userId = User.Identity.GetUserId();
+
+
+            if (piesa.FileName != null && userId == piesa.UserId || User.IsInRole("Admin"))
+            {
+                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Piese-Uploaded/"), piesa.FileName);
+                if ((System.IO.File.Exists(path)))
+                {
+                    System.IO.File.Delete(path);
+                }
+
+                _Context.Piese.Remove(piesa);
+                _Context.SaveChanges();
+
+                return Ok();
+            }
+            else
+                return BadRequest();
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿
+﻿@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
 
 @{
 
     var CurrentDateTime = DateTime.Now;
-    var Stiluri = Model.Stiluri;
+    var Stiluri = Model.PieseAllViewModel.Stiluri;
+    
 
 }
 
@@ -19,6 +21,9 @@
         margin-right: 20px;
     }
 
+    #yourUserID {
+        color: #FF4E79;
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="tabelDiv">
@@ -43,28 +48,63 @@
                     <th>Key</th>
                     <th>BPM</th>
                     <th>Date Created</th>
+                    <th>Postat de</th>
                     <th>Stil</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var piesa in Model.Piese)
+
+                @foreach (var piesa in Model.PieseAllViewModel.Piese)
                 {
                     var timeSpan = CurrentDateTime - piesa.DateCreated;
+
                     <tr>
                         <td>
-                            @{ 
+                            @{
                                 var DateFormater = piesa.DateCreated;
-                                string DateFormated = DateFormater.ToString("dd/MM/yyyy");
-                            } 
-                            <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>  @if (timeSpan.TotalDays < 3)
-                            {<span class="badge rounded-pill bg-info">Nou</span>} @if (piesa.DateModified != null)
-                            {<span class="badge rounded-pill bg-light">Modificat</span>} @if (piesa.IsBanger == true)
-                            {<span class="badge rounded-pill bg-success">Banger</span>}
-
+                                string DateFormated = DateFormater.ToString("dd/MM/yyyy HH:ss");
+                            }
+                            <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
+                            @if (timeSpan.TotalDays < 3)
+                            {
+                                <span class="badge rounded-pill bg-info">Nou</span>
+                            }
+                            @if (piesa.DateModified != null)
+                            {
+                                <span class="badge rounded-pill bg-light">Modificat</span>
+                            }
+                            @if (piesa.IsBanger == true)
+                            {
+                                <span class="badge rounded-pill bg-success">Banger</span>
+                            }
                         </td>
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
                         <td>@DateFormated</td>
+
+                        @{
+                            var userId = User.Identity.GetUserId();
+                        }
+
+                        @if (piesa.UserId != null)
+                        {
+                            if (userId == piesa.UserId)
+                            {
+                                <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                            }
+                            else
+                            {
+                                <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                            }
+
+
+                        }
+                        else
+                        {
+                            <td> </td>
+                        }
+
+
                         <td>@Stiluri[piesa.StyleId - 1].Name</td>
                     </tr>
                 }
@@ -76,20 +116,20 @@
 @section scripts
 {
 
-<script>
-    $(document).ready(function () {
-        $("#Piese").DataTable({
-            "order": [[3, "desc"]],
-            language: {
-                lengthMenu: 'Arata _MENU_ piese',
-                search: 'Cauta :',
-                info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
-                paginate: {
-                    previous: 'Pagina anterioara', 
-                    next: 'Pagina urmatoare' 
-                },
-            }
+    <script>
+        $(document).ready(function () {
+            $("#Piese").DataTable({
+                "order": [[3, "desc"]],
+                language: {
+                    lengthMenu: 'Arata _MENU_ piese',
+                    search: 'Cauta :',
+                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
+                    paginate: {
+                        previous: 'Pagina anterioara',
+                        next: 'Pagina urmatoare'
+                    },
+                }
+            });
         });
-    });
-</script>
+    </script>
 }

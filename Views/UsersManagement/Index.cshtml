@@ -24,7 +24,7 @@
                 roleName = ((IEnumerable<IdentityRole>)ViewBag.Roles).Single(x => x.Id == roleId).Name;
             }
             <tr>
-                <td>@user.UserName</td>
+                <td><a href="@Url.Action("Profile", "UsersManagement", new { id = user.Id })">@user.UserName</a></td>
                 <td>@user.Email</td>
                 <td>
                     @Html.DropDownList(

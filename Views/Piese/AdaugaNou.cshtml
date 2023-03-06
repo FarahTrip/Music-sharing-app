@@ -1,4 +1,4 @@
-﻿@model Trippin_Website.ViewModels.PieseStiluriViewModel
+﻿@model Trippin_Website.ViewModels.PieseViewModel
 @{
     ViewBag.Title = "AdaugaNou";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,16 +15,52 @@
     .input-validation-error {
         border: 2px solid rgb(237, 36, 29, 0.91);
     }
+    #uploadButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222;
+        padding: 20px;
+        border-radius: 5px;
+        width: 280px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .file-input input[type="file"] {
+        display: none;
+    }
+
+    .file-input label {
+        display: inline-block;
+        padding: 8px 20px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .form-message {
+        color: #666;
+        font-style: italic;
+    }
+
+    #submitBtn
+    {
+        border-radius: 20px;
+    }
+
 </style>
 
 <link href="~/Content/Retusuri.css" rel="stylesheet" />
 
 <body>
-    <div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
+    <div class="main-container" style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
-        @using (Html.BeginForm("Creeaza", "Piese"))
+
+        @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
 
+            @Html.HiddenFor(m => m.Piese.UserId)
             @Html.HiddenFor(m => m.Piese.Id)
             <h2 style="text-align: center; display:block">Adauga o noua piesa</h2>
             @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
@@ -51,13 +87,20 @@
                 <label for="StyleId">Stilul</label>
                 @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
             </div>
+            <div id="uploadButton" class="form-group">
+                <div class="file-input">
+                    <label for="file">Incarca piesa</label>
+                    @Html.TextBox("file", "", new { type = "file", id = "file" })
+                </div>
+            </div>
+            <p class="form-message">@ViewBag.Message</p>
             <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
                 @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
             </div>
             @Html.AntiForgeryToken()
 
 
-            <button type="submit" class="btn btn-secondary">
+            <button type="submit" id="submitBtn" class="btn btn-secondary">
                 Submit
             </button>
 

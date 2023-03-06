@@ -36,6 +36,16 @@
         width: fit-content;
         height: 50px;
         border-radius: 50%;
+        cursor: pointer;
+        margin-right: 7px;
+    }
+
+    #notification-icon {
+        width: fit-content;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-right: 15px;
     }
 
     #profilepicmenu {
@@ -54,13 +64,93 @@
         display: block;
         margin: 0 auto;
     }
+
+    #noti_Container {
+        position: relative;
+        width: 31px;
+        height: 16px;
+    }
+
+    .noti_bubble {
+        position: absolute;
+        top: -11px;
+        right: 23px;
+        padding: 1px 2px 1px 2px;
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        font-size: 0.55em;
+        border-radius: 30px;
+        box-shadow: 1px 1px 1px gray;
+    }
+
+    .noti_bubble {
+        position: absolute;
+        top: 8px;
+        right: 20px;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    .notification-container {
+        position: absolute;
+        top: 86px;
+        right: 10px;
+        background-color: white;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        min-width: 200px;
+        z-index: 1;
+        display: none;
+        padding: 10px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        line-height: 1.5;
+        font-family: Arial, sans-serif;
+    }
+
+        .notification-container h5 {
+            margin-top: 0px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #888888;
+        }
+
+        .notification-container p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        .notification-container a {
+            display: block;
+            margin-top: 10px;
+            color: #888888;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .notification-container a:hover {
+                background-color: #f5f5f5;
+            }
+
+    .notification-container {
+        background-color: #21262d;
+        color: #fff;
+    }
 </style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" @Html.ActionLink("Trippin", "Index", "Home")</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span onclick="toggleMenu()" id="navbar-toggler" class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav me-auto">
@@ -91,14 +181,23 @@
                                 <span>Clienti</span>
                             </a>
                         </li>
-
                         if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "UsersManagement")">
-                                    <span>Manageriaza conturi</span>
-                                </a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false" onClick="toggleDropdown()">Admin</a>
+                                <div class="dropdown-menu" data-bs-popper="static">
+
+                                    <a class="dropdown-item" href="@Url.Action("Index", "UsersManagement")">
+                                        <span>Manageriaza conturi</span>
+                                    </a>
+
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
                             </li>
+
                         }
                     }
 
@@ -106,22 +205,31 @@
 
                 <div class="right-menu-profile">
 
+
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
+                        <div id="notification-wrapper">
+                            <span id="noti_Container" onclick="toggleNotification()">
+                                <img id="notification-icon" src="~/Content/Images/notification-icon.png" alt="Alternate Text" />
+                                <div class="noti_bubble">2</div>
+                            </span>
 
-                        @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                            <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
 
-                        if (User.IsInRole("Admin"))
-                        {
-                            <span class="badge rounded-pill bg-info">Admin</span>
-                        }
-                        else if (User.IsInRole("Producer"))
-                        {
-                            <span class="badge rounded-pill bg-primary">Producer</span>
-                        }
+                            @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
 
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="badge rounded-pill bg-info">Admin</span>
+                            }
+                            else if (User.IsInRole("Producer"))
+                            {
+                                <span class="badge rounded-pill bg-primary">Producer</span>
+                            }
+                        </div>
                     }
+
+
                     @if (!Request.IsAuthenticated)
                     {
                         <ul class="nav navbar-nav navbar-right">
@@ -145,6 +253,22 @@
             </div>
             @if (User.Identity.IsAuthenticated)
             {
+
+                <div id="notification-dropdown" class="dropdown">
+                    <div class="dropdown-menu" aria-labelledby="notification-dropdown">
+                        <h5 class="dropdown-header">Notifications</h5>
+                        <a class="dropdown-item" href="#">Notification 1</a>
+                        <a class="dropdown-item" href="#">Notification 2</a>
+                        <a class="dropdown-item" href="#">Notification 3</a>
+                        <a class="dropdown-item" href="#">Notification 4</a>
+                    </div>
+                </div>
+                <div class="notification-container" id="notification-container">
+                    <h5>Notifications</h5>
+                    <p>You have a new message from John Doe</p>
+                    <a href="#">View all notifications</a>
+                </div>
+
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
                         <div class="user-info">
@@ -154,11 +278,11 @@
                             </h4>
                             @if (User.IsInRole("Admin"))
                             {
-                                <span class="badge rounded-pill bg-info">Admin</span>
+                                <span style="margin-left: 10px" class="badge rounded-pill bg-info">Admin</span>
                             }
                             else if (User.IsInRole("Producer"))
                             {
-                                <span class="badge rounded-pill bg-primary">Producer</span>
+                                <span style="margin-left: 20px" class="badge rounded-pill bg-primary">Producer</span>
                             }
                         </div>
                         <hr />
@@ -204,35 +328,54 @@
 
     @if (User.Identity.IsAuthenticated)
     {
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-        let subMenu = document.getElementById("subMenu");
+    let subMenu = document.getElementById("subMenu");
+    let navbar = document.getElementById("navbar-toggler");
+    let notificationContainer = document.getElementById("notification-container");
 
-        function toggleMenu() {
-            subMenu.classList.toggle("open-menu")
+    function toggleNotification() {
+        if (notificationContainer.style.display === "none") {
+            notificationContainer.style.display = "block";
+            subMenu.classList.remove("open-menu"); // Close subMenu if it's open
+        } else {
+            notificationContainer.style.display = "none";
         }
+    }
 
-
-        $(document).ready(function () {
-            var userId = "@userId"; 
-    $.get("/api/Conturi/" + userId, function (data) {
-
-        $("#username").text(data.userName);
-        $("#email").text(data.email);
-        if (data.profilePicture == null) {
-            $("#profilepic").attr("src", "/Content/Images/No-profile-picture.jpg");
-            $("#profilepicmenu").attr("src", "/Content/Images/No-profile-picture.jpg");
+    function toggleMenu() {
+        if (subMenu.classList.contains("open-menu")) {
+            subMenu.classList.remove("open-menu");
+        } else {
+            subMenu.classList.add("open-menu");
+            notificationContainer.style.display = "none"; // Close notificationContainer if it's open
         }
-        else {
-            $("#profilepic").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
-            $("#profilepicmenu").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
-        }
+    }
 
-    })
-    .fail(function () {
-        alert("Error retrieving user data.");s
+    $(document).ready(function () {
+        var userId = "@userId";
+        $.get("/api/Conturi/" + userId, function (data) {
+            $("#username").text(data.userName);
+            $("#email").text(data.email);
+            if (data.profilePicture == null) {
+                $("#profilepic").attr("src", "/Content/Images/No-profile-picture.jpg");
+                $("#profilepicmenu").attr("src", "/Content/Images/No-profile-picture.jpg");
+            }
+            else {
+                $("#profilepic").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
+                $("#profilepicmenu").attr("src", "/Content/Images/User Profiles Images/" + data.profilePicture);
+            }
+        })
+        .fail(function () {
+            alert("Error retrieving user data.");
+        });
     });
-});
+
+    function toggleDropdown() {
+        var dropdownMenu = document.querySelector('.dropdown-menu');
+        dropdownMenu.classList.toggle('show');
+    }
         </script>
 
     }

@@ -8,6 +8,7 @@ namespace Trippin_Website.ViewModels
         public List<Piese> Piese { get; set; } = new List<Piese>();
         public List<StyleOf> Stiluri { get; set; } = new List<StyleOf>();
         public List<PieseFileNames> PieseFileNames { get; set; } = new List<PieseFileNames>();
+        public List<ApplicationUser> Users { get; set; }
 
     }
 }

@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Trippin_Website.Models;
 using Trippin_Website.ViewModels;
@@ -10,6 +14,7 @@ namespace Trippin_Website.Controllers
     public class PieseController : Controller
     {
         private ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
@@ -17,7 +22,7 @@ namespace Trippin_Website.Controllers
         public PieseController()
         {
             _context = new ApplicationDbContext();
-
+            _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
         }
         // GET: Piese
 
@@ -27,31 +32,37 @@ namespace Trippin_Website.Controllers
             var piese = _context.Piese.ToList();
             var Stiluri = _context.StyleOf.ToList();
             var PieseFileNames = _context.PieseFileNames.ToList();
-            var pieseModel = new PieseAllViewModel()
+            var users = _userManager.Users.ToList();
+            var pieseAllViewModel = new PieseAllViewModel()
             {
                 Piese = piese,
                 PieseFileNames = PieseFileNames,
                 Stiluri = Stiluri,
+                Users = users
             };
 
-            return View(pieseModel);
+            var pieseIndexViewModel = new PieseIndexViewModel()
+            {
+                PieseAllViewModel = pieseAllViewModel,
+                UserManager = _userManager
+            };
+
+            return View(pieseIndexViewModel);
         }
 
         [AllowAnonymous]
         [Route("Piese/detalii/{id?}")]
         public ActionResult Detalii(Guid? id)
         {
-            var piese = _context.Piese.Include(c => c.Style).Include(c => c.PiesaFileName).SingleOrDefault(c => c.Id == id);
+            var piese = _context.Piese.Include(c => c.Style).SingleOrDefault(c => c.Id == id);
             if (id == null)
             {
                 return RedirectToAction("Index");
             }
-            var viewModel = new PieseStiluriViewModel
+            var viewModel = new PieseViewModel
             {
                 Piese = piese,
-                Style = _context.StyleOf.ToList(),
-                PieseFileNames = _context.PieseFileNames.ToList()
-
+                Style = _context.StyleOf.ToList()
             };
             return View(viewModel);
         }
@@ -60,7 +71,7 @@ namespace Trippin_Website.Controllers
         public ActionResult AdaugaNou()
         {
             var Stiluri = _context.StyleOf.ToList();
-            var viewModel = new PieseStiluriViewModel
+            var viewModel = new PieseViewModel
             {
                 Style = Stiluri
             };
@@ -69,59 +80,57 @@ namespace Trippin_Website.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Producer")]
-        public ActionResult Creeaza(Piese piese)
+        public ActionResult Creeaza(Piese piese, HttpPostedFileBase file)
         {
+            var PieseModel = new PieseViewModel()
+            {
+                Piese = piese,
+                Style = _context.StyleOf.ToList(),
+            };
+
             if (!ModelState.IsValid)
             {
-                var PieseModel = new PieseStiluriViewModel()
-                {
-                    Piese = piese,
-                    Style = _context.StyleOf.ToList(),
-                };
+
                 return View("AdaugaNou", PieseModel);
             }
 
-            piese.Id = Guid.NewGuid();
-            _context.Piese.Add(piese);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-
-        [Authorize(Roles = "Admin, Producer")]
-        public ActionResult ModificaFileName(Piese piese)
-        {
-            var CurrentDateTime = DateTime.Now;
-            var PiesaInDB = _context.Piese.Single(c => c.Id == piese.Id);
-
             try
             {
-                PiesaInDB.PiesaFileNameId = piese.PiesaFileNameId;
-                PiesaInDB.DateModified = CurrentDateTime;
+                if (file.ContentLength > 0)
+                {
+                    string _FileName = Path.GetFileName(file.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/Piese-Uploaded"), _FileName);
+
+                    string extension = Path.GetExtension(file.FileName).ToLower();
+                    if (extension == ".wav" || extension == ".mp3")
+                    {
+                        file.SaveAs(_path);
+                        piese.FileName = _FileName;
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Doar .wav si .mp3 sunt acceptate ca si extensii!.";
+                        return View("AdaugaNou", PieseModel);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Te rog selecteaza un fisier!";
+                    return View("AdaugaNou", PieseModel);
+                }
+
+                piese.Id = Guid.NewGuid();
+                piese.UserId = User.Identity.GetUserId();
+                _context.Piese.Add(piese);
                 _context.SaveChanges();
-                return RedirectToAction("Detalii", "Piese", new { piese.Id });
+
+                return RedirectToAction("Index", "Piese");
             }
             catch
             {
-                return Content("Eroare in sloboz");
+                ViewBag.Message = "Te rog selecteaza un fisier!!";
+                return View("AdaugaNou", PieseModel);
             }
-
-        }
-        [Authorize(Roles = "Admin, Producer")]
-        public ActionResult AlegePiesa(Guid? id)
-        {
-            var piese = _context.Piese.SingleOrDefault(c => c.Id == id);
-            if (id == null)
-            {
-                return RedirectToAction("Detalii");
-            }
-            var viewModel = new PieseAndPieseFileNamesViewModel
-            {
-                Piese = piese,
-                PieseFileNames = _context.PieseFileNames.ToList()
-            };
-            return View(viewModel);
         }
 
         [Authorize(Roles = "Admin, Producer")]
@@ -143,11 +152,10 @@ namespace Trippin_Website.Controllers
         [Authorize(Roles = "Admin, Producer")]
         public ActionResult ModificaPiesa(Guid id)
         {
-
             if (!ModelState.IsValid)
             {
                 var piesaForValidation = _context.Piese.SingleOrDefault(c => c.Id == id);
-                var ModelForValidation = new PieseStiluriViewModel
+                var ModelForValidation = new PieseViewModel
                 {
                     Piese = piesaForValidation,
                     Style = _context.StyleOf.ToList()
@@ -156,7 +164,7 @@ namespace Trippin_Website.Controllers
             }
             var piesa = _context.Piese.SingleOrDefault(c => c.Id == id);
             var stiluri = _context.StyleOf.ToList();
-            var Model = new PieseStiluriViewModel()
+            var Model = new PieseViewModel()
             {
                 Piese = piesa,
                 Style = stiluri
@@ -166,7 +174,7 @@ namespace Trippin_Website.Controllers
 
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Producer")]
-        public ActionResult ModificaSaved(PieseStiluriViewModel PiesaModel)
+        public ActionResult ModificaSaved(PieseViewModel PiesaModel)
         {
             var CurrentDateTime = DateTime.Now;
             var PieseInDb = _context.Piese.Single(c => c.Id == PiesaModel.Piese.Id);

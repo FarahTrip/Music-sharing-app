@@ -1,6 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+@{
     var CurrentDateTime = DateTime.Now;
     var Stiluri = Model.Stiluri;
+
 }
 
 <style>
@@ -13,6 +17,12 @@
     .card {
         margin-right: 20px;
     }
+
+    #NotYourSong {
+        margin-top: 20px;
+        font-size: 18px;
+        color: red;
+    }
 </style>
 
 <div class="tabelDiv">
@@ -23,7 +33,7 @@
         <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
     </div>
     <div class="TabeleNebune">
-        <table id="Piese"class="table table-hover">
+        <table id="Piese" class="table table-hover">
             <thead>
                 <tr>
                     <th>Nume Piesa</th>
@@ -48,25 +58,36 @@
                             {<span class="badge rounded-pill bg-success">Banger</span>}
 
                         </td>
-                        @{ 
+                        @{
                             var DateFormater = piesa.DateCreated;
                             string DateFormated = DateFormater.ToString("dd/M/yyyy");
+                            var userId = User.Identity.GetUserId();
                         }
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
                         <td>@Stiluri[piesa.StyleId - 1].Name</td>
                         <td>@DateFormated</td>
-                        <td>
-                            <button id="EditButton" type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "ModificaPiesa", new { id = piesa.Id })</button>
-                        </td>
-                        <td><button data-piese-id="@piesa.Id" id="EditButton" type="button" class="btn btn-danger sterge-btn">Sterge</button></td>
+
+                        @if (piesa.UserId == userId || User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <button id="EditButton" type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "ModificaPiesa", new { id = piesa.Id })</button>
+                            </td>
+                            <td><button data-piese-id="@piesa.Id" id="EditButton" type="button" class="btn btn-danger sterge-btn">Sterge</button></td>
+                        }
+                        else
+                        {
+                    <td id="NotYourSong">Unavailable</td>
+                    <td id="NotYourSong">Unavailable</td>
+                        }
+
 
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-</div> 
+</div>
 
 @section scripts
 {
@@ -85,12 +106,10 @@
                     },
                 }
             });
-            $("#Piese .sterge-btn").on("click", function ()       
-            {
+            $("#Piese .sterge-btn").on("click", function () {
                 var button = $(this);
 
-                if (confirm("Vrei sa stergi piesa?"))
-                {
+                if (confirm("Vrei sa stergi piesa?")) {
                     $.ajax({
                         url: "/API/PieseAPI/" + $(this).attr("data-piese-id"),
                         method: "DELETE",
@@ -103,4 +122,4 @@
             });
         });
     </script>
-    }
+}

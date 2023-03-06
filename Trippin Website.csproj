@@ -657,6 +657,14 @@
     <Compile Include="Migrations\202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.designer.cs">
       <DependentUpon>202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303032147510_AddUserIDToPiese.cs" />
+    <Compile Include="Migrations\202303032147510_AddUserIDToPiese.designer.cs">
+      <DependentUpon>202303032147510_AddUserIDToPiese.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303041112225_PieseFlleSystemModification.cs" />
+    <Compile Include="Migrations\202303041112225_PieseFlleSystemModification.designer.cs">
+      <DependentUpon>202303041112225_PieseFlleSystemModification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -701,6 +709,7 @@
     <Compile Include="Models\Notite.cs" />
     <Compile Include="Models\Piese.cs" />
     <Compile Include="Models\PieseFileNames.cs" />
+    <Compile Include="Models\PieseIndexViewModel.cs" />
     <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\StyleOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -710,9 +719,10 @@
     <Compile Include="ViewModels\NewBeatViewModel.cs" />
     <Compile Include="ViewModels\PieseAllViewModel.cs" />
     <Compile Include="ViewModels\PieseAndPieseFileNamesViewModel.cs" />
-    <Compile Include="ViewModels\PieseStiluriViewModel.cs" />
+    <Compile Include="ViewModels\PieseViewModel.cs" />
     <Compile Include="ViewModels\SingleUserViewModel.cs" />
     <Compile Include="ViewModels\songbeatartistViewModel.cs" />
+    <Compile Include="ViewModels\User-Content-ViewModel.cs" />
     <Compile Include="ViewModels\UserListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -838,6 +848,7 @@
     <Content Include="Content\Images\linesDark2.svg" />
     <Content Include="Content\Images\linesDarkGood.png" />
     <Content Include="Content\Images\No-profile-picture.jpg" />
+    <Content Include="Content\Images\notification-icon.png" />
     <Content Include="Content\Images\pastile.jpg" />
     <Content Include="Content\Images\stand-by.png" />
     <Content Include="Content\Images\up.png" />
@@ -969,15 +980,12 @@
     <Content Include="Views\Piese\Detalii.cshtml" />
     <Content Include="Views\Piese\Index.cshtml" />
     <Content Include="Views\Clienti\Index.cshtml" />
-    <Content Include="Views\Upload\UploadPiesa.cshtml" />
     <Content Include="Views\Clienti\Detalii.cshtml" />
     <Content Include="Views\Beaturi\Detalii.cshtml" />
     <Content Include="Views\Beaturi\AdaugaNou.cshtml" />
     <Content Include="Views\Beaturi\Edit.cshtml" />
     <Content Include="Views\Beaturi\EditBeat.cshtml" />
     <Content Include="Views\Piese\AdaugaNou.cshtml" />
-    <Content Include="Views\Upload\AddFileNameToDb.cshtml" />
-    <Content Include="Views\Piese\AlegePiesa.cshtml" />
     <Content Include="Views\Piese\Modifica.cshtml" />
     <Content Include="Views\Piese\ModificaPiesa.cshtml" />
     <Content Include="Views\UsersManagement\Index.cshtml" />
@@ -990,6 +998,7 @@
     <Folder Include="Piese-Uploaded\" />
     <Folder Include="Views\BeaturiAPI\" />
     <Folder Include="Views\Conturi\" />
+    <Folder Include="Views\Upload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -1100,6 +1109,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.resx">
       <DependentUpon>202303030132181_MaybeIGetAnExtensionMethodFromTheIdentityFramework.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303032147510_AddUserIDToPiese.resx">
+      <DependentUpon>202303032147510_AddUserIDToPiese.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303041112225_PieseFlleSystemModification.resx">
+      <DependentUpon>202303041112225_PieseFlleSystemModification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,7 @@ namespace Trippin_Website
         [Range(30, 200, ErrorMessage = "Oops! Nu prea sunt piese sub 30bpm sau peste 200bpm")]
         public int Bpm { get; set; }
 
-        public int BeatIDForLinking { get; set; }
+        public int BeatId { get; set; }
 
         public DateTime DateCreated { get; set; }
 
@@ -36,10 +36,8 @@ namespace Trippin_Website
         public byte StyleId { get; set; }
 
         public bool IsBanger { get; set; }
-
-        public PieseFileNames PiesaFileName { get; set; }
-
-        public int? PiesaFileNameId { get; set; }
+        public string FileName { get; set; }
+        public string UserId { get; set; }
 
     }
 }

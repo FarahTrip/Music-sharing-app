@@ -16,6 +16,7 @@ namespace Trippin_Website.Controllers
         public UploadController()
         {
             _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            _context = new ApplicationDbContext();
         }
 
         // GET: Upload
@@ -64,26 +65,36 @@ namespace Trippin_Website.Controllers
 
         public ActionResult UploadProfilePicture(HttpPostedFileBase file)
         {
-
             if (file.ContentLength > 0)
             {
                 string _FileName = Path.GetFileName(file.FileName);
                 string _path = Path.Combine(Server.MapPath("~/Content/Images/User Profiles Images"), _FileName);
-                file.SaveAs(_path);
                 var userId = User.Identity.GetUserId();
-                var user = _userManager.Users.SingleOrDefault(c => c.Id == userId);
 
-                string _FileName2 = Path.GetFileName(file.FileName);
-                user.ProfilePicture = _FileName2;
-                var result = _userManager.Update(user);
+                var user = _userManager.FindById(userId);
 
-                return RedirectToAction("Profile", "UsersManagement", user);
+                string extension = Path.GetExtension(file.FileName).ToLower();
+                if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif" || extension == ".bmp" || extension == ".webp")
+                {
+                    file.SaveAs(_path);
+
+                    string _FileName2 = Path.GetFileName(file.FileName);
+
+                    user.ProfilePicture = _FileName2;
+                    _userManager.Update(user);
+
+                    return RedirectToAction("Profile", "UsersManagement", new { Id = userId });
+                }
+                else
+                {
+                    ViewBag.Message = "Doar imaginile sunt acceptate ca format!";
+                    return RedirectToAction("Profile", "UsersManagement", new { Id = userId });
+                }
             }
 
             return View("Index");
-
-
         }
+
         public ActionResult AddFileNameToDb()
         {
             var FileNames = _context.PieseFileNames.ToList();

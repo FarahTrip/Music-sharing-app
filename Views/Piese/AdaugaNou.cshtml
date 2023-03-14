@@ -12,9 +12,11 @@
         font-size: 0.875em;
         color: #c00
     }
+
     .input-validation-error {
         border: 2px solid rgb(237, 36, 29, 0.91);
     }
+
     #uploadButton {
         display: flex;
         justify-content: center;
@@ -26,6 +28,7 @@
         margin-top: 10px;
         margin-bottom: 10px;
     }
+
     .file-input input[type="file"] {
         display: none;
     }
@@ -44,11 +47,9 @@
         font-style: italic;
     }
 
-    #submitBtn
-    {
+    #submitBtn {
         border-radius: 20px;
     }
-
 </style>
 
 <link href="~/Content/Retusuri.css" rel="stylesheet" />
@@ -57,7 +58,7 @@
     <div class="main-container" style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
 
-        @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { id = "adaugaForm", enctype = "multipart/form-data" }))
         {
 
             @Html.HiddenFor(m => m.Piese.UserId)
@@ -111,9 +112,21 @@
 </body>
 
 <footer>
-
 </footer>
 @section scripts
 {
+
+    <script>
+        $('#adaugaForm').submit(function (event) {
+        event.preventDefault(); 
+        var audio = new Audio('@Url.Content("~/Content/Audio/error-ok.wav")');
+        audio.play();
+        setTimeout(function () {
+            $('#adaugaForm').unbind('submit').submit(); 
+        }, 500); 
+    });
+    </script>
+
     @Scripts.Render("~/bundles/jqueryval")
-    }
+}
+

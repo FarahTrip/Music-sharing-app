@@ -69,91 +69,82 @@
     }
 </style>
 
+<body>
 
+    @using Microsoft.AspNet.Identity
+    @if (Request.IsAuthenticated)
+    {
 
-@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
-{
-
-
-
-    <div class="carousel-container">
-        <div class="carousel-slide">
-            <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
-            <img src="~/Content/Image-Carrousel/banner-la-misto.jpg">
-            <img src="https://i.ibb.co/kySpmh0/R.jpg">
-        </div>
-        <button class="prev-btn">&#8249;</button>
-        <button class="next-btn">&#8250;</button>
-    </div>
-    <script src="~/Scripts/Carrousel.js"></script>
-
-    <h3>@userId</h3>
-
-    <div class="jumbotron">
-
-        <div class="container">
-            <div class="card border-dark mb-3" style="max-width: fit-content;">
-                <div class="card-header">Youtube API</div>
-                <div class="card-body">
-                    <h4 class="card-title">Statistici despre canal</h4>
-                    YouTube Subscribers
-                    <div class="card-text" id="subscriberCount"></div>
-                    YouTube Video Views
-                    <div class="card-text" id="viewCount"></div>
-                    YouTube Video Count
-                    <div class="card-text" id="videoCount"></div>
-                </div>
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
+                <img src="~/Content/Image-Carrousel/banner-la-misto.jpg">
+                <img src="https://i.ibb.co/kySpmh0/R.jpg">
             </div>
-            <iframe class="DiscordApi" src="https://discord.com/widget?id=1078680165258899526&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            <button class="prev-btn">&#8249;</button>
+            <button class="next-btn">&#8250;</button>
         </div>
-        <script>
+        <script src="~/Scripts/Carrousel.js"></script>
 
-            const APIKey = 'AIzaSyA_60odxWTJP9vKUsF58ebUrLEmVVGe4cw';
-            const Userid = 'UCS-cRAaG-qEHjI1wSAEvVyQ';
-            const subscriberCount = document.getElementById('subscriberCount');
-            const viewCount = document.getElementById('viewCount');
-            const videoCount = document.getElementById('videoCount');
+        <div class="jumbotron">
 
+            <div class="container">
+                <div class="card border-dark mb-3" style="max-width: fit-content;">
+                    <div class="card-header">Youtube API</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Statistici despre canal</h4>
+                        YouTube Subscribers
+                        <div class="card-text" id="subscriberCount"></div>
+                        YouTube Video Views
+                        <div class="card-text" id="viewCount"></div>
+                        YouTube Video Count
+                        <div class="card-text" id="videoCount"></div>
+                    </div>
+                </div>
+                <iframe class="DiscordApi" src="https://discord.com/widget?id=1078680165258899526&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+            <script>
 
-
-            let getdata = () => {
-
-                fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${Userid}&key=${APIKey}`)
-                    .then(response => {
-                        return response.json()
-                    })
-                    .then(data => {
-                        console.log(data);
-                        subscriberCount.innerHTML = data["items"][0].statistics.subscriberCount;
-                        viewCount.innerHTML = data["items"][0].statistics.viewCount;
-                        videoCount.innerHTML = data["items"][0].statistics.videoCount;
-                    })
-
-            }
-
-            getdata();
-        </script>
-
-    </div>
+                const APIKey = 'AIzaSyA_60odxWTJP9vKUsF58ebUrLEmVVGe4cw';
+                const Userid = 'UCS-cRAaG-qEHjI1wSAEvVyQ';
+                const subscriberCount = document.getElementById('subscriberCount');
+                const viewCount = document.getElementById('viewCount');
+                const videoCount = document.getElementById('videoCount');
 
 
-}
-else
-{
-    <div class="NuELogatContainer">
-        <h2>Trebuie să fii logat ca să ai acces!</h2>
-        <img class="acces-denied" src="https://img.icons8.com/plasticine/256/restriction-shield.png" alt="Alternate Text" />
-        <button id="LoginBtn2" class="btn btn-outline-info" type="button"> @Html.ActionLink("Loghează-te", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
-    </div>
 
-}
+                let getdata = () => {
 
-@if (User.IsInRole("Admin"))
-{
-    <p>Bine ai venit faraoane!</p>
-}
+                    fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${Userid}&key=${APIKey}`)
+                        .then(response => {
+                            return response.json()
+                        })
+                        .then(data => {
+                            console.log(data);
+                            subscriberCount.innerHTML = data["items"][0].statistics.subscriberCount;
+                            viewCount.innerHTML = data["items"][0].statistics.viewCount;
+                            videoCount.innerHTML = data["items"][0].statistics.videoCount;
+                        })
 
+                }
+
+                getdata();
+            </script>
+
+        </div>
+
+
+    }
+    else
+    {
+        <div class="NuELogatContainer">
+            <h2>Trebuie să fii logat ca să ai acces!</h2>
+            <img class="acces-denied" src="https://img.icons8.com/plasticine/256/restriction-shield.png" alt="Alternate Text" />
+            <button id="LoginBtn2" class="btn btn-outline-info" type="button"> @Html.ActionLink("Loghează-te", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
+        </div>
+
+    }
+</body>
 <script>
 
 </script>

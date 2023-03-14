@@ -29,14 +29,12 @@ namespace Trippin_Website.Controllers
         [Authorize(Roles = "Admin, Producer")]
         public ActionResult Index()
         {
-            var piese = _context.Piese.ToList();
+            var piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList();
             var Stiluri = _context.StyleOf.ToList();
-            var PieseFileNames = _context.PieseFileNames.ToList();
             var users = _userManager.Users.ToList();
             var pieseAllViewModel = new PieseAllViewModel()
             {
                 Piese = piese,
-                PieseFileNames = PieseFileNames,
                 Stiluri = Stiluri,
                 Users = users
             };
@@ -59,10 +57,23 @@ namespace Trippin_Website.Controllers
             {
                 return RedirectToAction("Index");
             }
+
+
+            bool hasLiked = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                hasLiked = _context.Likes.Any(l => l.UserId == userId && l.PiesaId == piese.Id);
+            }
+
+
             var viewModel = new PieseViewModel
             {
                 Piese = piese,
-                Style = _context.StyleOf.ToList()
+                Style = _context.StyleOf.ToList(),
+                Likes = _context.Likes.Where(c => c.PiesaId == id).ToList(),
+                HasLiked = hasLiked
+
             };
             return View(viewModel);
         }
@@ -77,6 +88,7 @@ namespace Trippin_Website.Controllers
             };
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Producer")]
@@ -138,11 +150,9 @@ namespace Trippin_Website.Controllers
         {
             var piese = _context.Piese.ToList();
             var Stiluri = _context.StyleOf.ToList();
-            var PieseFileNames = _context.PieseFileNames.ToList();
             var pieseModel = new PieseAllViewModel()
             {
                 Piese = piese,
-                PieseFileNames = PieseFileNames,
                 Stiluri = Stiluri,
             };
 

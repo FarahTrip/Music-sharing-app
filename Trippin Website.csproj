@@ -548,12 +548,14 @@
     <Compile Include="Controllers\API\BeaturiAPIController.cs" />
     <Compile Include="Controllers\API\ConturiController.cs" />
     <Compile Include="Controllers\API\PieseAPIController.cs" />
+    <Compile Include="Controllers\API\SocialApiController.cs" />
     <Compile Include="Controllers\ArtistiController.cs" />
     <Compile Include="Controllers\BeaturiController.cs" />
     <Compile Include="Controllers\ClientiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PieseController.cs" />
+    <Compile Include="Controllers\SocialController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="DTOS\PieseDTO.cs" />
@@ -665,6 +667,22 @@
     <Compile Include="Migrations\202303041112225_PieseFlleSystemModification.designer.cs">
       <DependentUpon>202303041112225_PieseFlleSystemModification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303102206012_AddingLikes.cs" />
+    <Compile Include="Migrations\202303102206012_AddingLikes.designer.cs">
+      <DependentUpon>202303102206012_AddingLikes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303102222492_AddingLikesLookingForGuids.cs" />
+    <Compile Include="Migrations\202303102222492_AddingLikesLookingForGuids.designer.cs">
+      <DependentUpon>202303102222492_AddingLikesLookingForGuids.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303111452584_MakeLikesUnique.cs" />
+    <Compile Include="Migrations\202303111452584_MakeLikesUnique.designer.cs">
+      <DependentUpon>202303111452584_MakeLikesUnique.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303111528511_ThisWasNotAGoodIdea.cs" />
+    <Compile Include="Migrations\202303111528511_ThisWasNotAGoodIdea.designer.cs">
+      <DependentUpon>202303111528511_ThisWasNotAGoodIdea.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -702,8 +720,8 @@
     <Compile Include="Models\Artisti.cs" />
     <Compile Include="Models\Beat.cs" />
     <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\IdentityExtensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Likes.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Notite.cs" />
@@ -726,7 +744,12 @@
     <Compile Include="ViewModels\UserListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Audio\cairo.wav" />
+    <Content Include="Content\Audio\camera.mp3" />
+    <Content Include="Content\Audio\error-ok.wav" />
+    <Content Include="Content\Audio\error.mp3" />
+    <Content Include="Content\Audio\Like-sound.mp3" />
+    <Content Include="Content\Audio\show-share.mp3" />
+    <Content Include="Content\Audio\upload-piesa.wav" />
     <Content Include="Content\bootstrap-cyborg.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -842,14 +865,19 @@
     <Content Include="Content\Image-Carrousel\banner-la-misto.jpg" />
     <Content Include="Content\Images\accessdenied.svg" />
     <Content Include="Content\Images\Asset 3.png" />
+    <Content Include="Content\Images\dislike-active.png" />
+    <Content Include="Content\Images\dislike-non-active.png" />
     <Content Include="Content\Images\down.png" />
     <Content Include="Content\Images\eugene-golovesov-tFX1nzq57ys-unsplash.jpg" />
+    <Content Include="Content\Images\like-liked.png" />
+    <Content Include="Content\Images\like-non-liked-yet.png" />
     <Content Include="Content\Images\linesDark.svg" />
     <Content Include="Content\Images\linesDark2.svg" />
     <Content Include="Content\Images\linesDarkGood.png" />
     <Content Include="Content\Images\No-profile-picture.jpg" />
     <Content Include="Content\Images\notification-icon.png" />
     <Content Include="Content\Images\pastile.jpg" />
+    <Content Include="Content\Images\share-button.png" />
     <Content Include="Content\Images\stand-by.png" />
     <Content Include="Content\Images\up.png" />
     <Content Include="Content\Images\Upload.svg" />
@@ -857,6 +885,16 @@
     <Content Include="Content\Retusuri.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\Spacia\Spacia-Bold.svg" />
+    <Content Include="fonts\Spacia\Spacia-BoldItalic.svg" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBold.svg" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBoldItalic.svg" />
+    <Content Include="fonts\Spacia\Spacia-Heavy.svg" />
+    <Content Include="fonts\Spacia\Spacia-HeavyItalic.svg" />
+    <Content Include="fonts\Spacia\Spacia-Italic.svg" />
+    <Content Include="fonts\Spacia\Spacia-Light.svg" />
+    <Content Include="fonts\Spacia\Spacia-LightItalic.svg" />
+    <Content Include="fonts\Spacia\Spacia-Regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootbox.js" />
@@ -865,6 +903,40 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <Content Include="fonts\futura-pt-book.otf" />
+    <Content Include="fonts\dinneuzeitgroteskstd-light.otf" />
+    <Content Include="fonts\Futura Book font.ttf" />
+    <Content Include="fonts\Spacia-Regular.woff2" />
+    <Content Include="fonts\Spacia\Spacia-Bold.eot" />
+    <Content Include="fonts\Spacia\Spacia-Bold.woff" />
+    <Content Include="fonts\Spacia\Spacia-Bold.woff2" />
+    <Content Include="fonts\Spacia\Spacia-BoldItalic.eot" />
+    <Content Include="fonts\Spacia\Spacia-BoldItalic.woff" />
+    <Content Include="fonts\Spacia\Spacia-BoldItalic.woff2" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBold.eot" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBold.woff" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBold.woff2" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBoldItalic.eot" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBoldItalic.woff" />
+    <Content Include="fonts\Spacia\Spacia-ExtraBoldItalic.woff2" />
+    <Content Include="fonts\Spacia\Spacia-Heavy.eot" />
+    <Content Include="fonts\Spacia\Spacia-Heavy.woff" />
+    <Content Include="fonts\Spacia\Spacia-Heavy.woff2" />
+    <Content Include="fonts\Spacia\Spacia-HeavyItalic.eot" />
+    <Content Include="fonts\Spacia\Spacia-HeavyItalic.woff" />
+    <Content Include="fonts\Spacia\Spacia-HeavyItalic.woff2" />
+    <Content Include="fonts\Spacia\Spacia-Italic.eot" />
+    <Content Include="fonts\Spacia\Spacia-Italic.woff" />
+    <Content Include="fonts\Spacia\Spacia-Italic.woff2" />
+    <Content Include="fonts\Spacia\Spacia-Light.eot" />
+    <Content Include="fonts\Spacia\Spacia-Light.woff" />
+    <Content Include="fonts\Spacia\Spacia-Light.woff2" />
+    <Content Include="fonts\Spacia\Spacia-LightItalic.eot" />
+    <Content Include="fonts\Spacia\Spacia-LightItalic.woff" />
+    <Content Include="fonts\Spacia\Spacia-LightItalic.woff2" />
+    <Content Include="fonts\Spacia\Spacia-Regular.eot" />
+    <Content Include="fonts\Spacia\Spacia-Regular.woff" />
+    <Content Include="fonts\Spacia\Spacia-Regular.woff2" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Carrousel.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -998,6 +1070,8 @@
     <Folder Include="Piese-Uploaded\" />
     <Folder Include="Views\BeaturiAPI\" />
     <Folder Include="Views\Conturi\" />
+    <Folder Include="Views\SocialApi\" />
+    <Folder Include="Views\Social\" />
     <Folder Include="Views\Upload\" />
   </ItemGroup>
   <ItemGroup>
@@ -1115,6 +1189,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303041112225_PieseFlleSystemModification.resx">
       <DependentUpon>202303041112225_PieseFlleSystemModification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303102206012_AddingLikes.resx">
+      <DependentUpon>202303102206012_AddingLikes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303102222492_AddingLikesLookingForGuids.resx">
+      <DependentUpon>202303102222492_AddingLikesLookingForGuids.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303111452584_MakeLikesUnique.resx">
+      <DependentUpon>202303111452584_MakeLikesUnique.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303111528511_ThisWasNotAGoodIdea.resx">
+      <DependentUpon>202303111528511_ThisWasNotAGoodIdea.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -59,14 +59,12 @@
 
                         </td>
                         @{
-                            var DateFormater = piesa.DateCreated;
-                            string DateFormated = DateFormater.ToString("dd/M/yyyy");
                             var userId = User.Identity.GetUserId();
                         }
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
                         <td>@Stiluri[piesa.StyleId - 1].Name</td>
-                        <td>@DateFormated</td>
+                        <td>@piesa.DateCreated</td>
 
                         @if (piesa.UserId == userId || User.IsInRole("Admin"))
                         {
@@ -80,8 +78,6 @@
                     <td id="NotYourSong">Unavailable</td>
                     <td id="NotYourSong">Unavailable</td>
                         }
-
-
                     </tr>
                 }
             </tbody>

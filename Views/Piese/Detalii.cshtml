@@ -1,4 +1,10 @@
 ﻿
+
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+
+
 @{
     ViewBag.Title = "Detalii";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,7 +30,13 @@
     var CurrentDateTime = DateTime.Now;
     var timeSpan = CurrentDateTime - Model.Piese.DateCreated;
 
+
+
+    var hasLiked = Model.HasLiked;
+
 }
+
+
 <style>
     .card * {
         text-align: center;
@@ -39,16 +51,32 @@
     }
 
     button a {
-       
     }
 
     body {
         background-image: url('/Content/Images/linesDark2.svg');
-        background-size: cover;
+        background-size:cover;
         background-repeat: no-repeat;
     }
 
+    .card-text description full {
+        padding-top: 3px;
+        padding-bottom: 0px;
+    }
 
+    #interactWithPiesa {
+        padding-top: 2px;
+    }
+
+    #shareBtn {
+        cursor: pointer;
+    }
+
+
+
+    #shareContainer {
+        display: block;
+    }
 </style>
 
 
@@ -88,6 +116,25 @@
                     </p>
 
                 </div>
+                <div id="interactWithPiesa" class="card-body">
+                    <p id="LikeCount">@Model.Piese.Likes like-uri</p>
+                    @if (hasLiked)
+                    {
+                        <a id="likeBtn" href=""><img class="LikeButtons" src="~/Content/Images/like-liked.png" alt="Like button" /></a>
+
+                    }
+                    else if (!hasLiked)
+                    {
+                        <a id="likeBtn" href=""><img class="LikeButtons" src="~/Content/Images/like-non-liked-yet.png" alt="Like button" /></a>
+                    }
+                    <img class="LikeButtons" src="~/Content/Images/dislike-non-active.png" alt="Like button" />
+                    <img id="shareBtn" class="LikeButtons" onclick="showShare()" src="~/Content/Images/share-button.png" alt="Like button" />
+                </div>
+
+                <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
+
+
+
                 @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
                 {
                     <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })'">Alege piesa</button>
@@ -96,77 +143,78 @@
                 {
                     <button type="button" class="btn btn-outline-info" onclick="if(confirm('Nu ai drepturi sa schimbi piesa dar merci de incercare tho!')) { } else { event.preventDefault(); }">Alege piesa</button>
                 }
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
-                @if (Model.Piese.Key == null)
-                {
-                    <li class="list-group-item">Key : Nu este setata</li>
-                }
-                else
-                {
-                    <li class="list-group-item">Key : @Model.Piese.Key</li>
-                }
-
-
-
-
-                @if (Model.Style == null)
-                {
-                    <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
-                }
-                else
-                {
-                    <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
-
-                }
-                <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
-                <div style="background-color: #0d1117;">
-                    @if (Model.Piese.FileName != null)
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
+                    @if (Model.Piese.Key == null)
                     {
-
-                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
-                        {
-                            <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
-                                <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
-                            </audio>
-                        }
-                        else
-                        {
-                            <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                                <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
-                            </audio>
-                        }
-
-                    }
-
-                </div>
-
-
-
-                ------------------------------------------------------------------------------------------
-
-
-                @if (Model.Piese.FileName != null)
-                {
-                    if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
-                    {
-                        <a runat="server" href="~/Piese-Uploaded/@Model.Piese.FileName">@Model.Piese.FileName</a>
+                        <li class="list-group-item">Key : Nu este setata</li>
                     }
                     else
                     {
-                        <br />
-                        @Model.Piese.FileName
-                        <br />
+                        <li class="list-group-item">Key : @Model.Piese.Key</li>
                     }
-                }
-                else
-                {
-                    <li> Nu ai selectat inca fisierul!</li>
-                }
-                ------------------------------------------------------------------------------------------
-                <li class="list-group-item">Seed poza : @resultrandom</li>
-            </ul>
 
+
+
+
+                    @if (Model.Style == null)
+                    {
+                        <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+
+                    }
+                    <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
+                    <div style="background-color: #0d1117;">
+                        @if (Model.Piese.FileName != null)
+                        {
+
+                            if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
+                            {
+                                <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                                    <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
+                                </audio>
+                            }
+                            else
+                            {
+                                <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                                    <source src="~/Piese-Uploaded/@Model.Piese.FileName" type="audio/wav" />
+                                </audio>
+                            }
+
+                        }
+
+                    </div>
+
+
+
+
+
+                    ------------------------------------------------------------------------------------------
+
+
+                    @if (Model.Piese.FileName != null)
+                    {
+                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
+                        {
+                            <a runat="server" href="~/Piese-Uploaded/@Model.Piese.FileName">@Model.Piese.FileName</a>
+                        }
+                        else
+                        {
+                            <br />
+                            @Model.Piese.FileName
+                            <br />
+                        }
+                    }
+                    else
+                    {
+                        <li> Nu ai selectat inca fisierul!</li>
+                    }
+                    ------------------------------------------------------------------------------------------
+                    <li class="list-group-item">Seed poza : @resultrandom</li>
+                </ul>
 
                 <div class="card-footer text-muted">
 
@@ -189,6 +237,7 @@
 
                     }
 
+                    <audio id="likeSound" src="~/Content/Audio/show-share.mp3"></audio>
 
                 </div>
             </div>
@@ -196,33 +245,125 @@
     </div>
 </body>
 
-<script>
-    var description = document.getElementById('description');
-    var lineHeight = parseInt(window.getComputedStyle(description).getPropertyValue('line-height'));
-    var height = parseInt(window.getComputedStyle(description).getPropertyValue('height'));
-    var numLines = height / lineHeight;
-    if (numLines < 4) {
-        document.querySelector('.show-more-link').style.display = 'none';
-    } else {
-        document.querySelector('.show-more-link').style.display = 'block';
-    }
-</script>
+@section scripts{
+    <script>
+$(document).ready(function () {
+    var pieId = "@Model.Piese.Id";
+    var hasLiked = @Model.HasLiked.ToString().ToLower() === "true";
+    var likeBtn = $("#likeBtn");
+    var likeCount = $("#LikeCount");
+    var likeSound = $("#likeSound")[0];
 
-<script>
-    document.getElementById("copy-link").addEventListener("click", function (event) {
-        event.preventDefault();
-        navigator.clipboard.writeText(window.location.href);
-        var message = document.createElement("div");
-        message.innerText = "Copiat!";
-        message.style.position = "fixed";
-        message.style.top = (event.clientY - 20) + "px";
-        message.style.left = (event.clientX - 30) + "px";
-        message.style.backgroundColor = "#9933cc";
-        message.style.padding = "5px";
-        message.style.borderRadius = "5px";
-        document.body.appendChild(message);
-        setTimeout(function () {
-            document.body.removeChild(message);
-        }, 2000);
+    if (hasLiked) {
+        likeCount.text(parseInt(likeCount.text()) + 1 + " like-uri");
+        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+    }
+
+    likeBtn.click(function (e) {
+        e.preventDefault();
+
+        var url = "/api/socialapi/" + pieId;
+        var action = hasLiked ? "unlike" : "like";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { Id: pieId },
+            success: function (data) {
+                if (data.success) {
+                    if (action === "unlike") {
+                        likeCount.text(parseInt(likeCount.text()) - 1 + " like-uri");
+                        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-non-liked-yet.png")");
+                        hasLiked = false;
+                    } else {
+                        likeCount.text(parseInt(likeCount.text()) + 1 + " like-uri");
+                        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+                        hasLiked = true;
+                    }
+                    $.get("/api/socialapi/" + pieId, function (data) {
+                        if (data.alreadyLiked) {
+                            likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+                        }
+                        else {
+                            likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-non-liked-yet.png")");
+                        }
+                        likeCount.text(data.likes + " like-uri");
+                    });
+                    likeSound.play();
+                }
+            },
+            error: function () {
+                alert("A aparut o eroare :( .");
+            }
+        });
     });
-</script>
+});
+    </script>
+
+    <script>
+        var description = document.getElementById('description');
+        var lineHeight = parseInt(window.getComputedStyle(description).getPropertyValue('line-height'));
+        var height = parseInt(window.getComputedStyle(description).getPropertyValue('height'));
+        var numLines = height / lineHeight;
+        if (numLines < 4) {
+            document.querySelector('.show-more-link').style.display = 'none';
+        } else {
+            document.querySelector('.show-more-link').style.display = 'block';
+        }
+    </script>
+
+    <script>
+        document.getElementById("copy-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            navigator.clipboard.writeText(window.location.href);
+            var message = document.createElement("div");
+            message.innerText = "Copiat!";
+            message.style.position = "fixed";
+            message.style.top = (event.clientY - 20) + "px";
+            message.style.left = (event.clientX - 30) + "px";
+            message.style.backgroundColor = "#9933cc";
+            message.style.padding = "5px";
+            message.style.borderRadius = "5px";
+            document.body.appendChild(message);
+            setTimeout(function () {
+                document.body.removeChild(message);
+            }, 2000);
+        });
+    </script>
+
+
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=640f8b4eb5b185001201ccb0&product=inline-share-buttons&source=platform" async="async"></script>
+
+    <script>
+        window.onload = function () {
+            showShareOnLoad();
+        };
+
+        function showShareOnLoad() {
+            const st1Div = document.getElementById("st-1");
+            st1Div.style.display = "none";
+       
+        }
+
+        function showShare() {
+            const st1Div = document.getElementById("st-1");
+
+            if (st1Div.offsetHeight === 0) {
+                st1Div.style.display = "block";
+                st1Div.style.height = "0px";
+                st1Div.animate(
+                    [{ height: "0px" }, { height: 50 + "px" }],
+                    { duration: 100, fill: "forwards" }
+                );
+            } else {
+                st1Div.animate(
+                    [{ height: 50 + "px" }, { height: "0px" }],
+                    { duration: 100, fill: "forwards" }
+                ).onfinish = () => {
+                    st1Div.style.display = "none";
+                    st1Div.style.height = "";
+                };
+            }
+        }
+    </script>
+}

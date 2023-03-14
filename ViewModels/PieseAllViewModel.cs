@@ -10,5 +10,6 @@ namespace Trippin_Website.ViewModels
         public List<PieseFileNames> PieseFileNames { get; set; } = new List<PieseFileNames>();
         public List<ApplicationUser> Users { get; set; }
 
+        public Likes Likes { get; set; }
     }
 }

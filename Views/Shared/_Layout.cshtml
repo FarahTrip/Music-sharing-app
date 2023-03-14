@@ -291,10 +291,6 @@
                         @if (Request.IsAuthenticated)
                         {
 
-
-                            <buttonclass ="btn btn-outline-info" type="button"> </buttonclass>
-
-
                             using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                             {
                                 @Html.AntiForgeryToken()

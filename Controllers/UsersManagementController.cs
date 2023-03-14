@@ -54,11 +54,10 @@ namespace Trippin_Website.Controllers
             var Model = new User_Content_ViewModel
             {
                 User = user,
-                Piese = _context.Piese.ToList()
+                Piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList()
             };
 
             return View(Model);
-
         }
 
         public ActionResult DeleteProfilePicture()

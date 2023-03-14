@@ -4,8 +4,7 @@
 @{
 
     var CurrentDateTime = DateTime.Now;
-    var Stiluri = Model.PieseAllViewModel.Stiluri;
-    
+    var Stiluri = Model.PieseAllViewModel.Stiluri;   
 
 }
 
@@ -60,10 +59,6 @@
 
                     <tr>
                         <td>
-                            @{
-                                var DateFormater = piesa.DateCreated;
-                                string DateFormated = DateFormater.ToString("dd/MM/yyyy HH:ss");
-                            }
                             <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
                             @if (timeSpan.TotalDays < 3)
                             {
@@ -80,7 +75,7 @@
                         </td>
                         <td>@piesa.Key</td>
                         <td>@piesa.Bpm</td>
-                        <td>@DateFormated</td>
+                        <td>@piesa.DateCreated</td>
 
                         @{
                             var userId = User.Identity.GetUserId();

@@ -281,3 +281,38 @@ audio
 text-align: center;
 }
 
+
+@font-face {
+    font-family: 'Spacia';
+    src: url('/fonts/Spacia/Spacia-Regular.eot');
+    src: url('/fonts/Spacia/Spacia-Regular.eot?#iefix') format('embedded-opentype'), url('/fonts/Spacia/Spacia-Regular.woff2') format('woff2'), url('/fonts/Spacia/Spacia-Regular.woff') format('woff'), url('/fonts/Spacia/Spacia-Regular.svg#Spacia-Regular') format('svg');
+    font-weight:bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+.LikeButtons
+{
+    height: 35px !important;
+    width: 35px !important;
+    display: inline;
+    margin-left: 0px;
+    margin-right: auto;
+}
+
+#LikeCount {
+    display: inline;
+}
+
+.st-label {
+    background-color: unset !important;
+}
+
+.st-btn img {
+    background-color: unset !important;
+}
+
+.st-btn {
+    margin-bottom: 14px;
+}
+

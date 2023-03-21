@@ -156,8 +156,8 @@ namespace Trippin_Website.Controllers
                 {
                     /*                    var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
                                         var roleManager = new RoleManager<IdentityRole>(roleStore);
-                                        await roleManager.CreateAsync(new IdentityRole("Producer"));
-                                        await UserManager.AddToRoleAsync(user.Id, "Producer");*/
+                                        await roleManager.CreateAsync(new IdentityRole("Artist"));
+                                        await UserManager.AddToRoleAsync(user.Id, "Artist");*/
 
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 

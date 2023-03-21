@@ -4,6 +4,7 @@
     {
         public const string Admin = "Admin";
         public const string Producer = "Producer";
+        public const string Artist = "Artist";
 
 
     }

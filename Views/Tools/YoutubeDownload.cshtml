@@ -1,0 +1,54 @@
+﻿
+<link rel="stylesheet" href="~/Content/youtubeDownload.css" />
+
+<body>
+    <div class="container">
+        <h1>Descarca de pe youtube</h1>
+        <form>
+            <input id="urlText" type="text" placeholder="Pune URL-ul aici..." />
+            <button id="downloadBtn" type="submit">Descarca</button>
+        </form>
+    </div>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function DownloadVideo() {
+        var url = document.getElementById("urlText").value;
+        var videoID = url.split("v=")[1].split("&")[0];
+
+        const settings = {
+       /* API 2 - 50 uses max per/day dar fara reclame
+        * 
+        * "async": true,
+            "crossDomain": true,
+            "url": "https://youtube-mp36.p.rapidapi.com/dl?id=" + videoID,
+            "method": "GET",
+            "headers": {
+                "X-RapidAPI-Key": "367579e26fmsh62427d8189f7578p1e0a54jsn18ee80feaa0b",
+                "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com"
+            }*/
+            /*ap1 how many uses you want dar o reclama */
+            "async": true,
+            "crossDomain": true,
+            "url": "https://youtube-mp3-download1.p.rapidapi.com/dl?id=" + videoID,
+            "method": "GET",
+            "headers": {
+                "X-RapidAPI-Key": "367579e26fmsh62427d8189f7578p1e0a54jsn18ee80feaa0b",
+                "X-RapidAPI-Host": "youtube-mp3-download1.p.rapidapi.com"
+            }
+
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            window.open(response.link, '_blank');
+        });
+    }
+
+    document.getElementById("downloadBtn").addEventListener("click", function (event) {
+        event.preventDefault();
+        DownloadVideo();
+    });
+</script>

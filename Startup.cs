@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
+
 [assembly: OwinStartupAttribute(typeof(Trippin_Website.Startup))]
 namespace Trippin_Website
 {

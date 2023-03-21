@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Amazon;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 using Trippin_Website.ViewModels;
 
@@ -26,7 +31,7 @@ namespace Trippin_Website.Controllers
         }
         // GET: Piese
 
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult Index()
         {
             var piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList();
@@ -78,20 +83,23 @@ namespace Trippin_Website.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult AdaugaNou()
         {
+
+            var helper = new AmazonHelper();
             var Stiluri = _context.StyleOf.ToList();
             var viewModel = new PieseViewModel
             {
                 Style = Stiluri
             };
+            helper.CreateFolder(User.Identity.GetUserId());
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult Creeaza(Piese piese, HttpPostedFileBase file)
         {
             var PieseModel = new PieseViewModel()
@@ -145,7 +153,7 @@ namespace Trippin_Website.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult Modifica()
         {
             var piese = _context.Piese.ToList();
@@ -159,7 +167,7 @@ namespace Trippin_Website.Controllers
             return View(pieseModel);
         }
 
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult ModificaPiesa(Guid id)
         {
             if (!ModelState.IsValid)
@@ -183,7 +191,7 @@ namespace Trippin_Website.Controllers
         }
 
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Producer")]
+        [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult ModificaSaved(PieseViewModel PiesaModel)
         {
             var CurrentDateTime = DateTime.Now;
@@ -199,5 +207,57 @@ namespace Trippin_Website.Controllers
             return RedirectToAction("Index", "Piese");
 
         }
+
+        public ActionResult UrcaPeServerAmazonS3()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> UploadFileToS3(HttpPostedFileBase file)
+        {
+
+            var amazonHelper = new AmazonHelper();
+
+            try
+            {
+                using (var amazonS3client = new AmazonS3Client(amazonHelper.AccessId, amazonHelper.SecretKey, RegionEndpoint.EUNorth1))
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.InputStream.CopyTo(memoryStream);
+                        var request = new TransferUtilityUploadRequest
+                        {
+                            InputStream = memoryStream,
+                            // File name
+                            Key = file.FileName,
+                            // S3 bucket name
+                            BucketName = amazonHelper.BucketName,
+                            // File content type
+                            ContentType = file.ContentType
+                        };
+
+                        var transferUtility = new TransferUtility(amazonS3client);
+                        await transferUtility.UploadAsync(request);
+                    }
+                }
+                ViewBag.Success = "Fisierul a fost incarcat cu succes!";
+
+                return View("UrcaPeServerAmazonS3");
+            }
+            catch (AmazonS3Exception ex)
+            {
+                var errorMessage = ex.Message;
+                var statusCode = ex.StatusCode;
+                // Log or handle the error
+
+                ViewBag.ErrorMessage = $"Error uploading file to S3: {errorMessage} ({statusCode})";
+                return View("UrcaPeServerAmazonS3");
+            }
+
+        }
+
     }
 }

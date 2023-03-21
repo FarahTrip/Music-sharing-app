@@ -174,31 +174,39 @@
                                 <span>Beat-uri</span>
                             </a>
                         </li>
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Clienti")">
-                                <span>Clienti</span>
-                            </a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false" onClick="toggleDropdown('tools-dropdown')">Tools</a>
+                            <div class="dropdown-menu" data-bs-popper="static" id="tools-dropdown">
+                                <a class="dropdown-item" href="@Url.Action("YoutubeDownload", "Tools")">
+                                    <span>YouToube Download</span>
+                                </a>
+                                <a class="dropdown-item" href="@Url.Action("AnalizeazaSunet", "Tools")">
+                                    <span>Gaseste gama</span>
+                                </a>
+                            </div>
                         </li>
+
                         if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false" onClick="toggleDropdown()">Admin</a>
-                                <div class="dropdown-menu" data-bs-popper="static">
-
+                                <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false" onClick="toggleDropdown('admin-dropdown')">Admin</a>
+                                <div class="dropdown-menu" data-bs-popper="static" id="admin-dropdown">
                                     <a class="dropdown-item" href="@Url.Action("Index", "UsersManagement")">
                                         <span>Manageriaza conturi</span>
                                     </a>
-
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <a class="dropdown-item" href="#">Something else here</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Separated link</a>
                                 </div>
                             </li>
-
                         }
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Clienti")">
+                                <span>Clienti</span>
+                            </a>
+                        </li>
+
                     }
 
                 </ul>
@@ -226,6 +234,12 @@
                             {
                                 <span class="badge rounded-pill bg-primary">Producer</span>
                             }
+                            else if (User.IsInRole("Artist"))
+                            {
+                                <span class="badge rounded-pill bg-success">Artist</span>
+                            }
+
+
                         </div>
                     }
 
@@ -284,6 +298,10 @@
                             {
                                 <span style="margin-left: 20px" class="badge rounded-pill bg-primary">Producer</span>
                             }
+                            else if (User.IsInRole("Artist"))
+                            {
+                                <span style="margin-left: 20px" class="badge rounded-pill bg-success">Artist</span>
+                            }
                         </div>
                         <hr />
 
@@ -334,7 +352,7 @@
     function toggleNotification() {
         if (notificationContainer.style.display === "none") {
             notificationContainer.style.display = "block";
-            subMenu.classList.remove("open-menu"); // Close subMenu if it's open
+            subMenu.classList.remove("open-menu"); 
         } else {
             notificationContainer.style.display = "none";
         }
@@ -345,7 +363,7 @@
             subMenu.classList.remove("open-menu");
         } else {
             subMenu.classList.add("open-menu");
-            notificationContainer.style.display = "none"; // Close notificationContainer if it's open
+            notificationContainer.style.display = "none"; 
         }
     }
 
@@ -368,10 +386,10 @@
         });
     });
 
-    function toggleDropdown() {
-        var dropdownMenu = document.querySelector('.dropdown-menu');
-        dropdownMenu.classList.toggle('show');
-    }
+            function toggleDropdown(dropdownId) {
+                var dropdownMenu = document.getElementById(dropdownId);
+                dropdownMenu.classList.toggle('show');
+            }
         </script>
 
     }
@@ -381,3 +399,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

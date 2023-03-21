@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Analizeaza Sunet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="~/Content/KeyFinder.css" rel="stylesheet" />
+
+<body>
+    <div class="container">
+        <div class="title">Gaseste gama</div>
+        <div class="input">
+            <div id="fileInput" class="file-input">
+                <div class="drag-text">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3 id="result_key" >Trage fisierul aici</h3>
+                </div>
+                <label for="file" class="file-label">
+                    <input type="file" id="file" name="file" accept="audio/*" class="file-input">
+                    sau alege un fisier
+                </label>
+            </div>
+            <input type="button" id="start" class="button" value="Incepe">
+        </div>
+        <div class="result">
+@*            <label for="result_bpm">BPM:</label>
+            <span id="result_bpm"></span>*@
+        </div>
+    </div>
+    <script src="~/Scripts/GasesteGama.js"></script>
+</body>
+
+<script>
+    var fileInput = document.getElementById('file');
+    var dragArea = document.getElementById('fileInput');
+
+    dragArea.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        dragArea.classList.add('drag-over');
+    });
+
+    dragArea.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        dragArea.classList.remove('drag-over');
+    });
+
+    dragArea.addEventListener('drop', function (e) {
+        e.preventDefault();
+        dragArea.classList.remove('drag-over');
+        var file = e.dataTransfer.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        submitFile(formData);
+        displayFileName(file);
+    });
+
+    fileInput.addEventListener('change', function (e) {
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        submitFile(formData);
+        displayFileName(file);
+    });
+
+
+    function displayFileName(file) {
+        if (file) {
+            dragArea.querySelector('h3').innerHTML = file.name;
+        } else {
+            dragArea.querySelector('h3').innerHTML = 'Trage fisierul aici';
+        }
+    }
+</script>

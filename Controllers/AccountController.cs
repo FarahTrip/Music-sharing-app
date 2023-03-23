@@ -148,12 +148,27 @@ namespace Trippin_Website.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+
+            if (model.Rol == string.Empty)
+            {
+                ViewBag.RolEmpty = "Trebuie sa alegi ce tip de cont vrei!!";
+                return View(model);
+
+            }
+
             if (ModelState.IsValid)
             {
+
                 var user = new ApplicationUser { UserName = model.UsernameCont, Email = model.Email, UsernameCont = model.UsernameCont };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (model.Rol == "Artist")
+                        await UserManager.AddToRoleAsync(user.Id, "Artist");
+
+                    if (model.Rol == "Producer")
+                        await UserManager.AddToRoleAsync(user.Id, "Producer");
+
                     /*                    var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
                                         var roleManager = new RoleManager<IdentityRole>(roleStore);
                                         await roleManager.CreateAsync(new IdentityRole("Artist"));
@@ -166,6 +181,8 @@ namespace Trippin_Website.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -337,6 +354,7 @@ namespace Trippin_Website.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

@@ -86,53 +86,7 @@
         </div>
         <script src="~/Scripts/Carrousel.js"></script>
 
-        <div class="jumbotron">
-
-            <div class="container">
-                <div class="card border-dark mb-3" style="max-width: fit-content;">
-                    <div class="card-header">Youtube API</div>
-                    <div class="card-body">
-                        <h4 class="card-title">Statistici despre canal</h4>
-                        YouTube Subscribers
-                        <div class="card-text" id="subscriberCount"></div>
-                        YouTube Video Views
-                        <div class="card-text" id="viewCount"></div>
-                        YouTube Video Count
-                        <div class="card-text" id="videoCount"></div>
-                    </div>
-                </div>
-                <iframe class="DiscordApi" src="https://discord.com/widget?id=1078680165258899526&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-            </div>
-            <script>
-
-                const APIKey = 'AIzaSyA_60odxWTJP9vKUsF58ebUrLEmVVGe4cw';
-                const Userid = 'UCS-cRAaG-qEHjI1wSAEvVyQ';
-                const subscriberCount = document.getElementById('subscriberCount');
-                const viewCount = document.getElementById('viewCount');
-                const videoCount = document.getElementById('videoCount');
-
-
-
-                let getdata = () => {
-
-                    fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${Userid}&key=${APIKey}`)
-                        .then(response => {
-                            return response.json()
-                        })
-                        .then(data => {
-                            console.log(data);
-                            subscriberCount.innerHTML = data["items"][0].statistics.subscriberCount;
-                            viewCount.innerHTML = data["items"][0].statistics.viewCount;
-                            videoCount.innerHTML = data["items"][0].statistics.videoCount;
-                        })
-
-                }
-
-                getdata();
-            </script>
-
-        </div>
-
+   
 
     }
     else

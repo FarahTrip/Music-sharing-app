@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Amazon;
+using Amazon.S3;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Http;
+using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers.API
@@ -73,21 +74,18 @@ namespace Trippin_Website.Controllers.API
         [HttpDelete]
         public IHttpActionResult DeletePiesa(Guid id)
         {
+            var fileServerHelper = new AmazonHelper();
             var piesa = _Context.Piese.FirstOrDefault(c => c.Id == id);
+            var client = new AmazonS3Client(fileServerHelper.AccessId, fileServerHelper.SecretKey, RegionEndpoint.EUNorth1);
 
             if (piesa == null)
                 return NotFound();
 
             var userId = User.Identity.GetUserId();
 
-
-            if (piesa.FileName != null && userId == piesa.UserId || User.IsInRole("Admin"))
+            if (piesa.S3ServerPath != null && userId == piesa.UserId || User.IsInRole("Admin"))
             {
-                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Piese-Uploaded/"), piesa.FileName);
-                if ((System.IO.File.Exists(path)))
-                {
-                    System.IO.File.Delete(path);
-                }
+                client.DeleteObjectAsync(fileServerHelper.BucketName, piesa.S3ServerPath);
 
                 _Context.Piese.Remove(piesa);
                 _Context.SaveChanges();

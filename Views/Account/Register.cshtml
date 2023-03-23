@@ -1,47 +1,81 @@
 ﻿@model Trippin_Website.Models.RegisterViewModel
-@{
-    ViewBag.Title = "Register";
-}
 
-<h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.UsernameCont, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.UsernameCont, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
-}
+<h2>@ViewBag.Title</h2>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<style>
+    .input-elements {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      
+    }
+
+    #Rol
+    {
+        margin: 7px;
+    }
+
+</style>
+
+
+
+<div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; ">
+    <div style="width: 80%; max-width: 800px; background-color: #1a1a1a; padding: 30px; border-radius: 5px; border-color: #9933cc; border-width: 1px; border-style: solid">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div style="text-align: center;">
+                <h2>Inregistreaza-te</h2>
+                <hr />
+            </div>
+            <div class="input-elements">
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", style = "border-radius: 14px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UsernameCont, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.UsernameCont, new { @class = "form-control", style = "border-radius: 14px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label", style = "display: inline-block !important" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", style = "border-radius: 14px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", style = "border-radius: 14px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10" style="display: flex; justify-content: center; padding: 5px;">
+                        Artist
+                        @Html.RadioButtonFor(model => model.Rol, "Artist")
+                        Producer
+                        @Html.RadioButtonFor(model => model.Rol, "Producer")
+                    </div>
+                </div>
+                <div class="form-group">
+                    @ViewBag.RolEmpty
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Inregistreaza-te" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
+
+

@@ -87,6 +87,9 @@ namespace Trippin_Website.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Rol { get; set; } = string.Empty;
+
     }
 
     public class ResetPasswordViewModel

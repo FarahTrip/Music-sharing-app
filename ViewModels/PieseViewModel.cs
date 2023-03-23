@@ -11,5 +11,6 @@ namespace Trippin_Website.ViewModels
         public List<Likes> Likes { get; set; }
         public ApplicationUser User { get; set; }
         public bool HasLiked { get; set; }
+        public string PresignedUrl { get; set; }
     }
 }

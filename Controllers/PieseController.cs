@@ -1,5 +1,6 @@
 ﻿using Amazon;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -43,7 +44,6 @@ namespace Trippin_Website.Controllers
                 Stiluri = Stiluri,
                 Users = users
             };
-
             var pieseIndexViewModel = new PieseIndexViewModel()
             {
                 PieseAllViewModel = pieseAllViewModel,
@@ -55,7 +55,7 @@ namespace Trippin_Website.Controllers
 
         [AllowAnonymous]
         [Route("Piese/detalii/{id?}")]
-        public ActionResult Detalii(Guid? id)
+        public async Task<ActionResult> Detalii(Guid? id)
         {
             var piese = _context.Piese.Include(c => c.Style).SingleOrDefault(c => c.Id == id);
             if (id == null)
@@ -71,37 +71,58 @@ namespace Trippin_Website.Controllers
                 hasLiked = _context.Likes.Any(l => l.UserId == userId && l.PiesaId == piese.Id);
             }
 
-
+            var path = await GetAudioAsync((Guid)piese.Id);
             var viewModel = new PieseViewModel
             {
                 Piese = piese,
                 Style = _context.StyleOf.ToList(),
                 Likes = _context.Likes.Where(c => c.PiesaId == id).ToList(),
-                HasLiked = hasLiked
-
+                HasLiked = hasLiked,
+                PresignedUrl = path
             };
+
             return View(viewModel);
+        }
+
+        [AllowAnonymous]
+        public async Task<string> GetAudioAsync(Guid id)
+        {
+            var helper = new AmazonHelper();
+            AmazonS3Client client = new AmazonS3Client(helper.AccessId, helper.SecretKey, RegionEndpoint.EUNorth1);
+            var piesa = await _context.Piese.SingleOrDefaultAsync(c => c.Id == id);
+
+            var userId = User.Identity.GetUserId();
+            var key = piesa.S3ServerPath;
+
+            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+            {
+                BucketName = helper.BucketName,
+                Expires = DateTime.Now.AddMinutes(10),
+                Key = key
+            };
+
+            string path = client.GetPreSignedURL(request);
+
+            return path;
         }
 
         [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult AdaugaNou()
         {
-
-            var helper = new AmazonHelper();
             var Stiluri = _context.StyleOf.ToList();
             var viewModel = new PieseViewModel
             {
                 Style = Stiluri
             };
-            helper.CreateFolder(User.Identity.GetUserId());
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Producer, Artist")]
-        public ActionResult Creeaza(Piese piese, HttpPostedFileBase file)
+        public async Task<ActionResult> Creeaza(Piese piese, HttpPostedFileBase file)
         {
+            var fileServerHelper = new AmazonHelper();
             var PieseModel = new PieseViewModel()
             {
                 Piese = piese,
@@ -110,45 +131,63 @@ namespace Trippin_Website.Controllers
 
             if (!ModelState.IsValid)
             {
-
                 return View("AdaugaNou", PieseModel);
             }
 
-            try
-            {
-                if (file.ContentLength > 0)
-                {
-                    string _FileName = Path.GetFileName(file.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/Piese-Uploaded"), _FileName);
+            fileServerHelper.UserFolder(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
 
-                    string extension = Path.GetExtension(file.FileName).ToLower();
-                    if (extension == ".wav" || extension == ".mp3")
-                    {
-                        file.SaveAs(_path);
-                        piese.FileName = _FileName;
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Doar .wav si .mp3 sunt acceptate ca si extensii!.";
-                        return View("AdaugaNou", PieseModel);
-                    }
-                }
-                else
+
+            if (IsAudio(file) && file.ContentLength > 0)
+                try
                 {
-                    ViewBag.Message = "Te rog selecteaza un fisier!";
+                    var key = $"Users-Files/{userId}/{file.FileName}";
+
+                    using (var amazonS3client = new AmazonS3Client(fileServerHelper.AccessId, fileServerHelper.SecretKey, RegionEndpoint.EUNorth1))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            file.InputStream.CopyTo(memoryStream);
+                            var request = new TransferUtilityUploadRequest
+                            {
+                                InputStream = memoryStream,
+                                Key = key,
+                                BucketName = fileServerHelper.BucketName,
+                                ContentType = file.ContentType
+                            };
+
+                            var transferUtility = new TransferUtility(amazonS3client);
+                            await transferUtility.UploadAsync(request);
+                        }
+                    }
+                    ViewBag.Message = "Fisierul a fost incarcat cu succes!";
+
+                    piese.Id = Guid.NewGuid();
+                    piese.UserId = User.Identity.GetUserId();
+                    piese.S3ServerPath = key;
+                    _context.Piese.Add(piese);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index", "Piese");
+                }
+                catch (AmazonS3Exception ex)
+                {
+                    var errorMessage = ex.Message;
+                    var statusCode = ex.StatusCode;
+                    // Log or handle the error
+
+                    ViewBag.Message = $@"A aparut o eroare la urcarea pe server. Status code : {statusCode} : Mesaj : {errorMessage}.
+Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
                     return View("AdaugaNou", PieseModel);
                 }
-
-                piese.Id = Guid.NewGuid();
-                piese.UserId = User.Identity.GetUserId();
-                _context.Piese.Add(piese);
-                _context.SaveChanges();
-
-                return RedirectToAction("Index", "Piese");
-            }
-            catch
+                catch
+                {
+                    ViewBag.Message = "Te rog selecteaza un fisier!!";
+                    return View("AdaugaNou", PieseModel);
+                }
+            else
             {
-                ViewBag.Message = "Te rog selecteaza un fisier!!";
+                ViewBag.Message = "Te rog seleteaza un fisier .wav, .mp3 sau .ogg!!";
                 return View("AdaugaNou", PieseModel);
             }
         }
@@ -207,56 +246,13 @@ namespace Trippin_Website.Controllers
             return RedirectToAction("Index", "Piese");
 
         }
-
-        public ActionResult UrcaPeServerAmazonS3()
+        private bool IsAudio(HttpPostedFileBase file)
         {
-            return View();
-        }
+            if (file == null) { return false; }
 
+            string[] extensions = new string[] { "wav", "mp3", "ogg" };
 
-
-        [HttpPost]
-        public async Task<ActionResult> UploadFileToS3(HttpPostedFileBase file)
-        {
-
-            var amazonHelper = new AmazonHelper();
-
-            try
-            {
-                using (var amazonS3client = new AmazonS3Client(amazonHelper.AccessId, amazonHelper.SecretKey, RegionEndpoint.EUNorth1))
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        file.InputStream.CopyTo(memoryStream);
-                        var request = new TransferUtilityUploadRequest
-                        {
-                            InputStream = memoryStream,
-                            // File name
-                            Key = file.FileName,
-                            // S3 bucket name
-                            BucketName = amazonHelper.BucketName,
-                            // File content type
-                            ContentType = file.ContentType
-                        };
-
-                        var transferUtility = new TransferUtility(amazonS3client);
-                        await transferUtility.UploadAsync(request);
-                    }
-                }
-                ViewBag.Success = "Fisierul a fost incarcat cu succes!";
-
-                return View("UrcaPeServerAmazonS3");
-            }
-            catch (AmazonS3Exception ex)
-            {
-                var errorMessage = ex.Message;
-                var statusCode = ex.StatusCode;
-                // Log or handle the error
-
-                ViewBag.ErrorMessage = $"Error uploading file to S3: {errorMessage} ({statusCode})";
-                return View("UrcaPeServerAmazonS3");
-            }
-
+            return extensions.Any(i => file.FileName.EndsWith(i, StringComparison.OrdinalIgnoreCase));
         }
 
     }

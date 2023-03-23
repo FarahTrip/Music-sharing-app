@@ -567,6 +567,7 @@
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="DTOS\PieseDTO.cs" />
     <Compile Include="Logic_classes\AmazonHelper.cs" />
+    <Compile Include="Logic_classes\AmazonReturnState.cs" />
     <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.cs" />
     <Compile Include="Migrations\202301192242575_AddedBeaturiIntoDB.designer.cs">
       <DependentUpon>202301192242575_AddedBeaturiIntoDB.cs</DependentUpon>
@@ -690,6 +691,10 @@
     <Compile Include="Migrations\202303111528511_ThisWasNotAGoodIdea.cs" />
     <Compile Include="Migrations\202303111528511_ThisWasNotAGoodIdea.designer.cs">
       <DependentUpon>202303111528511_ThisWasNotAGoodIdea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303211521091_AddingServerPathToPiese.cs" />
+    <Compile Include="Migrations\202303211521091_AddingServerPathToPiese.designer.cs">
+      <DependentUpon>202303211521091_AddingServerPathToPiese.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
@@ -1076,7 +1081,6 @@
     <Content Include="Views\UsersManagement\Profile.cshtml" />
     <Content Include="Views\Tools\YoutubeDownload.cshtml" />
     <Content Include="Views\Tools\AnalizeazaSunet.cshtml" />
-    <Content Include="Views\Piese\UrcaPeServerAmazonS3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
@@ -1215,6 +1219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303111528511_ThisWasNotAGoodIdea.resx">
       <DependentUpon>202303111528511_ThisWasNotAGoodIdea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303211521091_AddingServerPathToPiese.resx">
+      <DependentUpon>202303211521091_AddingServerPathToPiese.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -37,6 +37,7 @@ namespace Trippin_Website
 
         public bool IsBanger { get; set; }
         public string FileName { get; set; }
+        public string S3ServerPath { get; set; }
         public string UserId { get; set; }
         public int Likes { get; set; }
 

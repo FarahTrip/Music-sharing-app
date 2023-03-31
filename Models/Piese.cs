@@ -7,7 +7,6 @@ namespace Trippin_Website
 {
     public class Piese
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
@@ -40,6 +39,8 @@ namespace Trippin_Website
         public string S3ServerPath { get; set; }
         public string UserId { get; set; }
         public int Likes { get; set; }
+        public float FileSize { get; set; }
+
 
 
     }

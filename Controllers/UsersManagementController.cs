@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Amazon;
+using Amazon.S3;
+using Amazon.S3.IO;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 using Trippin_Website.ViewModels;
 
@@ -86,38 +91,121 @@ namespace Trippin_Website.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult ChangeRole(string userId, string roleId)
+        public async Task<ActionResult> ChangeRole(string userId, string roleId)
         {
             var user = _userManager.FindById(userId);
-            if (user == null)
+            if (!ModelState.IsValid)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (string.IsNullOrEmpty(roleId))
+            try
             {
-                var currentRoleId = user.Roles.FirstOrDefault()?.RoleId;
-                if (currentRoleId != null)
+                if (string.IsNullOrEmpty(roleId))
                 {
-                    _userManager.RemoveFromRole(userId, _roleManager.FindById(currentRoleId).Name);
-                }
-            }
-            else
-            {
-                var currentRoleId = user.Roles.FirstOrDefault()?.RoleId;
-                if (currentRoleId != roleId)
-                {
+                    var currentRoleId = user.Roles.FirstOrDefault()?.RoleId;
                     if (currentRoleId != null)
                     {
-                        _userManager.RemoveFromRole(userId, _roleManager.FindById(currentRoleId).Name);
+                        await _userManager.RemoveFromRoleAsync(userId, _roleManager.FindById(currentRoleId).Name);
                     }
+                }
+                else
+                {
+                    var currentRoleId = user.Roles.FirstOrDefault()?.RoleId;
+                    if (currentRoleId != roleId)
+                    {
+                        if (currentRoleId != null)
+                        {
+                            await _userManager.RemoveFromRoleAsync(userId, _roleManager.FindById(currentRoleId).Name);
+                        }
 
-                    _userManager.AddToRole(userId, _roleManager.FindById(roleId).Name);
+                        _userManager.AddToRole(userId, _roleManager.FindById(roleId).Name);
+                    }
                 }
             }
+
+            catch (Exception ex)
+            {
+                ViewBag.Eroare = $"A aparut o eroare neasteptata. Mesaj : {ex.Message} StackTrace : {ex.StackTrace}";
+            }
+
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
+        public async Task<ActionResult> DeleteUser(Guid Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id.ToString());
 
+            var usersList = _userManager.Users.ToList();
+            var roles = _roleManager.Roles.ToList();
+            var currentUserId = User.Identity.GetUserId();
+
+            ViewBag.Roles = roles;
+            var users = new UserListViewModel
+            {
+                Users = usersList
+            };
+
+
+            if (Id == null || user == null)
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
+
+
+            if (User.IsInRole("Admin") || user.Id == currentUserId)
+            {
+                try
+                {
+                    var logins = await _userManager.GetLoginsAsync(user.Id);
+                    var role = await _userManager.GetRolesAsync(user.Id);
+
+                    var pieseUser = _context.Piese.Where(c => c.UserId == user.Id);
+                    var beaturiUser = _context.Beaturi.Where(c => c.UserId == user.Id);
+
+                    var amazonHelper = new AmazonHelper();
+                    var client = new AmazonS3Client(amazonHelper.AccessId, amazonHelper.SecretKey, RegionEndpoint.EUNorth1);
+                    var folderKey = $"Users-Files/{Id}";
+                    var amazonFolder = new S3DirectoryInfo(client, amazonHelper.BucketName, folderKey);
+                    if (amazonFolder.Exists)
+                        amazonFolder.Delete(true);
+
+                    foreach (var login in logins.ToList())
+                    {
+                        await _userManager.RemoveLoginAsync(user.Id, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                    }
+
+                    if (role != null)
+                        await _userManager.RemoveFromRoleAsync(user.Id, user.Roles.FirstOrDefault().ToString());
+
+                    if (pieseUser != null)
+                        _context.Piese.RemoveRange(pieseUser);
+
+                    if (beaturiUser == null)
+                        _context.Beaturi.RemoveRange(beaturiUser);
+
+                    _context.SaveChanges();
+
+                    await _userManager.DeleteAsync(user);
+
+                    ViewBag.Success = $"Succes!";
+
+                    users.Users = _userManager.Users.ToList();
+
+                    return View("Index", users);
+
+                }
+                catch (AmazonS3Exception ex)
+                {
+                    ViewBag.Eroare = $"A aparut o eroare neasteptata. Mesaj : {ex.Message} StackTrace : {ex.StackTrace}";
+                    return View("Index", users);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Eroare = $"A aparut o eroare neasteptata. Mesaj : {ex.Message} StackTrace : {ex.StackTrace}";
+                    return View("Index", users);
+                }
+            }
+            return View("Index", users);
+        }
     }
 }

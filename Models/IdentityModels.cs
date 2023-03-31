@@ -16,6 +16,9 @@ namespace Trippin_Website.Models
 
         [DataType(DataType.Url)]
         public string ProfilePicture { get; set; }
+        public float Quota { get; set; }
+        public string Versuri { get; set; }
+        public float FileUploadHardLimit { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -35,7 +38,6 @@ namespace Trippin_Website.Models
         public DbSet<Beat> Beaturi { get; set; }
         public DbSet<StyleOf> StyleOf { get; set; }
         public DbSet<Likes> Likes { get; set; }
-
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

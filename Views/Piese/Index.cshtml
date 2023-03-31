@@ -32,7 +32,6 @@
         {
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
-            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Incarca piesa", "UploadPiesa", "Upload")</button>
         }
         else
         {
@@ -125,24 +124,6 @@
                     },
                 }
             });
-        });
-    </script>
-
-    <script>
-
-        const settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://youtube-mp36.p.rapidapi.com/dl?id=UxxajLWwzqY",
-            "method": "GET",
-            "headers": {
-                "X-RapidAPI-Key": "367579e26fmsh62427d8189f7578p1e0a54jsn18ee80feaa0b",
-                "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com"
-            }
-        };
-
-        $.ajax(settings).done(function (response) {
-            console.log(response);
         });
     </script>
 }

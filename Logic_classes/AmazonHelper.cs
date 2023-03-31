@@ -1,6 +1,8 @@
 ﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.IO;
+using System;
+using System.Configuration;
 
 namespace Trippin_Website.Logic_classes
 {
@@ -14,10 +16,11 @@ namespace Trippin_Website.Logic_classes
 
         public AmazonHelper()
         {
-            AccessId = "AKIAT5UTNOTECKGQZCOK";
-            SecretKey = "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";
-            BucketName = "trippin-website";
+            AccessId = ConfigurationSettings.AppSettings.Get("AmazonAccessId");
+            SecretKey = ConfigurationSettings.AppSettings.Get("AmazonSecretKey");
+            BucketName = ConfigurationSettings.AppSettings.Get("AmazonBucketName");
         }
+
         public AmazonReturnState UserFolder(string UserId)
         {
             var path = "Users-Files";
@@ -49,6 +52,11 @@ namespace Trippin_Website.Logic_classes
                        Mesaj : {error.Message}. Daca eroarea persista te rog contacteaza suportul.";
 
                         return returnState;
+                    }
+                    catch (Exception error)
+                    {
+                        returnState.error = $@"A aparut o eroare! Vezi detalii aici : Stacl trace : {error.StackTrace} 
+                       Mesaj : {error.Message}. Daca eroarea persista te rog contacteaza suportul.";
                     }
                 }
                 returnState.success = path + "/" + UserId;

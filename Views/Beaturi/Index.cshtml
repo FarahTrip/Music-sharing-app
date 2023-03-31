@@ -1,16 +1,20 @@
-﻿@model Trippin_Website.ViewModels.BeaturiViewModel
+﻿
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+
+@model Trippin_Website.ViewModels.BeaturiViewModel
 
 @{
 
 
-        var CurrentDateTime = DateTime.Now;
-        var Stiluri = Model.Stiluri;
+    var CurrentDateTime = DateTime.Now;
+    var Stiluri = Model.Stiluri;
 
 
 }
 
 <style>
-
     .container {
         display: flex;
         flex-wrap: wrap;
@@ -20,14 +24,17 @@
     .card {
         margin-right: 20px;
     }
+    #yourUserID {
+        color: #FF4E79;
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <div class="tabelDiv">
     <h2 class="titletabele">Beat-uri</h2>
     <div class="buttonsForTables" style="background-color: #0d1117">
-        @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer))
+        @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
         {
-            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Beaturi")</button>
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
         }
         else
@@ -43,6 +50,7 @@
                     <th>Key</th>
                     <th>BPM</th>
                     <th>Date Created</th>
+                    <th>Postat de</th>
                     <th>Stil</th>
                 </tr>
             </thead>
@@ -56,7 +64,7 @@
                                 var DateFormater = beat.Created;
                                 string DateFormated = DateFormater.ToString("dd/MM/yyyy");
                             }
-                            <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.Id })">@beat.Name</a>  @if (timeSpan.TotalDays < 3)
+                            <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.IdBun })">@beat.Name</a>  @if (timeSpan.TotalDays < 3)
                             {<span class="badge rounded-pill bg-info">Nou</span>} @if (beat.Modified != null)
                             {<span class="badge rounded-pill bg-light">Modificat</span>} @if (beat.IsBanger == true)
                             {<span class="badge rounded-pill bg-success">Banger</span>}
@@ -64,7 +72,28 @@
                         </td>
                         <td>@beat.Key</td>
                         <td>@beat.Bpm</td>
-                        <td>@DateFormated</td>
+                        <td>@beat.Created</td>
+                        @{
+                            var userId = User.Identity.GetUserId();
+                        }
+
+                        @if (beat.UserId != null)
+                        {
+                            if (userId == beat.UserId)
+                            {
+                                <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = beat.UserId })">@(Model.UserManager.FindByIdAsync(beat.UserId).Result.UserName)</a></td>
+                            }
+                            else
+                            {
+                                <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = beat.UserId })">@(Model.UserManager.FindByIdAsync(beat.UserId).Result.UserName)</a></td>
+                            }
+
+
+                        }
+                        else
+                        {
+                            <td> </td>
+                        }
                         <td>@Stiluri[beat.StyleId - 1].Name</td>
                     </tr>
                 }

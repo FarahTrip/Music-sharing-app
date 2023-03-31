@@ -76,6 +76,12 @@
 
     #shareContainer {
         display: block;
+        margin-top: 20px;
+    }
+
+    #player
+    {
+        margin-top: 20px !important;
     }
 </style>
 
@@ -129,10 +135,6 @@
                     <img id="shareBtn" class="LikeButtons" onclick="showShare()" src="~/Content/Images/share-button.png" alt="Like button" />
                 </div>
 
-                <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
-
-
-
                 @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
                 {
                     <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })'">Alege piesa</button>
@@ -171,23 +173,25 @@
 
                         if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
                         {
-                            <audio preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                            <audio id="player" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
                                 <source src="@Model.PresignedUrl" type="audio/wav" />
                             </audio>
                         }
                         else
                         {
-                            <audio oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                            <audio id="player" oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
                                 <source src="@Model.PresignedUrl" type="audio/wav" />
                             </audio>
                         }
 
                     }
-
+                    <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
                 </div>
 
 
-              
+
+
+
                 ------------------------------------------------------------------------------------------
 
 
@@ -329,37 +333,4 @@ $(document).ready(function () {
 
 
     <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=640f8b4eb5b185001201ccb0&product=inline-share-buttons&source=platform" async="async"></script>
-
-    <script>
-        window.onload = function () {
-            showShareOnLoad();
-        };
-
-        function showShareOnLoad() {
-            const st1Div = document.getElementById("st-1");
-            st1Div.style.display = "none";
-       
-        }
-
-        function showShare() {
-            const st1Div = document.getElementById("st-1");
-
-            if (st1Div.offsetHeight === 0) {
-                st1Div.style.display = "block";
-                st1Div.style.height = "0px";
-                st1Div.animate(
-                    [{ height: "0px" }, { height: 50 + "px" }],
-                    { duration: 100, fill: "forwards" }
-                );
-            } else {
-                st1Div.animate(
-                    [{ height: 50 + "px" }, { height: "0px" }],
-                    { duration: 100, fill: "forwards" }
-                ).onfinish = () => {
-                    st1Div.style.display = "none";
-                    st1Div.style.height = "";
-                };
-            }
-        }
-    </script>
 }

@@ -82,11 +82,14 @@ namespace Trippin_Website.Controllers.API
                 return NotFound();
 
             var userId = User.Identity.GetUserId();
+            var user = _userManager.FindById(userId);
 
             if (piesa.S3ServerPath != null && userId == piesa.UserId || User.IsInRole("Admin"))
             {
                 client.DeleteObjectAsync(fileServerHelper.BucketName, piesa.S3ServerPath);
+                user.Quota -= piesa.FileSize;
 
+                _userManager.Update(user);
                 _Context.Piese.Remove(piesa);
                 _Context.SaveChanges();
 

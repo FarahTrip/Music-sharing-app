@@ -14,6 +14,10 @@
         text-align: center !important;
     }
 
+    #mesaj{
+        color: red;
+    }
+
    
 </style>
 
@@ -58,6 +62,8 @@
                     <p style="text-align: center;">
                         @Html.ActionLink("Înregistrează-te ca utilizator nou", "Register", null, new { style = "color: #fff;", margin = "7px"})
                     </p>
+
+                    <p id="mesaj" style="text-align: center; margin-top: 20px;">@ViewBag.Mesaj</p>
                 }
             </div>
         </div>

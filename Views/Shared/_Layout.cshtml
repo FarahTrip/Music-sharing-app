@@ -18,6 +18,7 @@
     <title>@ViewBag.Title - Trippin</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <style>
     #RegisterBtn {
@@ -144,6 +145,14 @@
         background-color: #21262d;
         color: #fff;
     }
+
+    #quota {
+        display: inline;
+        margin-top:auto;
+        margin-bottom:auto;
+        margin-right: 10px;
+        font-size: larger;
+    }
 </style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -180,11 +189,16 @@
                                 <a class="dropdown-item" href="@Url.Action("YoutubeDownload", "Tools")">
                                     <span>YouToube Download</span>
                                 </a>
+                                <a class="dropdown-item" href="@Url.Action("LinkTemporar", "Tools")">
+                                    <span>Genereaza link temporar</span>
+                                </a>
                                 <a class="dropdown-item" href="@Url.Action("AnalizeazaSunet", "Tools")">
                                     <span>Gaseste gama</span>
                                 </a>
                             </div>
                         </li>
+
+
 
                         if (User.IsInRole("Admin"))
                         {
@@ -211,11 +225,18 @@
 
                 </ul>
 
+
+                <strong id="quota"></strong>
+
                 <div class="right-menu-profile">
+
 
 
                     @if (User.Identity.IsAuthenticated)
                     {
+
+
+
                         <div id="notification-wrapper">
                             <span id="noti_Container" onclick="toggleNotification()">
                                 <img id="notification-icon" src="~/Content/Images/notification-icon.png" alt="Alternate Text" />
@@ -223,6 +244,7 @@
                             </span>
 
                             <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
+
 
                             @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
 
@@ -238,7 +260,6 @@
                             {
                                 <span class="badge rounded-pill bg-success">Artist</span>
                             }
-
 
                         </div>
                     }
@@ -258,15 +279,17 @@
 
 
                 @*          <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>*@
+            <input class="form-control me-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>*@
 
 
 
             </div>
             @if (User.Identity.IsAuthenticated)
             {
+
+              
 
                 <div id="notification-dropdown" class="dropdown">
                     <div class="dropdown-menu" aria-labelledby="notification-dropdown">
@@ -282,6 +305,7 @@
                     <p>You have a new message from John Doe</p>
                     <a href="#">View all notifications</a>
                 </div>
+
 
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
@@ -335,7 +359,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p style="display: block !important">&copy; @DateTime.Now.Year - Farah nebunul </p>
+            <p style="display: block !important">&copy; @DateTime.Now.Year - Trippin </p>
         </footer>
     </div>
 
@@ -371,6 +395,18 @@
         var userId = "@userId";
         $.get("/api/Conturi/" + userId, function (data) {
             $("#username").text(data.userName);
+            var quotaInBytes = data.quota;
+            var quotaInMb = quotaInBytes / (1024 * 1024);
+            var quotaText = "";
+
+            if (quotaInMb < 1024) {
+                quotaText = "Uploaded: " + quotaInMb.toFixed(2) + " MB";
+            } else {
+                var quotaInGb = quotaInMb / 1024;
+                quotaText = "Uploaded: " + quotaInGb.toFixed(2) + " GB";
+            }
+
+            $("#quota").text(quotaText);
             $("#email").text(data.email);
             if (data.profilePicture == null) {
                 $("#profilepic").attr("src", "/Content/Images/No-profile-picture.jpg");
@@ -382,7 +418,7 @@
             }
         })
         .fail(function () {
-            alert("Error retrieving user data.");
+            alert("A aparut o eroare");
         });
     });
 

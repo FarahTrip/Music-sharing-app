@@ -1,9 +1,32 @@
 ﻿@using Microsoft.AspNet.Identity.EntityFramework
+@using Trippin_Website.Logic_classes
 
 @model Trippin_Website.ViewModels.UserListViewModel
 
+<style>
+    #errorMessage
+    {
+        color: darkred;
+    }
+    #SuccessMessage
+    {
+        color: green;
+    }
+    #MailConfirmat
+    {
+        color:green;
+    }
+    #MailNeconfirmat
+    {
+        color: red;
+    }
+</style>
 
 <h1>User Management</h1>
+
+
+<p id="errorMessage">@ViewBag.Eroare</p>
+<p id="SuccessMessage">@ViewBag.Success</p>
 
 <table id="Conturi">
     <thead>
@@ -12,11 +35,19 @@
             <th>Email</th>
             <th>Schimba rol</th>
             <th>Rol</th>
+            <th>Mail confirmat</th>
+            <th>Quota</th>
+            <th>Sterge</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model.Users)
         {
+            if (user.Id == System.Configuration.ConfigurationSettings.AppSettings.Get("SuperUser"))
+            {
+                continue;
+            }
+
             var roleName = "";
             if (user.Roles.Any())
             {
@@ -38,6 +69,17 @@
            new { @class = "role-dropdown", data_user_id = user.Id })
                 </td>
                 <td>@roleName</td>
+                @if(user.EmailConfirmed)
+                {
+                    <td id="MailConfirmat">Da</td>
+                }
+                else
+                {
+                    <td id="MailNeconfirmat">Nu</td>
+                }
+
+            <td>@user.Quota.ConvertToDigitalStorageSize()</td>
+                <td><button   type="button" class="btn btn-outline-info sterge-btn"><a href="@Url.Action("DeleteUser", "UsersManagement", new {Id = user.Id})">Delete</a></button></td>
             </tr>
         }
     </tbody>
@@ -75,6 +117,17 @@
                     },
                 }
             });
+        });
+        $("#Conturi .sterge-btn").on("click", function () {
+            var button = $(this);
+
+            if (confirm("Vrei sa stergi contul?")) {
+                $.ajax({
+                    success: function () {
+                        button.parents("tr").remove();
+                    }
+                });
+            }
         });
     </script>
 }

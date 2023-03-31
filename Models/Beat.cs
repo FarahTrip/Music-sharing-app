@@ -1,11 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Trippin_Website.Models
 {
     public class Beat
     {
-        public int Id { get; set; }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid? IdBun { get; set; }
+
         [Required(ErrorMessage = "Nu ai introdus numele!")]
         [Display(Name = "Nume")]
         public string Name { get; set; }
@@ -31,8 +36,10 @@ namespace Trippin_Website.Models
         public bool IsBanger { get; set; }
 
         [DataType(DataType.Url)]
-        public string BeatLink { get; set; }
-
+        public string FileName { get; set; }
+        public string S3ServerPath { get; set; }
+        public string UserId { get; set; }
+        public int Likes { get; set; }
 
     }
 }

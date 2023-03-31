@@ -136,6 +136,7 @@ namespace Trippin_Website.Controllers
 
             fileServerHelper.UserFolder(User.Identity.GetUserId());
             var userId = User.Identity.GetUserId();
+            var user = _userManager.FindById(userId);
 
 
             if (IsAudio(file) && file.ContentLength > 0)
@@ -165,8 +166,11 @@ namespace Trippin_Website.Controllers
                     piese.Id = Guid.NewGuid();
                     piese.UserId = User.Identity.GetUserId();
                     piese.S3ServerPath = key;
+                    piese.FileSize = file.ContentLength;
+                    user.Quota += file.ContentLength;
                     _context.Piese.Add(piese);
                     _context.SaveChanges();
+                    await _userManager.UpdateAsync(user);
 
                     return RedirectToAction("Index", "Piese");
                 }
@@ -174,7 +178,6 @@ namespace Trippin_Website.Controllers
                 {
                     var errorMessage = ex.Message;
                     var statusCode = ex.StatusCode;
-                    // Log or handle the error
 
                     ViewBag.Message = $@"A aparut o eroare la urcarea pe server. Status code : {statusCode} : Mesaj : {errorMessage}.
 Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers
@@ -70,22 +71,40 @@ namespace Trippin_Website.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UsernameCont, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            var user = await UserManager.FindByNameAsync(model.UsernameCont);
+
+            if (user == null)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                ViewBag.Mesaj = "Nume sau parola gresite!";
+                return View(user);
             }
+
+            if (user.EmailConfirmed)
+            {
+                var result = await SignInManager.PasswordSignInAsync(model.UsernameCont, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(returnUrl);
+
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
+            }
+            else
+            {
+
+                ViewBag.Mesaj = "Trebuie sa iti confirmi email-ul inainte de a te putea loga!.";
+                return View(model);
+            }
+
+
         }
 
         //
@@ -174,17 +193,18 @@ namespace Trippin_Website.Controllers
                                         await roleManager.CreateAsync(new IdentityRole("Artist"));
                                         await UserManager.AddToRoleAsync(user.Id, "Artist");*/
 
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var emailSender = new EmailSender();
+
+                    await emailSender.EmailConfirmation(user.Email, user.UserName, callbackUrl);
+                    /*    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");*/
 
 
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("PleaseConfirmEmal", "Home");
                 }
                 AddErrors(result);
             }

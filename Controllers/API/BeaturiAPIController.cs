@@ -22,11 +22,11 @@ namespace Trippin_Website.Controllers.API
             _context.Beaturi.ToList();
             return _context.Beaturi;
         }
-        public Beat GetBeat(int id)
+        public Beat GetBeat(Guid id)
         {
 
 
-            var beat = _context.Beaturi.SingleOrDefault(b => b.Id == id);
+            var beat = _context.Beaturi.SingleOrDefault(b => b.IdBun == id);
 
             if (beat == null)
                 throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
@@ -49,9 +49,9 @@ namespace Trippin_Website.Controllers.API
         }
 
         [HttpPut]
-        public void UpdateBeat(int id, Beat beat)
+        public void UpdateBeat(Guid id, Beat beat)
         {
-            var beatUpdate = _context.Beaturi.SingleOrDefault(b => b.Id == id);
+            var beatUpdate = _context.Beaturi.SingleOrDefault(b => b.IdBun == id);
 
             if (beatUpdate == null)
                 throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
@@ -66,9 +66,9 @@ namespace Trippin_Website.Controllers.API
         }
 
         [HttpDelete]
-        public IHttpActionResult DeleteBeat(int id)
+        public IHttpActionResult DeleteBeat(Guid id)
         {
-            var beatToDelete = _context.Beaturi.SingleOrDefault(c => c.Id == id);
+            var beatToDelete = _context.Beaturi.SingleOrDefault(c => c.IdBun == id);
 
             if (beatToDelete == null)
                 return NotFound();

@@ -10,23 +10,8 @@ namespace Trippin_Website.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult PleaseConfirmEmal()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-        public ActionResult Random()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
 

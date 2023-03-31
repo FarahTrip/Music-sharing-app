@@ -1,0 +1,130 @@
+﻿@model Trippin_Website.Logic_classes.TemporaryLinkResponse
+
+
+@{
+    ViewBag.Title = "LinkTemporar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #1c1c1c;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .form {
+        margin-bottom: 30px;
+    }
+
+    .file-label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .file-upload {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #272727;
+        border: none;
+        color: #fff;
+    }
+
+    .button {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #3f3f3f;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .button:hover {
+            background-color: #585858;
+        }
+
+    .link-container {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .link-label {
+        margin-right: 10px;
+    }
+
+    .link-input {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #272727;
+        border: none;
+        color: #fff;
+        flex-grow: 1;
+    }
+
+    .copy-button {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #3f3f3f;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .copy-button:hover {
+            background-color: #585858;
+        }
+</style>
+
+<body>
+
+    @using (Html.BeginForm("ObtineUrlTemporar", "Tools", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container">
+            <h1 class="title">Link temporar</h1>
+            <form>
+                @ViewBag.Eroare
+                <label for="fileUpload" class="file-label">Upload a file:</label>
+                <input type="file" name="file" id="fileUpload" class="file-upload">
+                <button type="submit" class="button">Genereaza link</button>
+                <div class="link-container">
+                    <label>In cate zile vrei sa expire link-ul?</label>
+                    @Html.TextBoxFor(m => m.expires, new { Value = "1" })
+                </div>
+            </form>
+            <div class="link-container">
+
+                <p class="link-label">Temporary Link:</p>
+                <input type="text" id="link" class="link-input" value="@ViewBag.Link">
+                <button type="button" class="copy-button">Copy Link</button>
+            </div>
+
+        </div>
+        <p>Expira : @ViewBag.Expires</p>
+        <p>AutoDelete : @ViewBag.AutoDelete</p>
+        <p>Numar maxim de downloaduri : @ViewBag.MaxDownloads</p>
+        @ViewBag.Mesaj
+
+    }
+</body>
+
+  

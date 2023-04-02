@@ -15,8 +15,6 @@
     var DateTimeForConverting = Model.Piese.DateCreated;
     string DateConvertedString = DateTimeForConverting.ToString("dd/MM/yyyy");
 
-
-
     var CurrentStyleId = Model.Piese.StyleId;
 
 
@@ -33,6 +31,8 @@
 
 
     var hasLiked = Model.HasLiked;
+
+
 
 }
 
@@ -121,7 +121,7 @@
 
                 </div>
                 <div id="interactWithPiesa" class="card-body">
-                    <p id="LikeCount">@Model.Piese.Likes like-uri</p>
+                    <p id="LikeCount">@ViewBag.Likes like-uri</p>
                     @if (hasLiked)
                     {
                         <a id="likeBtn" href=""><img class="LikeButtons" src="~/Content/Images/like-liked.png" alt="Like button" /></a>
@@ -135,86 +135,90 @@
                     <img id="shareBtn" class="LikeButtons" onclick="showShare()" src="~/Content/Images/share-button.png" alt="Like button" />
                 </div>
 
-                @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("AlegePiesa", "Piese", new { id = Model.Piese.Id })'">Alege piesa</button>
+                    <button type="button" class="btn btn-outline-info">Trimite request de colaborare</button>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-outline-info" onclick="if(confirm('Nu ai drepturi sa schimbi piesa dar merci de incercare tho!')) { } else { event.preventDefault(); }">Alege piesa</button>
-                }
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
-                @if (Model.Piese.Key == null)
-                {
-                    <li class="list-group-item">Key : Nu este setata</li>
-                }
-                else
-                {
-                    <li class="list-group-item">Key : @Model.Piese.Key</li>
+            <button type="button" class="btn btn-outline-info">Trebuie sa fii logat ca sa pot trimite request</button> 
                 }
 
 
-
-
-                @if (Model.Style == null)
-                {
-                    <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
-                }
-                else
-                {
-                    <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
-
-                }
-                <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
-                <div style="background-color: #0d1117;">
-                    @if (Model.PresignedUrl != null)
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">BPM : @Model.Piese.Bpm</li>
+                    @if (Model.Piese.Key == null)
                     {
-
-                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
-                        {
-                            <audio id="player" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
-                                <source src="@Model.PresignedUrl" type="audio/wav" />
-                            </audio>
-                        }
-                        else
-                        {
-                            <audio id="player" oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
-                                <source src="@Model.PresignedUrl" type="audio/wav" />
-                            </audio>
-                        }
-
-                    }
-                    <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
-                </div>
-
-
-
-
-
-                ------------------------------------------------------------------------------------------
-
-
-                @if (Model.Piese.FileName != null)
-                {
-                    if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
-                    {
-                        <a runat="server" href="~/Piese-Uploaded/@Model.Piese.FileName">@Model.Piese.FileName</a>
+                        <li class="list-group-item">Key : Nu este setata</li>
                     }
                     else
                     {
-                        <br />
-                        @Model.Piese.FileName
-                        <br />
+                        <li class="list-group-item">Key : @Model.Piese.Key</li>
                     }
-                }
-                else
-                {
-                    <li> Nu ai selectat inca fisierul!</li>
-                }
-                ------------------------------------------------------------------------------------------
-                <li class="list-group-item">Seed poza : @resultrandom</li>
-            </ul>
+
+
+
+
+                    @if (Model.Style == null)
+                    {
+                        <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+
+                    }
+                    <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
+                    <div style="background-color: #0d1117;">
+                        @if (Model.PresignedUrl != null)
+                        {
+
+                            if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+                            {
+                                <audio id="player" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                                    <source src="@Model.PresignedUrl" type="audio/wav" />
+                                </audio>
+                            }
+                            else
+                            {
+                                <audio id="player" oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                                    <source src="@Model.PresignedUrl" type="audio/wav" />
+                                </audio>
+                            }
+
+                        }
+                        <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
+                    </div>
+
+
+
+
+
+                    ------------------------------------------------------------------------------------------
+
+
+                    @if (Model.Piese.FileName != null)
+                    {
+                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+                        {
+                            <br />
+                            @Model.Piese.FileName
+                            <br />
+                        }
+                        else
+                        {
+                            <br />
+                            @Model.Piese.FileName
+                            <br />
+                        }
+                    }
+                    else
+                    {
+                        <li> Nu ai selectat inca fisierul!</li>
+                    }
+                    ------------------------------------------------------------------------------------------
+                    <li class="list-group-item">Seed poza : @resultrandom</li>
+                </ul>
 
                 <div class="card-footer text-muted">
 

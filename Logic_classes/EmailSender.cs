@@ -25,5 +25,20 @@ namespace Trippin_Website.Logic_classes
 
             await client.SendEmailAsync(msg);
         }
+        public async Task ForgotPassword(string toEmail, string ToName, string callBackUrl)
+        {
+            senderHelper = new EmailSenderHelper(callBackUrl);
+            var apiKey = $"{senderHelper.ApiKey}";
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress($"{senderHelper.From}", $"{senderHelper.FromName}");
+            var subject = $"Resetare parola pentru {ToName} pe Trippin ";
+            var to = new EmailAddress($"{toEmail}", $"{ToName}");
+            var plainTextContent = "";
+            var htmlContent = senderHelper.ForgotPasswordHtmlBody;
+
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+            await client.SendEmailAsync(msg);
+        }
     }
 }

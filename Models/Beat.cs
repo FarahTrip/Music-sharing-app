@@ -41,5 +41,7 @@ namespace Trippin_Website.Models
         public string UserId { get; set; }
         public int Likes { get; set; }
 
+        public float FileSize { get; set; }
+
     }
 }

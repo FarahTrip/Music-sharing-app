@@ -59,8 +59,13 @@
                     <div class="form-group">
                         <input type="submit" value="Conectează-te" class="btn btn-primary btn-block" style="background-color: #9933CC; border-color: #060606; color: #fff; margin: 7px; display: block; margin: 0 auto; border-radius: 50px;" />
                     </div>
+                    <br />
                     <p style="text-align: center;">
-                        @Html.ActionLink("Înregistrează-te ca utilizator nou", "Register", null, new { style = "color: #fff;", margin = "7px"})
+                        @Html.ActionLink("Înregistrează-te ca utilizator nou", "Register", null, new { style = "color: #fff;", margin = "7px" })
+                    </p>
+                    <br />
+                    <p style="text-align: center;">
+                        @Html.ActionLink("Am uitat parola", "ForgotPassword", null, new { style = "color: #fff;", margin = "7px" })
                     </p>
 
                     <p id="mesaj" style="text-align: center; margin-top: 20px;">@ViewBag.Mesaj</p>

@@ -35,18 +35,18 @@
         @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
         {
             <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Beaturi")</button>
-            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
+            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Edit", "Beaturi")</button>
         }
         else
         {
-            <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
+            <p>Din pacate nu ai dreptul de a modifica sau adauga beaturi!</p>
         }
     </div>
     <div class="TabeleNebune">
         <table id="Beaturi" class="table table-hover">
             <thead>
                 <tr>
-                    <th>Nume Piesa</th>
+                    <th>Nume Beat</th>
                     <th>Key</th>
                     <th>BPM</th>
                     <th>Date Created</th>
@@ -110,9 +110,9 @@
             $("#Beaturi").DataTable({
                 "order": [[3, "desc"]],
                 language: {
-                    lengthMenu: 'Arata _MENU_ piese',
+                    lengthMenu: 'Arata _MENU_ beat-uri',
                     search: 'Cauta :',
-                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ piese',
+                    info: 'Vizibil _START_ din _END_ din total de _TOTAL_ beat-uri',
                     paginate: {
                         previous: 'Pagina anterioara',
                         next: 'Pagina urmatoare'

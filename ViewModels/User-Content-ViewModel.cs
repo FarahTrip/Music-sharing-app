@@ -7,5 +7,6 @@ namespace Trippin_Website.ViewModels
     {
         public ApplicationUser User { get; set; }
         public List<Piese> Piese { get; set; }
+
     }
 }

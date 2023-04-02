@@ -1,11 +1,14 @@
-﻿
+﻿@using Microsoft.AspNet.Identity.EntityFramework;
+@using Trippin_Website.Models;
+@using Trippin_Website.Logic_classes;
 @{
 
     /*  var ListOfUsers = Model.Users;*/
     var userId = User.Identity.GetUserId();
     /*    var user = ListOfUsers.SingleOrDefault(m => m.Id == userId);*/
-   
+    UserManager<ApplicationUser> _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
+    var currentUser = _userManager.FindById(userId);
 }
 
 
@@ -153,6 +156,10 @@
         margin-right: 10px;
         font-size: larger;
     }
+    #usage{
+        display: block;
+        text-align:center;
+    }
 </style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -208,25 +215,31 @@
                                     <a class="dropdown-item" href="@Url.Action("Index", "UsersManagement")">
                                         <span>Manageriaza conturi</span>
                                     </a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
+                                    <a class="dropdown-item" href="#">Dashboard</a>
                                 </div>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Clienti")">
-                                <span>Clienti</span>
-                            </a>
-                        </li>
 
                     }
 
                 </ul>
 
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <strong style="color: #9933cc;" id="quota">UNLIMITED</strong>
+                    }
+                    else
+                    {
+                        var usageLeft = currentUser.FileUploadHardLimit - currentUser.Quota;
+            <p id="quota">Spatiu disponibil :   <strong > @usageLeft.ConvertToDigitalStorageSize()</strong> </p> 
+                    }
 
-                <strong id="quota"></strong>
+                }
+
+
+
 
                 <div class="right-menu-profile">
 
@@ -327,7 +340,19 @@
                                 <span style="margin-left: 20px" class="badge rounded-pill bg-success">Artist</span>
                             }
                         </div>
+
+
                         <hr />
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <p id="usage">@currentUser.Quota.ConvertToDigitalStorageSize() / UNLIMITED</p>
+
+                        }
+                        else
+                        {
+                            <p id="usage">@currentUser.Quota.ConvertToDigitalStorageSize() / @currentUser.FileUploadHardLimit.ConvertToDigitalStorageSize()</p>
+                        }
 
                         @using Microsoft.AspNet.Identity
                         @if (Request.IsAuthenticated)
@@ -345,8 +370,6 @@
 
                                 <button class="btn btn-outline-info logout-btn"><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></button>
                             }
-
-
                         }
                     </div>
                 </div>
@@ -394,19 +417,7 @@
     $(document).ready(function () {
         var userId = "@userId";
         $.get("/api/Conturi/" + userId, function (data) {
-            $("#username").text(data.userName);
-            var quotaInBytes = data.quota;
-            var quotaInMb = quotaInBytes / (1024 * 1024);
-            var quotaText = "";
 
-            if (quotaInMb < 1024) {
-                quotaText = "Uploaded: " + quotaInMb.toFixed(2) + " MB";
-            } else {
-                var quotaInGb = quotaInMb / 1024;
-                quotaText = "Uploaded: " + quotaInGb.toFixed(2) + " GB";
-            }
-
-            $("#quota").text(quotaText);
             $("#email").text(data.email);
             if (data.profilePicture == null) {
                 $("#profilepic").attr("src", "/Content/Images/No-profile-picture.jpg");

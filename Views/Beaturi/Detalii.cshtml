@@ -1,4 +1,12 @@
-﻿
+﻿@model Trippin_Website.ViewModels.BeatViewModel
+
+
+
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+
+
 @{
     ViewBag.Title = "Detalii";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,93 +19,321 @@
 
 
 
-    var CurrentBeatId = Model.Beat.StyleId;
+    var CurrentStyleId = Model.Beat.StyleId;
+
+
     var listofStyles = new List<string>();
     foreach (var StyleName in Model.Styles)
     {
         listofStyles.Add(StyleName.Name);
     }
+
+
     var CurrentDateTime = DateTime.Now;
     var timeSpan = CurrentDateTime - Model.Beat.Created;
+
+
+
+    var hasLiked = Model.HasLiked;
+
 }
+
+
 <style>
     .card * {
         text-align: center;
         background-color: #0d1117;
     }
+
     .card img {
         width: 50%;
         height: 50%;
         object-fit: cover;
         margin: auto;
     }
+
+    button a {
+    }
+
+    body {
+        background-image: url('/Content/Images/linesDark2.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .card-text description full {
+        padding-top: 3px;
+        padding-bottom: 0px;
+    }
+
+    #interactWithPiesa {
+        padding-top: 2px;
+    }
+
+    #shareBtn {
+        cursor: pointer;
+    }
+
+
+
+    #shareContainer {
+        display: block;
+        margin-top: 20px;
+    }
+
+    #player {
+        margin-top: 20px !important;
+    }
 </style>
 
-<div class="displayInfo"  style="display: flex; justify-content: center; align-items: center; margin-top: 30px " >
-    <div class="card mb-3">
-        <h3 class="card-header">@Model.Beat.Name  @if (timeSpan.TotalDays < 1)
-                {<span class="badge rounded-pill bg-info">Nou</span>} </h3>
-        <div class="card-body">
-        </div>
-        <img src="@links.ElementAt(resultrandom);" alt="Alternate Text" />
-        <div class="card-body">
-            @if (Model.Beat.Description == null)
-            {
-                <p class="card-text">Nu este adaugata nici o descriere!</p>
-            }
-            else
-            {
-                <p class="card-text">@Model.Beat.Description</p>
-            }
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">BPM : @Model.Beat.Bpm</li>
-            @if (Model.Beat.Key == null)
-            {
-                <li class="list-group-item">Key : Nu este setata</li>
-            }
-            else
-            {
-                <li class="list-group-item">Key : @Model.Beat.Key</li>
-            }
+
+<body>
+
+    <div class="BackGroundImageContent">
+        <div class="displayInfo" style="display: flex; justify-content: center; align-items: center; margin-top: 30px ">
+            <div class="card mb-3">
+                <h3 class="card-header">
+                    @Model.Beat.Name  @if (timeSpan.TotalDays < 3)
+                    {<span class="badge rounded-pill bg-info">Nou</span>}
+                </h3>
+                <img src="@links.ElementAt(resultrandom);" alt="Alternate Text" />
+                <div class="card-body">
+
+                    @{
+                        var description = Model.Beat?.Description?.Replace("\n", "<br/>") ?? "";
+                        var lines = description.Split(new string[] { "<br/>" }, StringSplitOptions.None).Length;
+                    }
+
+                    @if (lines > 4)
+                    {
+                        <p class="card-text description" id="description">@Html.Raw(description)</p>
+                        <a href="#" class="show-more-link" onclick="document.querySelector('.card-text.description').classList.toggle('full'); console.log('Clicked!'); return false;">Arata mai mult</a>
+                    }
+                    else
+                    {
+                        <p class="card-text description full" id="description">@Html.Raw(description)</p>
+                    }
+
+                    <p style="margin-bottom: 3px">
+                        @if (Model.Beat.IsBanger == true)
+
+                        {<span style="margin-bottom: 0px !important" class="badge rounded-pill bg-success">Banger Alert!</span>}
+                    </p>
+
+                </div>
+                <div id="interactWithPiesa" class="card-body">
+                    <p id="LikeCount">@Model.Beat.Likes like-uri</p>
+                    @if (hasLiked)
+                    {
+                        <a id="likeBtn" href=""><img class="LikeButtons" src="~/Content/Images/like-liked.png" alt="Like button" /></a>
+
+                    }
+                    else if (!hasLiked)
+                    {
+                        <a id="likeBtn" href=""><img class="LikeButtons" src="~/Content/Images/like-non-liked-yet.png" alt="Like button" /></a>
+                    }
+                    <img class="LikeButtons" src="~/Content/Images/dislike-non-active.png" alt="Like button" />
+                    <img id="shareBtn" class="LikeButtons" onclick="showShare()" src="~/Content/Images/share-button.png" alt="Like button" />
+                </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button type="button" class="btn btn-outline-info">Trimite request de colaborare</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-info">Trebuie sa fii logat ca sa pot trimite request</button>
+                }
 
 
-            @if (Model.Styles == null)
-            {
-                <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
-            }
-            else
-            {
-        <li class="list-group-item">Stil : @listofStyles[CurrentBeatId - 1]</li>
-            }
-
-            <li class="list-group-item">Seed poza : @resultrandom</li>
-        </ul>
-        <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-        </div>
-        <div class="card-footer text-muted">
-            @if (Model.Beat.Created == null)
-            {
-                <label>Ai creat defapt acest beat?</label>
-            }
-            else
-            {
-                <label>Date created : </label>
-                <label style="display:block">~@DateConvertedString~</label>
-            }
-            @if (Model.Beat.Modified != null)
-            {
-                var DateTimeForConverting2 = Model.Beat.Modified;
-                string DateConvertedString2 = DateTimeForConverting2.ToString("dd/MM/yyyy");
-                string DateConvertedString3 = DateTimeForConverting2.ToString("HH:mm");
-                <label>Last Modified : </label>
-                <label style="display:block">~@DateConvertedString2 la ora @DateConvertedString3~</label>
-
-            }
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">BPM : @Model.Beat.Bpm</li>
+                    @if (Model.Beat.Key == null)
+                    {
+                        <li class="list-group-item">Key : Nu este setata</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Key : @Model.Beat.Key</li>
+                    }
 
 
+
+
+                    @if (Model.Styles == null)
+                    {
+                        <li class="list-group-item">Stil : Nu este selectat nici un stil </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Stil : @listofStyles[CurrentStyleId - 1]</li>
+
+                    }
+                    <li class="list-group-item"><a href="#" id="copy-link">Copiaza link!</a></li>
+                    <div style="background-color: #0d1117;">
+                        @if (Model.PresignedUrl != null)
+                        {
+
+                            if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+                            {
+                                <audio id="player" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="download">
+                                    <source src="@Model.PresignedUrl" type="audio/wav" />
+                                </audio>
+                            }
+                            else
+                            {
+                                <audio id="player" oncontextmenu="return false;" preload="auto" style="display:block; margin: 0 auto; padding-top:5px; padding-bottom:3px; text-align:center" controls controlsList="nodownload">
+                                    <source src="@Model.PresignedUrl" type="audio/wav" />
+                                </audio>
+                            }
+
+                        }
+                        <div id="shareContainer"><div id="shareExpanded" class="sharethis-inline-share-buttons"></div></div>
+                    </div>
+
+
+
+
+
+                    ------------------------------------------------------------------------------------------
+
+
+                    @if (Model.Beat.FileName != null)
+                    {
+                        if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+                        {
+                            <br />
+                            @Model.Beat.FileName
+                            <br />
+                        }
+                        else
+                        {
+                            <br />
+                            @Model.Beat.FileName
+                            <br />
+                        }
+                    }
+                    else
+                    {
+                        <li> Nu ai selectat inca fisierul!</li>
+                    }
+                    ------------------------------------------------------------------------------------------
+                    <li class="list-group-item">Seed poza : @resultrandom</li>
+                </ul>
+
+                <div class="card-footer text-muted">
+
+                    @if (Model.Beat.Created == null)
+                    {
+                        <label>Ai creat defapt acest beat?</label>
+                    }
+                    else
+                    {
+                        <label>Date created : </label>
+                        <label style="display:block">~@DateConvertedString~</label>
+                    }
+                    @if (Model.Beat.Modified != null)
+                    {
+
+                        <label>Last Modified : </label>
+                        <label style="display:block">~@Model.Beat.Modified~</label>
+
+                    }
+
+                    <audio id="likeSound" src="~/Content/Audio/show-share.mp3"></audio>
+
+                </div>
+            </div>
         </div>
     </div>
-    </div>
+</body>
+
+@section scripts{
+    <script>
+$(document).ready(function () {
+    var pieId = "@Model.Beat.IdBun";
+    var hasLiked = @Model.HasLiked.ToString().ToLower() === "true";
+    var likeBtn = $("#likeBtn");
+    var likeCount = $("#LikeCount");
+    var likeSound = $("#likeSound")[0];
+
+    if (hasLiked) {
+        likeCount.text(parseInt(likeCount.text()) + 1 + " like-uri");
+        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+    }
+
+    likeBtn.click(function (e) {
+        e.preventDefault();
+
+        var url = "/api/socialapi/" + pieId;
+        var action = hasLiked ? "unlike" : "like";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { Id: pieId },
+            success: function (data) {
+                if (data.success) {
+                    if (action === "unlike") {
+                        likeCount.text(parseInt(likeCount.text()) - 1 + " like-uri");
+                        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-non-liked-yet.png")");
+                        hasLiked = false;
+                    } else {
+                        likeCount.text(parseInt(likeCount.text()) + 1 + " like-uri");
+                        likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+                        hasLiked = true;
+                    }
+                    $.get("/api/socialapi/" + pieId, function (data) {
+                        if (data.alreadyLiked) {
+                            likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-liked.png")");
+                        }
+                        else {
+                            likeBtn.find("img").attr("src", "@Url.Content("~/Content/Images/like-non-liked-yet.png")");
+                        }
+                        likeCount.text(data.likes + " like-uri");
+                    });
+                    likeSound.play();
+                }
+            },
+            error: function () {
+                alert("A aparut o eroare :( .");
+            }
+        });
+    });
+});
+    </script>
+
+    <script>
+        var description = document.getElementById('description');
+        var lineHeight = parseInt(window.getComputedStyle(description).getPropertyValue('line-height'));
+        var height = parseInt(window.getComputedStyle(description).getPropertyValue('height'));
+        var numLines = height / lineHeight;
+        if (numLines < 4) {
+            document.querySelector('.show-more-link').style.display = 'none';
+        } else {
+            document.querySelector('.show-more-link').style.display = 'block';
+        }
+    </script>
+
+    <script>
+        document.getElementById("copy-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            navigator.clipboard.writeText(window.location.href);
+            var message = document.createElement("div");
+            message.innerText = "Copiat!";
+            message.style.position = "fixed";
+            message.style.top = (event.clientY - 20) + "px";
+            message.style.left = (event.clientX - 30) + "px";
+            message.style.backgroundColor = "#9933cc";
+            message.style.padding = "5px";
+            message.style.borderRadius = "5px";
+            document.body.appendChild(message);
+            setTimeout(function () {
+                document.body.removeChild(message);
+            }, 2000);
+        });
+    </script>
+
+
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=640f8b4eb5b185001201ccb0&product=inline-share-buttons&source=platform" async="async"></script>
+}

@@ -43,20 +43,23 @@
     }
 
     .form-message {
-        color: #666;
+        color: red;
         font-style: italic;
+        text-align: center;
     }
 
     #submitBtn {
         border-radius: 20px;
     }
+
+    
 </style>
 
 <link href="~/Content/Retusuri.css" rel="stylesheet" />
 
 <body>
-    <div class="main-container" style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
+    <div class="main-container" style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
         @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { id = "adaugaForm", enctype = "multipart/form-data" }))
         {
@@ -94,7 +97,6 @@
                     @Html.TextBox("file", "", new { type = "file", id = "file" })
                 </div>
             </div>
-            <p class="form-message">@ViewBag.Message</p>
             <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
                 @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
             </div>
@@ -107,7 +109,7 @@
         }
 
     </div>
-
+    <p class="form-message">@ViewBag.Message</p>
 </body>
 
 <footer>

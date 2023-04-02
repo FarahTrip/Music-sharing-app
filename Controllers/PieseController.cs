@@ -58,11 +58,13 @@ namespace Trippin_Website.Controllers
         public async Task<ActionResult> Detalii(Guid? id)
         {
             var piese = _context.Piese.Include(c => c.Style).SingleOrDefault(c => c.Id == id);
+            var user = _userManager.FindById(piese.UserId);
             if (id == null)
             {
                 return RedirectToAction("Index");
             }
 
+            var likes = _context.Likes.Where(c => c.PiesaId == id).ToList();
 
             bool hasLiked = false;
             if (User.Identity.IsAuthenticated)
@@ -80,6 +82,8 @@ namespace Trippin_Website.Controllers
                 HasLiked = hasLiked,
                 PresignedUrl = path
             };
+
+            ViewBag.Likes = likes.Count;
 
             return View(viewModel);
         }
@@ -139,6 +143,15 @@ namespace Trippin_Website.Controllers
             var user = _userManager.FindById(userId);
 
 
+            var verifyIfIsInQuota = user.Quota + file.ContentLength;
+
+            if (!User.IsInRole("Admin") && verifyIfIsInQuota > user.FileUploadHardLimit)
+            {
+                ViewBag.Message = "Quota de upload a fost depasita. Nu vei putea uploada noi fisiere decat daca vei sterge altele vechi sau iti vei schimba planul cu unul platit.";
+                return View("AdaugaNou", PieseModel);
+            }
+
+
             if (IsAudio(file) && file.ContentLength > 0)
                 try
                 {
@@ -167,6 +180,7 @@ namespace Trippin_Website.Controllers
                     piese.UserId = User.Identity.GetUserId();
                     piese.S3ServerPath = key;
                     piese.FileSize = file.ContentLength;
+                    piese.FileName = file.FileName;
                     user.Quota += file.ContentLength;
                     _context.Piese.Add(piese);
                     _context.SaveChanges();
@@ -247,7 +261,6 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
             PieseInDb.DateModified = CurrentDateTime;
             _context.SaveChanges();
             return RedirectToAction("Index", "Piese");
-
         }
         private bool IsAudio(HttpPostedFileBase file)
         {

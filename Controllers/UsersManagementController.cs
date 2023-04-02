@@ -161,6 +161,7 @@ namespace Trippin_Website.Controllers
 
                     var pieseUser = _context.Piese.Where(c => c.UserId == user.Id);
                     var beaturiUser = _context.Beaturi.Where(c => c.UserId == user.Id);
+                    var likesUser = _context.Likes.Where(c => c.UserId == user.Id);
 
                     var amazonHelper = new AmazonHelper();
                     var client = new AmazonS3Client(amazonHelper.AccessId, amazonHelper.SecretKey, RegionEndpoint.EUNorth1);
@@ -180,8 +181,12 @@ namespace Trippin_Website.Controllers
                     if (pieseUser != null)
                         _context.Piese.RemoveRange(pieseUser);
 
-                    if (beaturiUser == null)
+                    if (beaturiUser != null)
                         _context.Beaturi.RemoveRange(beaturiUser);
+
+                    if (likesUser != null)
+                        _context.Likes.RemoveRange(likesUser);
+
 
                     _context.SaveChanges();
 

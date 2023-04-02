@@ -29,6 +29,8 @@ namespace Trippin_Website.Controllers.API
         {
             var user = _userManager.FindById(User.Identity.GetUserId());
             var Piesa = _context.Piese.SingleOrDefault(c => c.Id == Id);
+            var likes = _context.Likes.Where(c => c.PiesaId == Id).ToList();
+
             if (Piesa == null)
                 return NotFound();
 
@@ -36,11 +38,11 @@ namespace Trippin_Website.Controllers.API
 
             if (like == null)
             {
-                return Json(new { likes = Piesa.Likes, alreadyLiked = false });
+                return Json(new { likes = likes.Count, alreadyLiked = false });
             }
             else
             {
-                return Json(new { likes = Piesa.Likes, alreadyLiked = true });
+                return Json(new { likes = likes.Count, alreadyLiked = true });
             }
         }
 

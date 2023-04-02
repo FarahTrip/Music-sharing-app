@@ -1,20 +1,27 @@
-﻿using System;
+﻿using Amazon;
+using Amazon.S3;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 
 namespace Trippin_Website.Controllers.API
 {
-    [Authorize(Roles = "Admin, Producer")]
+    [Authorize(Roles = "Admin, Producer, Artist")]
     public class BeaturiAPIController : ApiController
     {
         // GET: BeaturiAPI
 
         private ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         public BeaturiAPIController()
         {
             _context = new ApplicationDbContext();
+            _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
         }
 
         public IEnumerable<Beat> GetBeats()
@@ -68,15 +75,29 @@ namespace Trippin_Website.Controllers.API
         [HttpDelete]
         public IHttpActionResult DeleteBeat(Guid id)
         {
-            var beatToDelete = _context.Beaturi.SingleOrDefault(c => c.IdBun == id);
+            var fileServerHelper = new AmazonHelper();
+            var beat = _context.Beaturi.FirstOrDefault(c => c.IdBun == id);
+            var client = new AmazonS3Client(fileServerHelper.AccessId, fileServerHelper.SecretKey, RegionEndpoint.EUNorth1);
 
-            if (beatToDelete == null)
+            if (beat == null)
                 return NotFound();
 
-            _context.Beaturi.Remove(beatToDelete);
-            _context.SaveChanges();
+            var userId = User.Identity.GetUserId();
+            var user = _userManager.FindById(userId);
 
-            return Ok();
+            if (beat.S3ServerPath != null && userId == beat.UserId || User.IsInRole("Admin"))
+            {
+                client.DeleteObjectAsync(fileServerHelper.BucketName, beat.S3ServerPath);
+                user.Quota -= beat.FileSize;
+
+                _userManager.Update(user);
+                _context.Beaturi.Remove(beat);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            else
+                return BadRequest();
         }
     }
 }

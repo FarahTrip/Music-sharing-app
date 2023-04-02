@@ -1,5 +1,6 @@
 ﻿using Amazon;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -42,25 +43,68 @@ namespace Trippin_Website.Controllers
         }
 
         [Route("Beaturi/detalii/{id?}")]
-        public ActionResult Detalii(Guid? id)
+        public async Task<ActionResult> Detalii(Guid? id)
         {
+            bool hasLiked = false;
+
             var beaturi = _context.Beaturi.Include(c => c.Style).SingleOrDefault(c => c.IdBun == id);
             if (id == null)
             {
                 return RedirectToAction("Index");
             }
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                hasLiked = _context.Likes.Any(l => l.UserId == userId && l.PiesaId == beaturi.IdBun);
+            }
+            var path = await GetAudioAsync((Guid)beaturi.IdBun);
+
             var viewModel = new BeatViewModel
             {
                 Beat = beaturi,
-                Styles = _context.StyleOf.ToList()
+                Styles = _context.StyleOf.ToList(),
+                PresignedUrl = path,
+                HasLiked = hasLiked,
+                Likes = _context.Likes.Where(c => c.BeatId == id).ToList()
+
             };
             return View(viewModel);
+        }
+
+        [AllowAnonymous]
+        public async Task<string> GetAudioAsync(Guid id)
+        {
+            var helper = new AmazonHelper();
+            AmazonS3Client client = new AmazonS3Client(helper.AccessId, helper.SecretKey, RegionEndpoint.EUNorth1);
+            var beat = await _context.Beaturi.SingleOrDefaultAsync(c => c.IdBun == id);
+
+            var userId = User.Identity.GetUserId();
+            var key = beat.S3ServerPath;
+
+            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+            {
+                BucketName = helper.BucketName,
+                Expires = DateTime.Now.AddMinutes(10),
+                Key = key
+            };
+
+            string path = client.GetPreSignedURL(request);
+
+            return path;
         }
 
         public ActionResult Edit()
         {
             var beaturi = _context.Beaturi.ToList();
-            return View(beaturi);
+            var Styles = _context.StyleOf.ToList();
+            var model = new BeaturiViewModel
+            {
+                Beaturi = beaturi,
+                Stiluri = Styles
+            };
+
+            return View(model);
         }
 
 
@@ -95,6 +139,7 @@ namespace Trippin_Website.Controllers
 
             fileServerHelper.UserFolder(User.Identity.GetUserId());
             var userId = User.Identity.GetUserId();
+            var user = _userManager.FindById(userId);
 
 
             if (IsAudio(file) && file.ContentLength > 0)
@@ -124,8 +169,12 @@ namespace Trippin_Website.Controllers
                     Beat.IdBun = Guid.NewGuid();
                     Beat.UserId = User.Identity.GetUserId();
                     Beat.S3ServerPath = key;
+                    Beat.FileSize = file.ContentLength;
+                    Beat.FileName = file.FileName;
+                    user.Quota += file.ContentLength;
+                    await _userManager.UpdateAsync(user);
                     _context.Beaturi.Add(Beat);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index", "Beaturi");
                 }
@@ -154,10 +203,10 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
         public ActionResult Modifica(Beat Beat)
         {
             var CurrentDateTime = DateTime.Now;
-            var BeatInDb = _context.Beaturi.Single(c => c.IdBun == Beat.IdBun);
+            var BeatInDb = _context.Beaturi.SingleOrDefault(c => c.IdBun == Beat.IdBun);
             BeatInDb.Name = Beat.Name;
             BeatInDb.Key = Beat.Key;
-            BeatInDb.Style = Beat.Style;
+            BeatInDb.StyleId = Beat.StyleId;
             BeatInDb.Description = Beat.Description;
             BeatInDb.Bpm = Beat.Bpm;
             BeatInDb.Modified = CurrentDateTime;

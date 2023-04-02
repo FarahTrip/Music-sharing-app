@@ -20,7 +20,7 @@ namespace Trippin_Website
         [Required(ErrorMessage = "Nu ai introdus gama piesei!")]
         public string Key { get; set; }
 
-        [Range(30, 200, ErrorMessage = "Oops! Nu prea sunt piese sub 30bpm sau peste 200bpm")]
+        [Range(30, 200, ErrorMessage = "Oops! Ai introdus un BPM sub 30bpm sau peste 200bpm")]
         public int Bpm { get; set; }
 
         public int BeatId { get; set; }

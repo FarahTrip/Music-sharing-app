@@ -727,6 +727,14 @@
     <Compile Include="Migrations\202303311319168_AddingFileUploadLimitToAccountInsteadOfPiese.designer.cs">
       <DependentUpon>202303311319168_AddingFileUploadLimitToAccountInsteadOfPiese.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304011318282_AddingFileSizeToBeats.cs" />
+    <Compile Include="Migrations\202304011318282_AddingFileSizeToBeats.designer.cs">
+      <DependentUpon>202304011318282_AddingFileSizeToBeats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304021804382_AddingBeatIdToLikes.cs" />
+    <Compile Include="Migrations\202304021804382_AddingBeatIdToLikes.designer.cs">
+      <DependentUpon>202304021804382_AddingBeatIdToLikes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1268,6 +1276,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303311319168_AddingFileUploadLimitToAccountInsteadOfPiese.resx">
       <DependentUpon>202303311319168_AddingFileUploadLimitToAccountInsteadOfPiese.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304011318282_AddingFileSizeToBeats.resx">
+      <DependentUpon>202304011318282_AddingFileSizeToBeats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304021804382_AddingBeatIdToLikes.resx">
+      <DependentUpon>202304021804382_AddingBeatIdToLikes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

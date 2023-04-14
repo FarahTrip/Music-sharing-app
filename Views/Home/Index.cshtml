@@ -1,106 +1,84 @@
 ﻿@{
     ViewBag.Title = "Principal";
-    var userId = User.Identity.GetUserId();
+    /*    var userId = User.Identity.GetUserId();*/
 }
-<style>
-    .carousel-container {
-        position: relative;
-        margin: auto;
-        width: fit-content;
-        height: 400px;
-        overflow: hidden;
-    }
 
-    .carousel-slide {
-        display: flex;
-        width: fit-content;
-        height: fit-content;
-    }
 
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/Content/homepage.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+          rel="home" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" />
+    <title>Trippin</title>
+    <style>
+        .body-content {
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+            padding: 0px !important;
         }
 
-    .prev-btn, .next-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-        color: white;
-        background-color: rgba(0,0,0,0.5);
-        border: none;
-        outline: none;
-        cursor: pointer;
-    }
-
-    .prev-btn {
-        left: 10px;
-    }
-
-    .next-btn {
-        right: 10px;
-    }
-
-    .NuELogatContainer {
-        margin: 5rem;
-        height: 35rem;
-        border: 1px solid #9933cc;
-        border-radius: 15px;
-        background-color: #0d1117;
-        text-align: center;
-        padding-top: 1.5rem;
-    }
-
-    .acces-denied {
-        margin-top: 3rem;
-        height: 20rem;
-        width: 20rem;
-    }
-
-    #LoginBtn2 {
-        display: block;
-        margin: 0 auto;
-        margin-top: 2.4rem;
-    }
-</style>
-
+    </style>
+</head>
 <body>
+    <section id="hero">
+        <video id="bg-video"
+               src="~/Content/pattern cut.mp4"
+               type="video/mp4"
+               poster="path/to/your/poster.jpg"
+               autoplay
+               muted
+               loop></video>
+        <div class="content">
+            <h1>Trippin</h1>
+            @if(!User.Identity.IsAuthenticated)
+            { <a href="@Url.Action("Login", "Account")" class="cta">Intra in cont</a>}
+            else
+            { <button class="cta">Fa altceva</button>}
 
-    @using Microsoft.AspNet.Identity
-    @if (Request.IsAuthenticated)
-    {
-
-        <div class="carousel-container">
-            <div class="carousel-slide">
-                <img src="https://i.ibb.co/cbbCbxV/R-1.jpg">
-                <img src="~/Content/Image-Carrousel/banner-la-misto.jpg">
-                <img src="https://i.ibb.co/kySpmh0/R.jpg">
+        </div>
+        <div class="counters">
+            <div class="counter">
+                <i class="fas fa-users"></i>
+                <span class="count">@ViewBag.Conturi</span>
+                <p>Conturi active</p>
             </div>
-            <button class="prev-btn">&#8249;</button>
-            <button class="next-btn">&#8250;</button>
+            <div class="counter">
+                <i class="fas fa-music"></i>
+                <span class="count">@ViewBag.Piese</span>
+                <p>Piese</p>
+            </div>
+            <div class="counter">
+                <i class="fas fa-headphones-alt"></i>
+                <span class="count">@ViewBag.Beaturi</span>
+                <p>Beat-uri</p>
+            </div>
         </div>
-        <script src="~/Scripts/Carrousel.js"></script>
-
-   
-
-    }
-    else
-    {
-        <div class="NuELogatContainer">
-            <h2>Trebuie să fii logat ca să ai acces!</h2>
-            <img class="acces-denied" src="https://img.icons8.com/plasticine/256/restriction-shield.png" alt="Alternate Text" />
-            <button id="LoginBtn2" class="btn btn-outline-info" type="button"> @Html.ActionLink("Loghează-te", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </button>
+    </section>
+    <section id="galaxy">
+        <div id="galaxy-animation"></div>
+        <div class="content">
+            <p>
+                Muzica pentru intreaga
+                <strong style="color: #ff14a5"> galaxie...</strong>
+            </p>
         </div>
-
-    }
+    </section>
+    <section id="futuristic">
+        <div class="content">
+            <h2>Impartaseste unrelease-urile tale doar cu cine trebuie </h2>
+            <p>
+                De cele mai multe ori, ca artisti, ne trezim in situatia in care nu stim daca este safe sa impartasim piesele sau beat-urile noastre cu cineva deoarece exista riscuri, se pot fura.
+                Link-uri care expira? Ai pierdut exportul in telefon? Aici iti poti tine in siguranta munca.
+            </p>
+            <button class="futuristic-button">Inregistreaza-te</button>
+        </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="~/Scripts/galaxy.js"></script>
 </body>
-<script>
-
-</script>
-
-<asp:ListBox runat="server"></asp:ListBox>
+</html>

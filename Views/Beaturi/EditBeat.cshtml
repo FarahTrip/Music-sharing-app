@@ -49,9 +49,12 @@
             <label for="StyleId">Stilul</label>
             @Html.DropDownListFor(m => m.Beat.StyleId, new SelectList(Model.Styles, "Id", "Name"), new { @class = "form-control" })
         </div>
-        <div class=“checkbox”>
-            @Html.CheckBoxFor(m => m.Beat.IsBanger)	E banger?
-        </div>
+        if (User.IsInRole("Admin"))
+        {
+            <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
+                @Html.CheckBoxFor(m => m.Beat.IsBanger)	Este banger?
+            </div>
+        }
         @Html.HiddenFor(m => m.Beat.IdBun)
 
         <button type="submit" class="btn btn-secondary">

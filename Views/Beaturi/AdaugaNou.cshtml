@@ -63,6 +63,7 @@
         {
 
             <h2 style="text-align: center; display:block">Adauga un nou beat</h2>
+
             @Html.HiddenFor(m => m.Beat.Created, new { @Value = DateTime.Now })
             <div class="form-group">
                 @Html.LabelFor(m => m.Beat.Name)
@@ -87,6 +88,14 @@
                 <label for="StyleId">Stilul</label>
                 @Html.DropDownListFor(m => m.Beat.StyleId, new SelectList(Model.Styles, "Id", "Name"), new { @class = "form-control" })
             </div>
+            <div class="form-group">
+                <label id="produceriLabel" for="produceri">Produceri</label>
+                <input class="form-control" id="produceri" type="text" name="name" value="" />
+            </div>
+            <div class="form-group">
+                <label id="artistiLabel" for="artisti">Artisti</label>
+                <input class="form-control" id="artisti" type="text" name="name" value="" />
+            </div>
             <div id="uploadButton" class="form-group">
                 <div class="file-input">
                     <label for="file">Incarca beat-ul</label>
@@ -94,9 +103,13 @@
                 </div>
             </div>
             <p class="form-message">@ViewBag.Message</p>
-            <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
-                @Html.CheckBoxFor(m => m.Beat.IsBanger)	Este banger?
-            </div>
+            if (User.IsInRole("Admin"))
+            {
+                <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
+                    @Html.CheckBoxFor(m => m.Beat.IsBanger)	Este banger?
+                </div>
+            }
+
             @Html.AntiForgeryToken()
 
             <button type="submit" id="submitBtn" class="btn btn-secondary">
@@ -122,6 +135,53 @@
         setTimeout(function () {
             $('#adaugaForm').unbind('submit').submit();
         }, 500);
+    });
+    </script>
+
+    <script>
+
+        var vm = {};
+        $(document).ready(function () {
+            var produceri = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/Conturi?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#produceri').typeahead(
+                null, {
+                name: 'produceri',
+                display: 'userName',
+                source: produceri
+            });
+        }).on('typeahead:select', function (e, producer) {
+            vm.producerId = producer.UserId;
+        });
+
+    </script>
+    <script>
+    var vm2 = {};
+    $(document).ready(function () {
+    var artisti = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+    url: '/api/Conturi?query=%QUERY',
+    wildcard: '%QUERY'
+    }
+    });
+
+    $('#artisti').typeahead(
+    null, {
+    name: 'artisti',
+    display: 'userName',
+    source: artisti
+    });
+    }).on('typeahead:select', function (e, producer) {
+    vm.artistId = producer.UserId;
     });
     </script>
 

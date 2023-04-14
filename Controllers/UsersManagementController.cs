@@ -47,6 +47,7 @@ namespace Trippin_Website.Controllers
         }
 
         [Authorize]
+        [Route("profile/{id:guid}")]
         public ActionResult Profile(String Id)
         {
 
@@ -59,8 +60,20 @@ namespace Trippin_Website.Controllers
             var Model = new User_Content_ViewModel
             {
                 User = user,
-                Piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList()
+                Piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList(),
+                Beaturi = _context.Beaturi.OrderByDescending(c => c.Created).ToList(),
             };
+
+            var ProfileUser = _userManager.FindById(user.Id);
+            if (ProfileUser.Roles.Any(c => c.RoleId == "47db5674-87ba-471d-ad7c-7c4aae7958d8"))
+                ViewBag.UserProfileRole = "Admin";
+
+            if (ProfileUser.Roles.Any(c => c.RoleId == "60996260-1397-4b73-b5d4-a4b484fb554d"))
+                ViewBag.UserProfileRole = "Artist";
+
+            if (ProfileUser.Roles.Any(c => c.RoleId == "90ae9446-6d60-44e7-99b7-97a7031b1d2c"))
+                ViewBag.UserProfileRole = "Producer";
+
 
             return View(Model);
         }
@@ -211,6 +224,43 @@ namespace Trippin_Website.Controllers
                 }
             }
             return View("Index", users);
+        }
+
+        public ActionResult Versuri(Guid? Id)
+        {
+            var user = _userManager.Users.SingleOrDefault(c => c.Id == Id.ToString());
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var versuri = new VersuriViewModel()
+            {
+                Versuri = _context.Versuri.ToList(),
+                UserId = Id.ToString(),
+            };
+
+
+            return View(versuri);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> AdaugaVers(VersuriViewModel model)
+        {
+            var userId = User.Identity.GetUserId();
+
+            if (!ModelState.IsValid)
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
+            model.Vers.Id = Guid.NewGuid();
+            model.Vers.UserId = userId;
+            model.Vers.Created = DateTime.Now;
+
+            _context.Versuri.Add(model.Vers);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Versuri", "UsersManagement", new { id = userId });
         }
     }
 }

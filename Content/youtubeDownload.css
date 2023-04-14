@@ -1,13 +1,15 @@
 body {
     background-color: #1c1c1c;
     color: #fff;
-    font-family: Arial, sans-serif;
-  }
+    font-family: 'Unbounded', sans-serif;
+    font-size: small;
+}
   
   .container {
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
+
   }
   
   h1 {

@@ -23,6 +23,48 @@
         font-size: 18px;
         color: red;
     }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #262626;
+        padding: 20px;
+        border-radius: 4px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .modal-title {
+        margin-top: 0;
+        color: #9933cc;
+    }
+
+    .modal-lyrics {
+        white-space: pre-line; 
+    }
+
+    .modal-close {
+        margin-top: 10px;
+        background-color: #9933cc;
+        color: #ffffff;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+
 </style>
 
 <div class="tabelDiv">
@@ -74,13 +116,20 @@
                         }
                         else
                         {
-                    <td id="NotYourSong">Unavailable</td>
-                    <td id="NotYourSong">Unavailable</td>
+                            <td id="NotYourSong">Unavailable</td>
+                            <td id="NotYourSong">Unavailable</td>
                         }
                     </tr>
                 }
             </tbody>
         </table>
+        <div class="modal" id="lyricsModal">
+            <div class="modal-content">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <p class="modal-lyrics" id="modalLyrics"></p>
+                <button class="modal-close" id="modalClose">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -117,4 +166,6 @@
             });
         });
     </script>
+
+
 }

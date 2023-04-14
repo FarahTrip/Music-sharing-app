@@ -22,13 +22,13 @@
 </style>
 
 <body>
-    <div style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+    <div id="loginFormContainer" style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
         <div style="width: 70%;">
             <div style="text-align: center;">
                 <h2>Conectează-te</h2>
                 <hr />
             </div>
-            <div style="background-color: #1a1a1a; padding: 30px; border-radius: 5px; border-color: #9933cc; border-width: 1px; border-style: solid">
+            <div  style="background-color: #1a1a1a; padding: 30px; border-radius: 5px; border-color: #9933cc; border-width: 1px; border-style: solid">
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()

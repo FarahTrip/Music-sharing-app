@@ -142,7 +142,7 @@
             margin-bottom: 10px;
         }
 
-        .song-card ul { 
+        .song-card ul {
             list-style: none;
             margin: 0;
             padding: 0;
@@ -166,7 +166,7 @@
                 color: #fff;
             }
 
-            
+
 
             .song-card.is-banger .song-info {
                 border-top: 1px solid #fff;
@@ -174,15 +174,6 @@
                 padding-top: 10px;
             }
 
-    #show-more-btn {
-        background-color: #3182ce;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 16px;
-        cursor: pointer;
-    }
 
         #show-more-btn:hover {
             background-color: #2c5282;
@@ -230,10 +221,29 @@
 
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userId = User.Identity.GetUserId();
+
+    var pieseHasElements = Model.Piese.Any(c => c.UserId == userId);
+    var beaturiHasElements = Model.Beaturi.Any(c => c.UserId == userId);
+    var UserProfileRole = ViewBag.UserProfileRole;
+
 
 }
 
+<style>
+    .noelementsinlist {
+        margin-left: auto;
+        margin-right: auto;
+        color: #9933CC;
+    }
+    #show-more-btn{
+        height: 3rem;
+    }
+    #show-more-btn2 {
+        height: 3rem;
+    }
 
+</style>
 
 
 <div class="Profile-wrapper text-center">
@@ -286,31 +296,158 @@
 
 </div>
 
-<div class="Profile-wrapper text-center">
-    <h1>Piesele lui @Model.User.UserName </h1>
-    <div class="song-card-container">
-        @foreach (var piesa in Model.Piese.Where(c => c.UserId == Model.User.Id))
-        {
-            <div class="song-card" id="@piesa.Id">
-                <h2> <a href="@Url.Action("Detalii", "Piese", new {id = piesa.Id})">@piesa.Name</a></h2>
-                <div class="details">
-                    <p><strong>Key:</strong> @piesa.Key</p>
-                    <p><strong>Bpm:</strong> @piesa.Bpm</p>
-                    <p><strong>Date Created:</strong> @piesa.DateCreated.ToString("d")</p>
-                    @if (piesa.DateModified.HasValue)
+@{
+    if (UserProfileRole == "Admin" || UserProfileRole == "Artist")
+    {
+        <div class="Profile-wrapper text-center">
+            <h1>Piesele lui @Model.User.UserName </h1>
+            <div class="song-card-container">
+                @{
+                    if (pieseHasElements)
                     {
-                        <p><strong>Date Modified:</strong> @piesa.DateModified.Value.ToString("d")</p>
+                        foreach (var piesa in Model.Piese.Where(c => c.UserId == Model.User.Id))
+                        {
+                            <div class="song-card piese-card" id="@piesa.Id">
+                                <h2> <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a></h2>
+                                <div class="details">
+                                    <p><strong>Key:</strong> @piesa.Key</p>
+                                    <p><strong>Bpm:</strong> @piesa.Bpm</p>
+                                    <p><strong>Date Created:</strong> @piesa.DateCreated.ToString("d")</p>
+                                    @if (piesa.DateModified.HasValue)
+                                    {
+                                        <p><strong>Date Modified:</strong> @piesa.DateModified.Value.ToString("d")</p>
+                                    }
+                                    <p><strong>Is Banger:</strong> @piesa.IsBanger</p>
+                                </div>
+                            </div>
+                        }
                     }
-                    <p><strong>Is Banger:</strong> @piesa.IsBanger</p>
-                </div>
+                    else
+                    {
+                        <h4 class="noelementsinlist">Userul nu a incarcat nici o piesa pana acum pana acum</h4>
+                    }
+
+                }
+
+
             </div>
-        }
-    </div>
-    <button id="show-more-btn">Arata tot</button>
-</div>
+            <button id="show-more-btn" class="btn btn-outline-info">Arata mai mult</button>
+        </div>
+
+        <div class="Profile-wrapper text-center">
+            <h1>Beat-urile lui @Model.User.UserName </h1>
+            <div class="song-card-container">
+                @{
+                    if (beaturiHasElements)
+                    {
+                        foreach (var beat in Model.Beaturi.Where(c => c.UserId == Model.User.Id))
+                        {
+                            <div class="song-card beaturi-card" id="@beat.IdBun">
+                                <h2> <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.IdBun })">@beat.Name</a></h2>
+                                <div class="details">
+                                    <p><strong>Key:</strong> @beat.Key</p>
+                                    <p><strong>Bpm:</strong> @beat.Bpm</p>
+                                    <p><strong>Date Created:</strong> @beat.Created.ToString("d")</p>
+                                    @if (beat.Modified.HasValue)
+                                    {
+                                        <p><strong>Date Modified:</strong> @beat.Modified.Value.ToString("d")</p>
+                                    }
+                                    <p><strong>Is Banger:</strong> @beat.IsBanger</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h4 class="noelementsinlist">Userul nu a incarcat nici un beat pana acum</h4>
+                    }
+                }
+            </div>
+            <button id="show-more-btn2" class="btn btn-outline-info">Arata mai mult</button>
+        </div>
+    }
+    else if (UserProfileRole == "Producer")
+    {
+        <div class="Profile-wrapper text-center">
+            <h1>Beat-urile lui @Model.User.UserName </h1>
+            <div class="song-card-container">
+
+                @{
+                    if (beaturiHasElements)
+                    {
+                        foreach (var beat in Model.Beaturi.Where(c => c.UserId == Model.User.Id))
+                        {
+                            <div class="song-card beaturi-card" id="@beat.IdBun">
+                                <h2> <a href="@Url.Action("Detalii", "Beaturi", new { id = beat.IdBun })">@beat.Name</a></h2>
+                                <div class="details">
+                                    <p><strong>Key:</strong> @beat.Key</p>
+                                    <p><strong>Bpm:</strong> @beat.Bpm</p>
+                                    <p><strong>Date Created:</strong> @beat.Created.ToString("d")</p>
+                                    @if (beat.Modified.HasValue)
+                                    {
+                                        <p><strong>Date Modified:</strong> @beat.Modified.Value.ToString("d")</p>
+                                    }
+                                    <p><strong>Is Banger:</strong> @beat.IsBanger</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                {
+            <h4 class="noelementsinlist">Userul nu a incarcat nici un beat pana acum</h4>
+                }
+                }
+
+
+            </div>
+            <button id="show-more-btn2" class="btn btn-outline-info" >Arata mai mult</button>
+        </div>
+
+        <div class="Profile-wrapper text-center">
+            <h1>Piesele lui @Model.User.UserName </h1>
+            <div class="song-card-container">
+
+                @{
+                    if (pieseHasElements)
+                    {
+                        foreach (var piesa in Model.Piese.Where(c => c.UserId == Model.User.Id))
+                        {
+                            <div class="song-card piese-card" id="@piesa.Id">
+                                <h2> <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a></h2>
+                                <div class="details">
+                                    <p><strong>Key:</strong> @piesa.Key</p>
+                                    <p><strong>Bpm:</strong> @piesa.Bpm</p>
+                                    <p><strong>Date Created:</strong> @piesa.DateCreated.ToString("d")</p>
+                                    @if (piesa.DateModified.HasValue)
+                                    {
+                                        <p><strong>Date Modified:</strong> @piesa.DateModified.Value.ToString("d")</p>
+                                    }
+                                    <p><strong>Is Banger:</strong> @piesa.IsBanger</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+            <h4 class="noelementsinlist" >User nu a incarcat nici o piesa pana acum</h4>
+                    }
+
+
+
+                }
+
+
+            </div>
+            <button id="show-more-btn" class="btn btn-outline-info">Arata mai mult</button>
+        </div>
+
+    }
+}
+
+
 
 <script>
-    const songs = document.querySelectorAll('.song-card');
+    const songs = document.querySelectorAll('.piese-card');
     const button = document.getElementById('show-more-btn');
     let currentCount = 3;
 
@@ -319,6 +456,9 @@
             song.style.display = 'none';
         }
     });
+
+    if (songs.length <= 3)
+        button.style.display = 'none';
 
     button.addEventListener('click', () => {
         currentCount += 3;
@@ -334,6 +474,39 @@
         if (currentCount >= songs.length) {
             button.style.display = 'none';
         }
+
+     
+    });
+
+    const songs2 = document.querySelectorAll('.beaturi-card');
+    const button2 = document.getElementById('show-more-btn2');
+    let currentCount2 = 3;
+
+    songs2.forEach((song, index) => {
+        if (index > currentCount2 - 1) {
+            song.style.display = 'none';
+        }
+    });
+
+    if (songs2.length <= 3)
+        button2.style.display = 'none';
+
+    button2.addEventListener('click', () => {
+        currentCount2 += 3;
+
+        songs2.forEach((song, index) => {
+            if (index < currentCount2) {
+                song.style.display = 'block';
+            } else {
+                song.style.display = 'none';
+            }
+        });
+
+        if (currentCount2 >= songs2.length) {
+            button2.style.display = 'none';
+        }
     });
 </script>
+
+
 

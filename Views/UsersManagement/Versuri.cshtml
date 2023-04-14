@@ -1,0 +1,227 @@
+﻿@model Trippin_Website.ViewModels.VersuriViewModel
+
+
+@using Microsoft.AspNet.Identity;
+@using Trippin_Website.Models;
+@using Microsoft.AspNet.Identity.EntityFramework;
+
+
+@{
+    ViewBag.Title = "Versuri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var user = _userManager.FindById(User.Identity.GetUserId());
+    var versuri = Model.Versuri.Where(c => c.UserId == Model.UserId).OrderByDescending(c => c.Created);
+    var isYourVersuri = Model.UserId == User.Identity.GetUserId() ? true : false;
+}
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+    }
+
+ 
+    body {
+        background-color: #060606;
+        color: #ffffff;
+    }
+
+
+    .container {
+        margin: 0 auto;
+        max-width: 600px; 
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #9933cc;
+    }
+
+  
+    .form {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .input {
+        width: 100%; 
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        background-color: #262626;
+        color: #ffffff;
+        margin-bottom: 10px; 
+    }
+
+    .textarea {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        background-color: #262626;
+        color: #ffffff;
+        resize: vertical; 
+        height: 300px; 
+        margin-bottom: 10px; 
+    }
+
+    .button {
+        width: 100%; 
+        padding: 10px;
+        background-color: #9933cc;
+        color: #ffffff;
+        border: none;
+        border: :none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+
+    .list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .list-item {
+        padding: 10px;
+        background-color: #262626;
+        color: #ffffff;
+        cursor: pointer;
+        margin-bottom: 5px; 
+    }
+
+        .list-item:hover {
+            background-color: #9933cc;
+        }
+
+ 
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #262626;
+        padding: 20px;
+        border-radius: 4px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .modal-title {
+        margin-top: 0;
+        color: #9933cc;
+    }
+
+    .modal-lyrics {
+        white-space: pre-line; /* Preserve line breaks in lyrics */
+    }
+
+    .modal-close {
+        margin-top: 10px;
+        background-color: #9933cc;
+        color: #ffffff;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .container{
+        display: block !important;
+    }
+</style>
+
+<head>
+    <title>Versurile lui </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h3 class="title">Versurile lui @User.Identity.GetUserName()</h3>
+
+        @if (isYourVersuri)
+        {
+            using (Html.BeginForm("AdaugaVers", "UsersManagement", FormMethod.Post, new { @Class = "form" }))
+            {
+                @Html.TextBoxFor(m => m.Vers.Title, new { @class = "input", type = "text", id = "titleInput", placeholder = "Scrie titlul aici..." })
+                @Html.ValidationMessageFor(m => m.Vers.Title)
+                @Html.TextAreaFor(m => m.Vers.Vers, new { @class = "textarea", id = "lyricsInput", placeholder = "Scrie versurile aici..." })
+                @Html.ValidationMessageFor(m => m.Vers.Vers)
+                <button type="submit" class="button" id="addButton">Adauga</button>
+                @ViewBag.Mesaj
+            }
+        }
+
+
+
+        @if (!Model.Versuri.Any(c => c.UserId == user.Id))
+        {
+            <h4>Nu sunt adaugate inca versuri</h4>
+        }
+        else
+        {
+            <ul class="list" id="lyricsList">
+
+                @foreach (var vers in versuri)
+                {
+                    <li class="list-item" data-title="@vers.Title" data-lyrics="@vers.Vers">@vers.Title</li>
+                }
+            </ul>
+        }
+
+    </div>
+            <div class="modal" id="lyricsModal">
+                <div class="modal-content">
+                    <h3 class="modal-title" id="modalTitle"></h3>
+                    <p class="modal-lyrics" id="modalLyrics"></p>
+                    <button class="modal-close" id="modalClose">Close</button>
+                </div>
+            </div>
+</body>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const lyricsList = document.getElementById('lyricsList');
+        const modal = document.getElementById('lyricsModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalLyrics = document.getElementById('modalLyrics');
+        const modalClose = document.getElementById('modalClose');
+
+        lyricsList.addEventListener('click', function (event) {
+            const listItem = event.target;
+            const title = listItem.dataset.title;
+            const lyrics = listItem.dataset.lyrics;
+
+            modalTitle.textContent = title;
+            modalLyrics.textContent = lyrics;
+
+            modal.style.display = 'block';
+        });
+
+        modalClose.addEventListener('click', function () {
+
+            modal.style.display = 'none';
+        });
+    });
+
+</script>

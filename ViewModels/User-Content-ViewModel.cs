@@ -7,6 +7,9 @@ namespace Trippin_Website.ViewModels
     {
         public ApplicationUser User { get; set; }
         public List<Piese> Piese { get; set; }
+        public Versuri Vers { get; set; }
+        public List<Versuri> Versuri { get; set; }
+        public List<Beat> Beaturi { get; set; }
 
     }
 }

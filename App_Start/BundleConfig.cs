@@ -10,7 +10,9 @@ namespace Trippin_Website
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
                          "~/scripts/dataTables/datatables.bootstrap.js",
-                         "~/scripts/dataTables/jquery.datatables.js"));
+                         "~/scripts/dataTables/jquery.datatables.js",
+                         "~/scripts/typeahead.bundle.js"
+                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -28,7 +30,8 @@ namespace Trippin_Website
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-cyborg.css",
                       "~/content/datatables/css/datatables.bootstrap.css",
-                      "~/Content/site.css", "~/Content/Retusuri.css"));
+                      "~/Content/site.css", "~/Content/Retusuri.css",
+                     "~/Content/typeahead.css"));
         }
     }
 }

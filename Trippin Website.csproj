@@ -568,6 +568,7 @@
     <Compile Include="Controllers\ArtistiController.cs" />
     <Compile Include="Controllers\BeaturiController.cs" />
     <Compile Include="Controllers\ClientiController.cs" />
+    <Compile Include="Controllers\GrupuriController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PieseController.cs" />
@@ -576,6 +577,7 @@
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="DTOS\PieseDTO.cs" />
+    <Compile Include="DTOS\UsersDTO.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Logic_classes\AmazonHelper.cs" />
     <Compile Include="Logic_classes\AmazonReturnState.cs" />
@@ -735,6 +737,30 @@
     <Compile Include="Migrations\202304021804382_AddingBeatIdToLikes.designer.cs">
       <DependentUpon>202304021804382_AddingBeatIdToLikes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304061552122_AddingVersuri.cs" />
+    <Compile Include="Migrations\202304061552122_AddingVersuri.designer.cs">
+      <DependentUpon>202304061552122_AddingVersuri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304061651369_UserIdToVersuri.cs" />
+    <Compile Include="Migrations\202304061651369_UserIdToVersuri.designer.cs">
+      <DependentUpon>202304061651369_UserIdToVersuri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304062011215_requieredToVersuri.cs" />
+    <Compile Include="Migrations\202304062011215_requieredToVersuri.designer.cs">
+      <DependentUpon>202304062011215_requieredToVersuri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304091159518_AddingGrupuriAndGropumembers.cs" />
+    <Compile Include="Migrations\202304091159518_AddingGrupuriAndGropumembers.designer.cs">
+      <DependentUpon>202304091159518_AddingGrupuriAndGropumembers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304111238174_GroupAdminSecond.cs" />
+    <Compile Include="Migrations\202304111238174_GroupAdminSecond.designer.cs">
+      <DependentUpon>202304111238174_GroupAdminSecond.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304111309052_AddingWhoProducedAndMadeTheSong.cs" />
+    <Compile Include="Migrations\202304111309052_AddingWhoProducedAndMadeTheSong.designer.cs">
+      <DependentUpon>202304111309052_AddingWhoProducedAndMadeTheSong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -772,6 +798,8 @@
     <Compile Include="Models\Artisti.cs" />
     <Compile Include="Models\Beat.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Grupuri.cs" />
+    <Compile Include="Models\GrupuriMembrii.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Likes.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -782,6 +810,9 @@
     <Compile Include="Models\PieseIndexViewModel.cs" />
     <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\StyleOf.cs" />
+    <Compile Include="Models\Versuri.cs" />
+    <Compile Include="Models\WhoIsOnTheSong.cs" />
+    <Compile Include="Models\WhoProducedTheSong.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BeaturiViewModel.cs" />
@@ -794,6 +825,7 @@
     <Compile Include="ViewModels\songbeatartistViewModel.cs" />
     <Compile Include="ViewModels\User-Content-ViewModel.cs" />
     <Compile Include="ViewModels\UserListViewModel.cs" />
+    <Compile Include="ViewModels\VersuriViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Audio\camera.mp3" />
@@ -914,9 +946,16 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\galaxie2.png" />
+    <Content Include="Content\homepage.css" />
+    <Content Include="Content\Images\Galaxie.png" />
     <Content Include="Content\Image-Carrousel\banner-la-misto.jpg" />
     <Content Include="Content\Images\accessdenied.svg" />
     <Content Include="Content\Images\Asset 3.png" />
+    <Content Include="Content\Images\Banner_1.png" />
+    <Content Include="Content\Images\Banner_2.png" />
+    <Content Include="Content\Images\Banner_3.png" />
+    <Content Include="Content\Images\Banner_4.png" />
     <Content Include="Content\Images\dislike-active.png" />
     <Content Include="Content\Images\dislike-non-active.png" />
     <Content Include="Content\Images\down.png" />
@@ -935,7 +974,9 @@
     <Content Include="Content\Images\Upload.svg" />
     <Content Include="Content\Images\very polite kat.png" />
     <Content Include="Content\KeyFinder.css" />
+    <Content Include="Content\pattern cut.mp4" />
     <Content Include="Content\Retusuri.css" />
+    <Content Include="Content\typeahead.css" />
     <Content Include="Content\youtubeDownload.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -951,6 +992,8 @@
     <Content Include="fonts\Spacia\Spacia-Regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bloodhound.js" />
+    <Content Include="Scripts\bloodhound.min.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1057,6 +1100,7 @@
     <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
     <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
+    <Content Include="Scripts\galaxy.js" />
     <Content Include="Scripts\GasesteGama.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1070,6 +1114,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
+    <Content Include="Scripts\typeahead.jquery.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1123,6 +1171,7 @@
     <Content Include="Views\Tools\YoutubeDownload.cshtml" />
     <Content Include="Views\Tools\AnalizeazaSunet.cshtml" />
     <Content Include="Views\Home\PleaseConfirmEmal.cshtml" />
+    <Content Include="Views\UsersManagement\Versuri.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
@@ -1130,6 +1179,7 @@
     <Folder Include="Piese-Uploaded\" />
     <Folder Include="Views\BeaturiAPI\" />
     <Folder Include="Views\Conturi\" />
+    <Folder Include="Views\Grupuri\" />
     <Folder Include="Views\SocialApi\" />
     <Folder Include="Views\Social\" />
     <Folder Include="Views\Upload\" />
@@ -1282,6 +1332,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304021804382_AddingBeatIdToLikes.resx">
       <DependentUpon>202304021804382_AddingBeatIdToLikes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304061552122_AddingVersuri.resx">
+      <DependentUpon>202304061552122_AddingVersuri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304061651369_UserIdToVersuri.resx">
+      <DependentUpon>202304061651369_UserIdToVersuri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304062011215_requieredToVersuri.resx">
+      <DependentUpon>202304062011215_requieredToVersuri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304091159518_AddingGrupuriAndGropumembers.resx">
+      <DependentUpon>202304091159518_AddingGrupuriAndGropumembers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304111238174_GroupAdminSecond.resx">
+      <DependentUpon>202304111238174_GroupAdminSecond.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304111309052_AddingWhoProducedAndMadeTheSong.resx">
+      <DependentUpon>202304111309052_AddingWhoProducedAndMadeTheSong.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

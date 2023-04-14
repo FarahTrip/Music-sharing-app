@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -17,7 +18,7 @@ namespace Trippin_Website.Models
         [DataType(DataType.Url)]
         public string ProfilePicture { get; set; }
         public float Quota { get; set; }
-        public string Versuri { get; set; }
+        public Guid? Versuri { get; set; }
         public float FileUploadHardLimit { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -38,10 +39,16 @@ namespace Trippin_Website.Models
         public DbSet<Beat> Beaturi { get; set; }
         public DbSet<StyleOf> StyleOf { get; set; }
         public DbSet<Likes> Likes { get; set; }
+        public DbSet<Versuri> Versuri { get; set; }
+        public DbSet<Grupuri> Grupuri { get; set; }
+        public DbSet<GrupuriMembrii> GrupuriMembrii { get; set; }
+        public DbSet<WhoIsOnTheSong> WhoIsOnTheSong { get; set; }
+        public DbSet<WhoProducedTheSong> WhoProducedTheSong { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+
         }
 
         public static ApplicationDbContext Create()

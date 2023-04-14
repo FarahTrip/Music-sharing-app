@@ -69,7 +69,6 @@ namespace Trippin_Website.Controllers.API
                 };
 
                 _context.Likes.Add(like);
-                Piesa.Likes++;
                 _context.SaveChanges();
 
                 return Json(new { success = true, action = "like", count = Piesa.Likes });
@@ -77,7 +76,6 @@ namespace Trippin_Website.Controllers.API
             else
             {
                 _context.Likes.Remove(like);
-                Piesa.Likes--;
                 _context.SaveChanges();
 
                 return Json(new { success = true, action = "unlike", count = Piesa.Likes });

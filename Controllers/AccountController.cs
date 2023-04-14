@@ -178,7 +178,7 @@ namespace Trippin_Website.Controllers
             if (ModelState.IsValid)
             {
 
-                var user = new ApplicationUser { UserName = model.UsernameCont, Email = model.Email, UsernameCont = model.UsernameCont };
+                var user = new ApplicationUser { UserName = model.UsernameCont, Email = model.Email, UsernameCont = model.UsernameCont, FileUploadHardLimit = 209715200 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

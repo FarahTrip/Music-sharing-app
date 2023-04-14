@@ -18,12 +18,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded&display=swap" rel="stylesheet">
     <title>@ViewBag.Title - Trippin</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <style>
+    body {
+        font-family: 'Unbounded', sans-serif  !important;
+        font-size: small !important;
+    }
+
     #RegisterBtn {
         display: inline-block;
     }
@@ -92,7 +100,7 @@
         position: absolute;
         top: 8px;
         right: 20px;
-        background-color: red;
+        background-color: #D23927;
         color: white;
         font-size: 12px;
         border-radius: 50%;
@@ -160,14 +168,21 @@
         display: block;
         text-align:center;
     }
+
+
+    .navbar{
+        font-size: medium;
+    }
+
+    td
+    {
+        font-size: medium;
+    }
 </style>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav  id="theNAVBAR"  class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" @Html.ActionLink("Trippin", "Index", "Home")</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                <span onclick="toggleMenu()" id="navbar-toggler" class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -233,7 +248,7 @@
                     else
                     {
                         var usageLeft = currentUser.FileUploadHardLimit - currentUser.Quota;
-            <p id="quota">Spatiu disponibil :   <strong > @usageLeft.ConvertToDigitalStorageSize()</strong> </p> 
+                        <p id="quota">Spatiu disponibil :   <strong> @usageLeft.ConvertToDigitalStorageSize()</strong> </p>
                     }
 
                 }
@@ -254,6 +269,10 @@
                             <span id="noti_Container" onclick="toggleNotification()">
                                 <img id="notification-icon" src="~/Content/Images/notification-icon.png" alt="Alternate Text" />
                                 <div class="noti_bubble">2</div>
+                            </span>
+                            <span id="noti_Container" onclick="toggleNotification()">
+                                <img id="notification-icon" src="~/Content/Images/Galaxie.png" alt="Alternate Text" />
+                                <div class="noti_bubble">0</div>
                             </span>
 
                             <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
@@ -292,9 +311,9 @@
 
 
                 @*          <form class="d-flex">
-            <input class="form-control me-sm-2" type="search" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>*@
+                <input class="form-control me-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>*@
 
 
 
@@ -302,7 +321,7 @@
             @if (User.Identity.IsAuthenticated)
             {
 
-              
+
 
                 <div id="notification-dropdown" class="dropdown">
                     <div class="dropdown-menu" aria-labelledby="notification-dropdown">
@@ -365,6 +384,7 @@
 
                                 <h5> <a href="@Url.Action("Profile", "UsersManagement", new {id = User.Identity.GetUserId()})">Profil</a></h5>
                                 <h5> @Html.ActionLink("Setari", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</h5>
+                                <h5>  <a href=" @Url.Action("Versuri", "UsersManagement", new { id = User.Identity.GetUserId().ToString() })">Versuri</a>  </h5>
 
 
 
@@ -374,6 +394,9 @@
                     </div>
                 </div>
             }
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span onclick="phoneToggleMenu()" id="navbar-toggler" class="navbar-toggler-icon"></span>
+            </button>
 
         </div>
     </nav>
@@ -395,6 +418,8 @@
     let subMenu = document.getElementById("subMenu");
     let navbar = document.getElementById("navbar-toggler");
     let notificationContainer = document.getElementById("notification-container");
+    let phoneMenuNavBar = document.getElementById("navbarColor02");
+
 
     function toggleNotification() {
         if (notificationContainer.style.display === "none") {
@@ -404,6 +429,15 @@
             notificationContainer.style.display = "none";
         }
     }
+
+            function phoneToggleMenu() {
+                if (phoneMenuNavBar.style.display === "none") {
+                    phoneMenuNavBar.style.display = "block";
+                }
+                else {
+                    phoneMenuNavBar.style.display = "none"
+                }
+            }
 
     function toggleMenu() {
         if (subMenu.classList.contains("open-menu")) {

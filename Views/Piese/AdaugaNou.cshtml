@@ -52,7 +52,13 @@
         border-radius: 20px;
     }
 
-    
+    #formWrapper {
+        width: fit-content;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+
 </style>
 
 <link href="~/Content/Retusuri.css" rel="stylesheet" />
@@ -63,48 +69,65 @@
 
         @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { id = "adaugaForm", enctype = "multipart/form-data" }))
         {
+            <h2 style="text-align: center; display:block; margin-bottom: 2rem">Adauga o noua piesa</h2>
+            <div id="formWrapper">
+                @Html.HiddenFor(m => m.Piese.UserId)
+                @Html.HiddenFor(m => m.Piese.Id)
 
-            @Html.HiddenFor(m => m.Piese.UserId)
-            @Html.HiddenFor(m => m.Piese.Id)
-            <h2 style="text-align: center; display:block">Adauga o noua piesa</h2>
-            @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
-            <div class="form-group">
-                @Html.LabelFor(m => m.Piese.Name)
-                @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Piese.Name)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Piese.Key)
-                @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Piese.Key)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Piese.Bpm)
-                @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
-                @Html.ValidationMessageFor(m => m.Piese.Bpm)
-            </div>
-            <div class="form-group">
-                <label for="Description">Descriere</label>
-                @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <label for="StyleId">Stilul</label>
-                @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
-            </div>
-            <div id="uploadButton" class="form-group">
-                <div class="file-input">
-                    <label for="file">Incarca piesa</label>
-                    @Html.TextBox("file", "", new { type = "file", id = "file" })
+                @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Piese.Name)
+                    @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Piese.Name)
                 </div>
-            </div>
-            <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
-                @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
-            </div>
-            @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Piese.Key)
+                    @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Piese.Key)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Piese.Bpm)
+                    @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
+                    @Html.ValidationMessageFor(m => m.Piese.Bpm)
+                </div>
+                <div class="form-group">
+                    <label for="Description">Descriere</label>
+                    @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="StyleId">Stilul</label>
+                    @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label id="artistiLabel" for="artisti">Artisti</label>
+                    <input class="form-control" id="artisti" type="text" name="name" value="" />
+                </div>
+                <ul id="artistiList" class="list-group"></ul>
+                <div class="form-group">
+                    <label id="produceriLabel" for="produceri">Produceri</label>
+                    <input class="form-control" id="produceri" type="text" name="name" value="" />
+                </div>
+                <ul id="produceriList" class="list-group"></ul>
+                <div id="uploadButton" class="form-group">
+                    <div class="file-input">
+                        <label for="file">Incarca piesa</label>
+                        @Html.TextBox("file", "", new { type = "file", id = "file" })
+                    </div>
+                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
+                        @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
+                    </div>
+                }
+                @Html.AntiForgeryToken()
 
-            <button type="submit" id="submitBtn" class="btn btn-secondary">
-                Submit
-            </button>
+                <button type="submit" id="submitBtn" class="btn btn-secondary">
+                    Submit
+                </button>
+            </div>
+
+
 
         }
 
@@ -119,14 +142,70 @@
 
     <script>
         $('#adaugaForm').submit(function (event) {
-        event.preventDefault(); 
+        event.preventDefault();
         var audio = new Audio('@Url.Content("~/Content/Audio/error-ok.wav")');
         audio.play();
         setTimeout(function () {
-            $('#adaugaForm').unbind('submit').submit(); 
-        }, 500); 
+            $('#adaugaForm').unbind('submit').submit();
+        }, 500);
     });
     </script>
+
+    <script>
+
+        var vm = {
+            producersIds : []
+        };
+        $(document).ready(function () {
+            var produceri = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/Conturi?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#produceri').typeahead(
+                null, {
+                name: 'produceri',
+                display: 'userName',
+                source: produceri
+            }).on('typeahead:select', function (e, producer) {
+                $("#produceriList").append("<div id='divforlist'><li>" + producer.userName + "</li></div>");
+                $("#produceri").typeahead("val", "");
+                vm.artistiIds.push(producer.UserId);
+            });
+        });
+
+        var vm2 = {
+            artistiIds: []
+        };
+        $(document).ready(function () {
+            var artisti = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/Conturi?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#artisti').typeahead(
+                null, {
+                name: 'artisti',
+                display: 'userName',
+                source: artisti
+            }).on('typeahead:select', function (e, artist) {
+                console.log(artist);
+                $("#artistiList").append("<div id='divforlist'><li>" + artist.userName + "</li></div>");
+                $("#artisti").typeahead("val", "");
+                vm2.artistiIds.push(artist.UserId);
+            });
+        });
+
+    </script>
+
 
     @Scripts.Render("~/bundles/jqueryval")
 }

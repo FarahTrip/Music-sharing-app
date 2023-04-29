@@ -38,16 +38,21 @@ namespace Trippin_Website.Controllers
             var piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList();
             var Stiluri = _context.StyleOf.ToList();
             var users = _userManager.Users.ToList();
+            var UserId = User.Identity.GetUserId();
+            var playLists = _context.PlayList.Where(c => c.userId == UserId).ToList();
+
             var pieseAllViewModel = new PieseAllViewModel()
             {
                 Piese = piese,
                 Stiluri = Stiluri,
-                Users = users
+                Users = users,
+                PlayLists = playLists
             };
             var pieseIndexViewModel = new PieseIndexViewModel()
             {
                 PieseAllViewModel = pieseAllViewModel,
-                UserManager = _userManager
+                UserManager = _userManager,
+
             };
 
             return View(pieseIndexViewModel);
@@ -118,13 +123,14 @@ namespace Trippin_Website.Controllers
             {
                 Style = Stiluri
             };
+            ViewBag.GuidId = Guid.NewGuid();
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Producer, Artist")]
-        public async Task<ActionResult> Creeaza(Piese piese, HttpPostedFileBase file)
+        public async Task<ActionResult> Creeaza(Piese piese, HttpPostedFileBase file, Guid piesaId)
         {
             var fileServerHelper = new AmazonHelper();
             var PieseModel = new PieseViewModel()
@@ -142,19 +148,16 @@ namespace Trippin_Website.Controllers
             var userId = User.Identity.GetUserId();
             var user = _userManager.FindById(userId);
 
-
-            var verifyIfIsInQuota = user.Quota + file.ContentLength;
-
-            if (!User.IsInRole("Admin") && verifyIfIsInQuota > user.FileUploadHardLimit)
-            {
-                ViewBag.Message = "Quota de upload a fost depasita. Nu vei putea uploada noi fisiere decat daca vei sterge altele vechi sau iti vei schimba planul cu unul platit.";
-                return View("AdaugaNou", PieseModel);
-            }
-
-
             if (IsAudio(file) && file.ContentLength > 0)
                 try
                 {
+                    var verifyIfIsInQuota = user.Quota + file.ContentLength;
+
+                    if (!User.IsInRole("Admin") && verifyIfIsInQuota > user.FileUploadHardLimit)
+                    {
+                        ViewBag.Message = "Quota de upload a fost depasita. Nu vei putea uploada noi fisiere decat daca vei sterge altele vechi sau iti vei schimba planul cu unul platit.";
+                        return View("AdaugaNou", PieseModel);
+                    }
                     var key = $"Users-Files/{userId}/{file.FileName}";
 
                     using (var amazonS3client = new AmazonS3Client(fileServerHelper.AccessId, fileServerHelper.SecretKey, RegionEndpoint.EUNorth1))
@@ -176,7 +179,7 @@ namespace Trippin_Website.Controllers
                     }
                     ViewBag.Message = "Fisierul a fost incarcat cu succes!";
 
-                    piese.Id = Guid.NewGuid();
+                    piese.Id = piesaId;
                     piese.UserId = User.Identity.GetUserId();
                     piese.S3ServerPath = key;
                     piese.FileSize = file.ContentLength;

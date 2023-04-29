@@ -4,20 +4,19 @@
 @model Trippin_Website.ViewModels.UserListViewModel
 
 <style>
-    #errorMessage
-    {
+    #errorMessage {
         color: darkred;
     }
-    #SuccessMessage
-    {
+
+    #SuccessMessage {
         color: green;
     }
-    #MailConfirmat
-    {
-        color:green;
+
+    #MailConfirmat {
+        color: green;
     }
-    #MailNeconfirmat
-    {
+
+    #MailNeconfirmat {
         color: red;
     }
 </style>
@@ -69,7 +68,7 @@
            new { @class = "role-dropdown", data_user_id = user.Id })
                 </td>
                 <td>@roleName</td>
-                @if(user.EmailConfirmed)
+                @if (user.EmailConfirmed)
                 {
                     <td id="MailConfirmat">Da</td>
                 }
@@ -78,28 +77,32 @@
                     <td id="MailNeconfirmat">Nu</td>
                 }
 
-            <td>@user.Quota.ConvertToDigitalStorageSize()</td>
-                <td><button   type="button" class="btn btn-outline-info sterge-btn"><a href="@Url.Action("DeleteUser", "UsersManagement", new {Id = user.Id})">Delete</a></button></td>
+                <td>@user.Quota.ConvertToDigitalStorageSize()</td>
+                <td><button type="button" class="btn btn-outline-info sterge-btn"><a href="@Url.Action("DeleteUser", "UsersManagement", new {Id = user.Id})">Delete</a></button></td>
             </tr>
         }
     </tbody>
 </table>
 
 @section Scripts {
+    <script src="~/Scripts/toastr.js"></script>
     <script>
+        toastr.options.timeOut = 7000;
+        toastr.options.closeButton = true;
         $(function () {
             $(".role-dropdown").on("change", function () {
                 var userId = $(this).data("user-id");
                 var roleId = $(this).val();
+      
                 $.ajax({
                     url: '@Url.Action("ChangeRole", "UsersManagement")',
                     type: 'POST',
                     data: { userId: userId, roleId: roleId },
                     success: function (data) {
-                        alert("Rolul a fost updatat cu succes!");
+                        toastr.success("Rolul a fost updatat cu success!")
                     },
                     error: function () {
-                        alert("A aparut o eroare!");
+                        toastr.error("A aparut o eroare!")
                     }
                 });
             });

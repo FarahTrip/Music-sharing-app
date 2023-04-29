@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Trippin_Website.DTOS;
 using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 using Trippin_Website.ViewModels;
@@ -153,6 +154,7 @@ namespace Trippin_Website.Controllers
             var roles = _roleManager.Roles.ToList();
             var currentUserId = User.Identity.GetUserId();
 
+
             ViewBag.Roles = roles;
             var users = new UserListViewModel
             {
@@ -162,6 +164,7 @@ namespace Trippin_Website.Controllers
 
             if (Id == null || user == null)
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
 
 
 
@@ -175,6 +178,8 @@ namespace Trippin_Website.Controllers
                     var pieseUser = _context.Piese.Where(c => c.UserId == user.Id);
                     var beaturiUser = _context.Beaturi.Where(c => c.UserId == user.Id);
                     var likesUser = _context.Likes.Where(c => c.UserId == user.Id);
+                    var songsWithThisArtist = _context.WhoIsOnTheSong.Where(c => c.ArtistId == user.Id);
+                    var beatsWithThisProducer = _context.WhoProducedTheSong.Where(c => c.ArtistId == user.Id);
 
                     var amazonHelper = new AmazonHelper();
                     var client = new AmazonS3Client(amazonHelper.AccessId, amazonHelper.SecretKey, RegionEndpoint.EUNorth1);
@@ -200,8 +205,13 @@ namespace Trippin_Website.Controllers
                     if (likesUser != null)
                         _context.Likes.RemoveRange(likesUser);
 
+                    if (songsWithThisArtist.Any())
+                        _context.WhoIsOnTheSong.RemoveRange(songsWithThisArtist);
 
-                    _context.SaveChanges();
+                    if (beatsWithThisProducer.Any())
+                        _context.WhoProducedTheSong.RemoveRange(beatsWithThisProducer);
+
+                    await _context.SaveChangesAsync();
 
                     await _userManager.DeleteAsync(user);
 
@@ -261,6 +271,18 @@ namespace Trippin_Website.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Versuri", "UsersManagement", new { id = userId });
+        }
+
+        public ActionResult ChatRoomTest()
+        {
+            var user = _userManager.FindById(User.Identity.GetUserId());
+            var userDTO = new UsersDTO
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+            };
+
+            return View(userDTO);
         }
     }
 }

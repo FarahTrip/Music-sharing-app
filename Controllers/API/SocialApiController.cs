@@ -59,6 +59,7 @@ namespace Trippin_Website.Controllers.API
             }
 
             var like = _context.Likes.SingleOrDefault(l => l.UserId == user.Id && l.PiesaId == Piesa.Id);
+            var likes = _context.Likes.Where(c => c.PiesaId == Id).ToList();
 
             if (like == null)
             {
@@ -71,14 +72,14 @@ namespace Trippin_Website.Controllers.API
                 _context.Likes.Add(like);
                 _context.SaveChanges();
 
-                return Json(new { success = true, action = "like", count = Piesa.Likes });
+                return Json(new { success = true, action = "like", count = _context.Likes.Where(c => c.PiesaId == Id).Count() });
             }
             else
             {
                 _context.Likes.Remove(like);
                 _context.SaveChanges();
 
-                return Json(new { success = true, action = "unlike", count = Piesa.Likes });
+                return Json(new { success = true, action = "unlike", count = _context.Likes.Where(c => c.PiesaId == Id).Count() });
             }
         }
 
@@ -87,6 +88,7 @@ namespace Trippin_Website.Controllers.API
         {
             var user = _userManager.FindById(User.Identity.GetUserId());
             var Piesa = _context.Piese.Find(Id);
+            var likes = _context.Likes.Where(c => c.PiesaId == Id).ToList();
 
             if (Piesa == null)
             {
@@ -97,7 +99,7 @@ namespace Trippin_Website.Controllers.API
 
             if (like == null)
             {
-                return Json(new { success = true, action = "unlike", count = Piesa.Likes });
+                return Json(new { success = true, action = "unlike", count = _context.Likes.Where(c => c.PiesaId == Id).Count() });
             }
             else
             {
@@ -105,7 +107,7 @@ namespace Trippin_Website.Controllers.API
                 Piesa.Likes--;
                 _context.SaveChanges();
 
-                return Json(new { success = true, action = "unlike", count = Piesa.Likes });
+                return Json(new { success = true, action = "unlike", count = _context.Likes.Where(c => c.PiesaId == Id).Count() });
             }
         }
     }

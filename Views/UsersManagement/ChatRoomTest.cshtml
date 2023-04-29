@@ -1,0 +1,43 @@
+﻿@model Trippin_Website.DTOS.UsersDTO
+@{
+    ViewBag.Title = "ChatRoomTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ChatRoomTest</h2>
+
+<div class="container">
+    <input type="text" id="name" placeholder="Display name" />
+    <input type="text" id="message" placeholder="Type your message here..." />
+    <input type="button" id="sendmessage" value="Send" />
+
+    <ul id="messages"></ul>
+</div>
+
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+<script src="~/signalr/hubs"></script>
+
+<script>
+    $(function () {
+        // Declare a proxy to reference the hub.
+        var chat = $.connection.chatHub;
+        $.connection.hub.logging = true;
+        // Create a function that the hub can call back to display messages.
+        chat.client.addNewMessageToPage = function (name, message) {
+            $('#messages').append('<li><strong>' + htmlEncode(name)
+                + '</strong>: ' + htmlEncode(message) + '</li>');
+        };
+
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                console.log("Connection started");
+                // Call the Send method on the hub.
+                chat.server.send($('#name').val(), $('#message').val());
+                // Clear text box and reset focus for next comment.
+                $('#message').val('').focus();
+            });
+        });
+    });
+</script>+

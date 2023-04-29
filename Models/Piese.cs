@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Trippin_Website.Models;
 
 namespace Trippin_Website
@@ -8,7 +7,6 @@ namespace Trippin_Website
     public class Piese
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? Id { get; set; }
 
         [Required(ErrorMessage = "Nu ai introdus numele piesei!")]
@@ -41,7 +39,8 @@ namespace Trippin_Website
         public int Likes { get; set; }
         public float FileSize { get; set; }
 
-
+        public bool IsPublic { get; set; }
+        public bool IsJustForMyGroup { get; set; }
 
     }
 }

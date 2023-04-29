@@ -7,14 +7,19 @@
     var Stiluri = Model.PieseAllViewModel.Stiluri;
 
 }
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-d7B6txDp8PZj+KryoMmUz5l/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous">
+    <link href="~/Content/Side-bar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<link href="~/Content/IsolatedStyles.css" rel="stylesheet" />
 
 <style>
 
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+
 
     .card {
         margin-right: 20px;
@@ -23,92 +28,913 @@
     #yourUserID {
         color: #FF4E79;
     }
+
+
+    .body-content {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    footer {
+        display: none !important;
+    }
+
+    td:nth-child(n) {
+        max-width: 10vw !important;
+    }
+
+    .music-player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        padding: 10px;
+        box-sizing: border-box;
+        z-index: 1000;
+    }
+
+
+
+    .player-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .control-button {
+        background: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0 5px;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 70%;
+        height: 8px;
+        background: #9933cc;
+        outline: none;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 10px 3px rgba(255, 0, 255, 0.5); /* Outer glow */
+        animation: pulse 2s infinite;
+    }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 25px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    .control-button img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .volume-container {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%); /* Vertically center the volume control */
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .sound-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .slider.volume-slider {
+        margin-bottom: 0.3rem;
+        margin-left: 0.5rem;
+        -webkit-appearance: none;
+        height: 8px;
+        background: #555;
+        outline: none;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+        .slider.volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    .player-info {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .song-title {
+        color: white;
+        font-size: 14px;
+    }
+
+    .time-info {
+        color: white;
+        font-size: 12px;
+    }
+
+
+    .player-info {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .song-title {
+        color: white;
+        font-size: 14px;
+    }
+
+    .time-info {
+        color: white;
+        font-size: 12px;
+    }
+
+    .artist-name {
+        color: white;
+        font-size: 14px;
+    }
+
+    .player-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .song-info {
+        text-align: center;
+    }
+
+    .song-title {
+        color: white;
+        font-size: 18px;
+    }
+
+    .artist-name {
+        color: white;
+        font-size: 14px;
+        margin-top: 3px;
+    }
+
+    .time-info {
+        color: white;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .music-player {
+        background-image: linear-gradient(135deg, #191d23 0%, #344051 50%, #191d23 100%);
+    }
+
+    #autoplay-indicator,
+    #loop-icon {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 0 8px;
+        border-right: 1px solid #444;
+        border-left: 1px solid #444;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #phonemenu-indicator {
+        display: none;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 0 8px;
+        border-right: 1px;
+        border-left: 1px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 2px;
+    }
+
+    #autoplay-indicator {
+        left: 1rem;
+    }
+
+    #loop-icon {
+        left: 10rem;
+    }
+
+
+    #autoplay-indicator span {
+        margin-left: 4px;
+        cursor: pointer;
+    }
+
+        #autoplay-indicator span.on {
+            color: green;
+        }
+
+        #autoplay-indicator span.off {
+            color: red;
+        }
+
+    #playBTN,
+    #pauseBTN {
+        height: 55px;
+        width: 55px;
+    }
+
+    #loop-img {
+        height: 2rem;
+        width: 2rem;
+        cursor: pointer;
+    }
+
+    #progress::-webkit-slider-runnable-track {
+        background: linear-gradient( to right, magenta var(--webkit-fill-percent), #333 var(--webkit-fill-percent) );
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        border: none;
+    }
+
+    #treedots {
+        height: 2.2rem;
+        width: 2.2rem;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .loop-option,
+    .autoplay-option {
+        display: flex;
+        align-items: center;
+    }
+
+        .loop-option label,
+        .autoplay-option label {
+            margin-right: 10px;
+        }
+
+    .play-icon, .pause-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    #LikeCount {
+        display: none;
+    }
+
+    .playlist-modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .playlist-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #2c3440;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+        .playlist-container .plus-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .playlist-container .songs {
+            display: none;
+            margin-top: 10px;
+        }
+
+            .playlist-container .songs .song {
+                margin: 5px 0;
+            }
+
+
+    .playlist-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .playlist-name {
+        font-size: 1.2em;
+    }
+
+    .playlist-close {
+        color: #ccc;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .playlist-modal-content {
+        background-color: #1d2330;
+        margin: 0;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        width: 80%;
+        min-height: 70%;
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        animation: popup 0.3s;
+    }
+
+    .plus-button {
+        font-size: 1.5em;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    .songs-container .song {
+        padding: 5px;
+        font-size: 1.1em;
+    }
+
+    .additional-features {
+        margin-top: 10px;
+    }
+
+    .feature-placeholder {
+        font-size: 1.1em;
+        padding: 5px;
+        background-color: #2c3440;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    #leftMenu {
+        width: 10%;
+        height: 100%;
+        background-color: #0d1117;
+    }
+
+    #leftMenu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .left-menu-button {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1.2em;
+        padding: 10px 15px;
+        text-align: left;
+        position: relative;
+    }
+
+        .left-menu-button:hover {
+            color: #ff8b8b;
+        }
+
+        .left-menu-button::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff00a1, #ffc800);
+            border-radius: 5px;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .left-menu-button:hover::before {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+
+    #leftMenu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        width: 10vw !important;
+        min-height: 100vh;
+        box-sizing: border-box;
+        background-color: #1d2330;
+        border-color: #1d2330;
+        border-radius: 6px;
+        margin: 0px !important;
+    }
+
+    body {
+        margin: 0px;
+    }
+
+    .container {
+        padding: 0px;
+        grid-template-columns: 10vw 1fr;
+    }
+
+    html, body {
+        overflow-x: hidden;
+    }
+
+    #leftMenu {
+        background-color: #222;
+        width: 250px;
+        height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        color: white;
+    }
+
+    #leftMenu {
+        background-color: #1d2330;
+        height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        color: white;
+        border: solid 0px;
+    }
+
+    .section-title {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+        .section-title i {
+            margin-right: 8px;
+        }
+
+    .sidebar-section {
+        margin-bottom: 30px;
+    }
+
+    .sidebar-button {
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1.1em;
+        text-align: left;
+        padding: 5px 10px;
+        width: calc(100% - 20px);
+        cursor: pointer;
+        transition: background-color 0.3s, border-radius 0.3s;
+        position: relative;
+    }
+
+        .sidebar-button i {
+            margin-right: 10px;
+        }
+
+        .sidebar-button::before {
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 10px;
+            height: 100%;
+            background-color: inherit;
+            border-radius: 5px 0 0 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-button:hover {
+            background-color: #0d1117;
+            border-radius: 15px;
+        }
+
+            .sidebar-button:hover::before {
+                background-color: #0d1117;
+            }
+
+    #createPlayListBTN {
+        float: left;   
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    #glassContDinPlayList {
+        justify-content: left;
+    }
 </style>
+
+<script src="~/Scripts/favorite.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<div class="tabelDiv">
-    <h2 class="titletabele">Piese</h2>
-    <div class="buttonsForTables" style="background-color: #0d1117">
-        @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
-        {
-            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Adauga", "AdaugaNou", "Piese")</button>
-            <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
-        }
-        else
-        {
-            <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
-        }
+<script src="~/Scripts/toastr.js"></script>
+<div class="music-player">
+    <audio id="audio"></audio>
+    <div class="player-controls">
+        <button id="addToPlaylist" class="control-button">
+            <img id="playlistBTN" src="~/Content/Images/add-to-playlist.png" alt="play" class="play-icon">
+        </button>
+        <button id="prev" class="control-button">
+            <img src="~/Content/Images/previous.png" alt="previous">
+        </button>
+        <button id="play" class="control-button">
+            <img id="playBTN" src="~/Content/Images/play.png" alt="play" class="play-icon">
+            <img id="pauseBTN" src="~/Content/Images/pause.png" alt="pause" class="pause-icon" style="display:none;">
+        </button>
+        <button id="next" class="control-button">
+            <img src="~/Content/Images/next.png" alt="next">
+        </button>
+        <button id="favorite" class="control-button" data-liked="false">
+            <img id="favBTN" class="play-icon favorite-icon fav-btn-animate" src="~/Content/Images/fav-unpressed.png" alt="play" class="play-icon">
+            <img id="favBTNPressed" class="pause-icon favorite-icon fav-btn-animate" src="~/Content/Images/fav-pressed.png" alt="pause" class="pause-icon" style="display:none;">
+        </button>
+        <p id="LikeCount">0 like-uri</p>
+        <div id="phonemenu-indicator">
+            <img id="treedots" src="~/Content/Images/music-player-mp-menu.png" alt="menu icon">
+        </div>
     </div>
-    <div  class="TabeleNebune">
-        <table id="Piese" class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Nume Piesa</th>
-                    <th>Key</th>
-                    <th>BPM</th>
-                    <th>Date Created</th>
-                    <th>Postat de</th>
-                    <th>Stil</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var piesa in Model.PieseAllViewModel.Piese)
-                {
-                    var timeSpan = CurrentDateTime - piesa.DateCreated;
-
-                    <tr>
-                        <td>
-                            <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
-                            @if (timeSpan.TotalDays < 3)
-                            {
-                                <span class="badge rounded-pill bg-info">Nou</span>
-                            }
-                            @if (piesa.DateModified != null)
-                            {
-                                <span class="badge rounded-pill bg-light">Modificat</span>
-                            }
-                            @if (piesa.IsBanger == true)
-                            {
-                                <span class="badge rounded-pill bg-success">Banger</span>
-                            }
-                        </td>
-                        <td>@piesa.Key</td>
-                        <td>@piesa.Bpm</td>
-                        <td>@piesa.DateCreated</td>
-
-                        @{
-                            var userId = User.Identity.GetUserId();
-                        }
-
-                        @if (piesa.UserId != null)
-                        {
-                            if (userId == piesa.UserId)
-                            {
-                                <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
-                            }
-                            else
-                            {
-                                <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
-                            }
-
-
-                        }
-                        else
-                        {
-                            <td> </td>
-                        }
-
-
-                        <td>@Stiluri[piesa.StyleId - 1].Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <input style="max-width:80vw" id="progress" class="slider" type="range" min="0" max="50000" step="1" value="0">
+    <div class="volume-container">
+        <img src="~/Content/Images/volume.png" alt="sound icon" class="sound-icon">
+        <input id="volume" class="slider volume-slider" type="range" min="0" max="100" step="1" value="100">
+    </div>
+    <div class="player-info">
+        <div id="song-info" class="song-info">
+            <span id="song-title" class="song-title"></span> - <span id="artist-name" class="artist-name"></span>
+        </div>
+        <div id="time-info" class="time-info">00:00 / 00:00</div>
+    </div>
+    <div id="control-container">
+        <div id="autoplay-container">
+            <div id="autoplay-indicator">
+                Autoplay: <span id="autoplay-text" class="off">off</span>
+            </div>
+        </div>
+        <div class="loop-container" id="loop-icon">
+            <img src="~/Content/Images/loop-unpressed.png" alt="Loop Icon" id="loop-img">
+        </div>
+    </div>
+    <div class="modal" id="phoneMenuModal">
+        <div class="modal-content" style="background-image: linear-gradient(135deg, #191d23 0%, #344051 50%, #191d23 100%); max-width: 400px; min-height: 200px; display: flex; justify-content: center; flex-direction: column;">
+            <span class="close" style="position: absolute; right: 10px; top: 10px;">&times;</span>
+            <div class="options">
+                <div class="loop-option">
+                    <label for="loop">Loop:</label>
+                    <input type="checkbox" id="loop" name="loop">
+                </div>
+                <div class="autoplay-option">
+                    <label for="autoplay">Autoplay:</label>
+                    <input type="checkbox" id="autoplay" name="autoplay">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+
+
+<div class="container">
+    <div class="tabelDiv" id="leftMenu">
+        <div class="sidebar-section">
+            <h3 class="section-title"><i class="fa-solid fa-compact-disc"></i>Playlist-uri</h3>
+            <button class="sidebar-button"><i class="fa-solid fa-heart"></i> Favorite</button>
+            <button class="sidebar-button"><i class="fas fa-music"></i> Playlist 2</button>
+            <button class="sidebar-button"><i class="fas fa-music"></i> Playlist 3</button>
+        </div>
+        <div class="sidebar-section">
+            <h3 class="section-title"><i class="fas fa-folder"></i> Section 2</h3>
+            <button class="sidebar-button"><i class="fas fa-random"></i> Placeholder 1</button>
+            <button class="sidebar-button"><i class="fas fa-random"></i> Placeholder 2</button>
+        </div>
+        <div class="sidebar-section">
+            <h3 class="section-title"><i class="fas fa-cog"></i> Section 3</h3>
+            <button class="sidebar-button"><i class="fas fa-random"></i> Placeholder 1</button>
+            <button class="sidebar-button"><i class="fas fa-random"></i> Placeholder 2</button>
+        </div>
+    </div>
+</div>
+<div class="tabelDiv" id="main-container">
+    <div class="filter-bar">
+        <div class="filter-option">
+            <label for="filter1">Filter 1:</label>
+            <select name="filter1" id="filter1">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="filter2">Filter 2:</label>
+            <select name="filter2" id="filter2">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="filter3">Filter 3:</label>
+            <select name="filter3" id="filter3">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="tabelDiv" id="tabele-container">
+        @*    <h2 class="titletabele">Piese</h2>*@
+        <div class="buttonsForTables" style="background-color: #0d1117">
+            @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
+            {
+                <div class="glass-container">
+                    <div class="glass-btn"><a href="@Url.Action("AdaugaNou", "Piese")">Adauga</a></div>
+                </div>
+                                    <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
+            }
+            else
+            {
+                <p>Din pacate nu ai dreptul de a modifica sau adauga piese!</p>
+            }
+        </div>
+        <div class="TabeleNebune">
+            <table id="Piese" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nume Piesa</th>
+                        <th>Key</th>
+                        <th>BPM</th>
+                        <th>Date Created</th>
+                        <th>Postat de</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var piesa in Model.PieseAllViewModel.Piese)
+                    {
+                        var timeSpan = CurrentDateTime - piesa.DateCreated;
+
+                        <tr>
+                            <td>
+                                <img class="play-icon play-song" piesaId="@piesa.Id" src="/Content/Images/play-fromt-table.png" alt="play" style="display: inline; margin:0.8rem; border-radius : 50%; cursor: pointer">
+                                <img class="pause-icon" src="~/Content/Images/stop-from-table.png" alt="pause" style="display: none; margin:0.8rem; border-radius : 50%; cursor: pointer">
+                                <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
+                                @if (timeSpan.TotalDays < 3)
+                                {
+                                    <span class="badge rounded-pill bg-info">Nou</span>
+                                }
+                                @if (piesa.DateModified != null)
+                                {
+                                    <span class="badge rounded-pill bg-light">Modificat</span>
+                                }
+                                @if (piesa.IsBanger == true)
+                                {
+                                    <span class="badge rounded-pill bg-success">Banger</span>
+                                }
+                            </td>
+                            <td>@piesa.Key</td>
+                            <td>@piesa.Bpm</td>
+                            <td>@piesa.DateCreated</td>
+
+                            @{
+                                var userId = User.Identity.GetUserId();
+                            }
+
+                            @if (piesa.UserId != null)
+                            {
+                                if (userId == piesa.UserId)
+                                {
+                                    <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                }
+                                else
+                                {
+                                    <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                }
+
+
+                            }
+                            else
+                            {
+                                <td> </td>
+                            }
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="playlist-modal" id="playlistModal">
+    <div class="playlist-modal-content">
+        <span class="playlist-close">&times;</span>
+        <h2 id="playlistsHead">Playlists</h2>
+        <div id="glassContDinPlayList" class="glass-container">
+            <div id="createPlayListBTN" class="glass-btn"><a href="@Url.Action("AdaugaNou", "Piese")">Creeaza un playlist</a></div>
+        </div>
+        <div class="playlist-container">
+            <div class="playlist-name">
+                <span>Playlist 1</span>
+            </div>
+            <span class="plus-button">+</span>
+            <div class="songs-container" style="display: none;">
+                <div class="song">Song 1</div>
+                <div class="song">Song 2</div>
+            </div>
+        </div>
+        <!-- Add more playlist containers here -->
+        <div class="additional-features">
+            <h3>Additional Features</h3>
+            <div class="feature-placeholder">Feature 1</div>
+            <div class="feature-placeholder">Feature 2</div>
+        </div>
+    </div>
+</div>
+
+
+
 @section scripts
 {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+
+        //Little protection layer
+        //Daca vezi asta, nu ar trebuii sa fii aici. Esti perseverent totusi, felicitari, dar nu fura piesela sau beat-urile oamenilor pentru ca nu este frumos.
+        //--------------------------------------
+        //use this to disable right-click
+/*        document.addEventListener('contextmenu', event => {
+            event.preventDefault();
+            toastr.warning('Click dreapta este dezactivat pe aceasta pagina!', 'Atentie!');
+        });
+*/
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "F12") {
+                e.preventDefault();
+                toastr.warning('Din pacate nu poti folosi Developer Tools pe aceasta pagina', 'Atentie!');
+            }
+        });
+        //-----------------------------------------------------------------------------------------------
+        document.getElementById('addToPlaylist').addEventListener('click', function () {
+            document.getElementById('playlistModal').style.display = 'block';
+        });
+
+        document.querySelector('.playlist-close').addEventListener('click', function () {
+            const playlistModal = document.getElementById('playlistModal');
+            playlistModal.style.display = 'none';
+            // Remove inline styles to ensure the animation plays every time the modal is opened
+            setTimeout(() => {
+                playlistModal.style.cssText = '';
+            }, 300);
+        });
+
+        window.addEventListener('click', function (event) {
+            const playlistModal = document.getElementById('playlistModal');
+            if (event.target === playlistModal) {
+                playlistModal.style.display = 'none';
+                // Remove inline styles to ensure the animation plays every time the modal is opened
+                setTimeout(() => {
+                    playlistModal.style.cssText = '';
+                }, 300);
+            }
+        });
+
+
+        document.querySelectorAll('.playlist-name').forEach(function (name) {
+            name.addEventListener('click', function () {
+                const songsContainer = this.nextElementSibling;
+                if (songsContainer.style.display === 'none') {
+                    songsContainer.style.display = 'block';
+                } else {
+                    songsContainer.style.display = 'none';
+                }
+            });
+        });
+        // Adding the current song to the selected playlist
+        document.querySelectorAll('.playlist-container').forEach(function (container) {
+            container.addEventListener('click', function (event) {
+                if (event.target.classList.contains('plus-button')) return;
+                const songsContainer = container.querySelector('.songs-container');
+                if (songsContainer.style.display === 'none') {
+                    songsContainer.style.display = 'block';
+                } else {
+                    songsContainer.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+
 
     <script>
         $(document).ready(function () {
@@ -125,5 +951,463 @@
                 }
             });
         });
+        $(document).ready(function () {
+            const phoneMenuModal = document.getElementById("phoneMenuModal");
+
+            const phoneMenuButton = document.getElementById("treedots");
+
+            const closeModalButton = document.getElementsByClassName("close")[0];
+
+            phoneMenuButton.onclick = function () {
+                phoneMenuModal.style.display = "block";
+            }
+
+            closeModalButton.onclick = function () {
+                phoneMenuModal.style.display = "none";
+            }
+            window.onclick = function (event) {
+                if (event.target == phoneMenuModal) {
+                    phoneMenuModal.style.display = "none";
+                }
+            }
+        });
+
+        $(document).ready(function () {
+            $(".play-icon").css("background-image", "url(" + $(".play-icon").data("play-src") + ")");
+        });
+        $(".play-icon").click(function () {
+
+            if ($(this).data("state") === "playing") {
+                $(this).css("background-image", "url(" + $(this).data("play-src") + ")");
+                $(this).data("state", "not-playing");
+            } else {
+                $(this).css("background-image", "url(" + $(this).data("pause-src") + ")");
+                $(this).data("state", "playing");
+            }
+        });
     </script>
+
+
+    <script>
+
+        function triggerFavBtnAnimation() {
+            var favBtns = document.querySelectorAll('.fav-btn-animate');
+            for (var i = 0; i < favBtns.length; i++) {
+                favBtns[i].classList.add('fav-btn-animation');
+            }
+
+            setTimeout(function () {
+                for (var i = 0; i < favBtns.length; i++) {
+                    favBtns[i].classList.remove('fav-btn-animation');
+                }
+            }, 400);
+        }
+
+        function updateButtonState(hasLiked) {
+            if (hasLiked) {
+                $("#favBTN").hide();
+                $("#favBTNPressed").show();
+            } else {
+                $("#favBTN").show();
+                $("#favBTNPressed").hide();
+            }
+        }
+
+        function favorites(pieId, updateOnly) {
+            var likeBtn = $("#favorite");
+            var likeCount = $("#LikeCount");
+
+            function fetchLikeState() {
+                $.get("/api/socialapi/" + pieId, function (data) {
+                    hasLiked = data.alreadyLiked;
+                    likeCount.text(data.likes + " favorite");
+                    updateButtonState(hasLiked);
+                    likeBtn.attr("data-liked", hasLiked);
+                });
+            }
+
+            fetchLikeState();
+
+            if (!updateOnly) {
+                likeBtn.off('click').on('click', function (e) {
+                    e.preventDefault();
+                    var url = "/api/socialapi/" + pieId;
+                    var alreadyLiked = likeBtn.attr("data-liked") === "true";
+                    var action = alreadyLiked ? "unlike" : "like";
+                    triggerFavBtnAnimation();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: { Id: pieId },
+                        success: function (data) {
+                            if (data.success) {
+                                hasLiked = !alreadyLiked;
+                                likes = data.count;
+                                likeCount.text(likes + " favorite");
+                                likeBtn.attr("data-liked", hasLiked);
+
+                                updateButtonState(hasLiked);
+                            }
+                        },
+                        error: function () {
+                            toastr.warning('Ceva nu a mers bine!')
+                        }
+                    });
+                });
+            }
+        }
+    </script>
+    <script>
+
+
+        $(document).ready(function () {
+            var listOfIds;
+
+            $.ajax({
+                url: '/API/GetAll',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    listOfIds = data;
+
+                    const audio = document.getElementById('audio');
+                    const playButton = document.getElementById('play');
+                    const prevButton = document.getElementById('prev');
+                    const nextButton = document.getElementById('next');
+                    const progressBar = document.getElementById('progress');
+                    const volumeSlider = document.getElementById('volume');
+                    const songTitleContainer = document.getElementById('song-title');
+                    const autoplaySwitch = document.getElementById('autoplay');
+
+                    audio.addEventListener('timeupdate', updateTimeInfo);
+
+                    let isPlaying = false;
+
+                    document.getElementById('autoplay-text').addEventListener('click', () => {
+                        const textElement = document.getElementById('autoplay-text');
+                        const isChecked = textElement.classList.contains('off');
+
+                        if (isChecked) {
+                            audio.autoplay = true;
+                            textElement.classList.remove('off');
+                            textElement.classList.add('on');
+                            textElement.textContent = 'on';
+                        } else {
+                            audio.autoplay = false;
+                            textElement.classList.remove('on');
+                            textElement.classList.add('off');
+                            textElement.textContent = 'off';
+                        }
+                    });
+
+                    const loopButton = document.getElementById('loop-img');
+                    let isLooping = false;
+
+                    loopButton.addEventListener('click', () => {
+                        isLooping = !isLooping;
+                        audio.loop = isLooping;
+
+                        if (isLooping) {
+                            loopButton.src = '/Content/Images/loop-pressed.png';
+                            loopButton.classList.add('loop-active');
+                        } else {
+                            loopButton.src = '/Content/Images/loop-unpressed.png';
+                            loopButton.classList.remove('loop-active');
+                        }
+                    });
+
+                    playButton.addEventListener('click', () => {
+                        if (isPlaying) {
+                            audio.pause();
+                        } else {
+                            audio.play();
+                        }
+                    });
+                    audio.addEventListener('play', () => {
+                        isPlaying = true;
+                        document.querySelector('#play .play-icon').style.display = 'none';
+                        document.querySelector('#play .pause-icon').style.display = 'inline';
+                        updatePlayPauseIcons();
+                    });
+
+                    audio.addEventListener('pause', () => {
+                        isPlaying = false;
+                        document.querySelector('#play .play-icon').style.display = 'inline';
+                        document.querySelector('#play .pause-icon').style.display = 'none';
+                        updatePlayPauseIcons();
+                    });
+
+                    function updateProgressBar() {
+                        const currentTime = audio.currentTime;
+                        const duration = audio.duration;
+                        progressBar.value = (currentTime / duration) * 50000;
+                        requestAnimationFrame(updateProgressBar);
+                    }
+
+                    updateProgressBar();
+
+                    progressBar.addEventListener('input', () => {
+                        const progress = progressBar.value;
+                        const duration = audio.duration;
+                        audio.currentTime = (progress / 50000) * duration;
+                    });
+
+                    function bindPlaySongEvent() {
+                        $('.play-song').off('click').on('click', function () {
+                            const songId = $(this).attr('piesaId');
+                            const index = listOfIds.indexOf(songId);
+
+                            if (index > -1) {
+                                $('.song-playing').removeClass('song-playing');
+                                $(this).addClass('song-playing');
+                                $(this).siblings('.pause-icon').addClass('song-playing');
+
+                                currentSongIndex = index;
+                                loadSong(currentSongIndex);
+                                if (!isPlaying) {
+                                    playButton.click();
+                                }
+                            }
+                        });
+                    }
+
+                    function bindPauseSongEvent() {
+                        $('.pause-icon').off('click').on('click', function () {
+                            if (isPlaying) {
+                                playButton.click();
+                            }
+                        });
+                    }
+
+                    function updatePlayPauseIcons() {
+
+                        $('.pause-icon:not(#play .pause-icon, .favorite-icon)').hide();
+                        $('.play-icon:not(#play .play-icon, .favorite-icon)').show();
+
+                        if (isPlaying) {
+                            $('*[data-playing="true"].pause-icon:not(.favorite-icon)').show();
+                            $('*[data-playing="true"].play-icon:not(.favorite-icon)').hide();
+                        }
+
+                        if (hasLiked) {
+                            $('.favorite-icon#favBTN').hide();
+                            $('.favorite-icon#favBTNPressed').show();
+                        } else {
+                            $('.favorite-icon#favBTN').show();
+                            $('.favorite-icon#favBTNPressed').hide();
+                        }
+                    }
+
+
+                    const songs = listOfIds;
+                    let currentSongIndex = 0;
+                    //------------------------------------------------------------------------------------------------
+                    let currentPieId = null;
+                    function loadSong(index) {
+                        if (isPlaying) {
+                            audio.play();
+                        }
+
+                        const song = songs[index];
+
+                        $(document).on('keydown', function (event) {
+                            // Check if the pressed key is the spacebar (key code 32)
+                            if (event.keyCode === 32) {
+                                // Check if the search box has focus
+                                if (!$('#Piese_filter input').is(':focus')) {
+                                    event.preventDefault(); // Prevent the default action (scrolling) when pressing the spacebar
+                                    // Toggle the play/pause state of the audio player
+                                    if (isPlaying) {
+                                        audio.pause();
+                                    } else {
+                                        audio.play();
+                                    }
+                                }
+                            }
+                        });
+                        $(document).on('keydown', function (event) {
+
+                            if (event.keyCode === 32) {
+
+                                if (!$('#Piese_filter input').is(':focus')) {
+                                    event.preventDefault();
+
+                                    if (isPlaying) {
+                                        audio.pause();
+                                    } else {
+                                        audio.play();
+                                    }
+                                }
+                            } else if (event.keyCode === 38 || event.keyCode === 40) {
+                                event.preventDefault();
+                                var volume = audio.volume;
+                                if (event.keyCode === 38) {
+                                    if (volume < 1) {
+                                        volume += 0.1;
+                                    }
+                                } else if (event.keyCode === 40) {
+                                    if (volume > 0) {
+                                        volume -= 0.1;
+                                    }
+                                }
+                                audio.volume = volume;
+                                $('#volume').val(volume * 100);
+                            } else if (event.keyCode === 37 || event.keyCode === 39) {
+                                event.preventDefault();
+                                var currentTime = audio.currentTime;
+                                var duration = audio.duration;
+                                if (event.keyCode === 37) {
+                                    currentTime -= 5;
+                                    if (currentTime < 0) {
+                                        currentTime = 0;
+                                    }
+                                } else if (event.keyCode === 39) {
+                                    currentTime += 5;
+                                    if (currentTime > duration) {
+                                        currentTime = duration;
+                                    }
+                                }
+                                audio.currentTime = currentTime;
+                                $('#progress').val((currentTime / duration) * 50000);
+                            }
+                        });
+
+                        $.ajax({
+                            url: '/API/MusicPlayer',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: {
+                                audioId: song
+                            },
+                            success: function (data) {
+                                audio.src = data.src;
+                                document.title = data.title;
+                                document.getElementById('song-title').textContent = data.title;
+                                hasLiked = data.hasLiked;
+                                const artistNameElement = document.getElementById('artist-name');
+                                artistNameElement.innerHTML = 'Nici un artist adaugat';
+                                if (data.artists.length < 1) {
+                                    artistNameElement.innerText = "Nici un artist adaugat";
+                                } else {
+                                    artistNameElement.innerText = data.artists.join(', ');
+                                }
+
+                                audio.onloadeddata = function () {
+                                    if (isPlaying) {
+                                        audio.play();
+                                    }
+                                    $('.play-icon, .pause-icon').removeAttr('data-playing');
+
+                                    const currentPlayIcon = $(`.play-icon[piesaid="${listOfIds[currentSongIndex]}"]`);
+                                    const currentPauseIcon = currentPlayIcon.siblings('.pause-icon');
+                                    currentPlayIcon.attr('data-playing', 'true');
+                                    currentPauseIcon.attr('data-playing', 'true');
+
+                                    updatePlayPauseIcons();
+
+                                    if (data.id && data.id !== currentPieId) {
+                                        currentPieId = data.id;
+                                        favorites(data.id);
+                                        updateButtonState(hasLiked);
+                                    }
+                                };
+
+                            },
+
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert('Actiunea a esuat');
+                                console.log(textStatus + ': ' + errorThrown);
+                            }
+                        });
+                    }
+
+                    function updateTimeInfo() {
+                        var currentTime = Math.floor(audio.currentTime);
+                        var totalTime = Math.floor(audio.duration);
+                        var elapsedMinutes = Math.floor(currentTime / 60);
+                        var elapsedSeconds = currentTime % 60;
+                        var totalMinutes = Math.floor(totalTime / 60);
+                        var totalSeconds = totalTime % 60;
+
+                        document.getElementById('time-info').innerText = (elapsedMinutes < 10 ? '0' + elapsedMinutes : elapsedMinutes) + ':' +
+                            (elapsedSeconds < 10 ? '0' + elapsedSeconds : elapsedSeconds) + ' / ' +
+                            (totalMinutes < 10 ? '0' + totalMinutes : totalMinutes) + ':' +
+                            (totalSeconds < 10 ? '0' + totalSeconds : totalSeconds);
+                    }
+
+                    volumeSlider.addEventListener('input', () => {
+                        const volume = volumeSlider.value / 100;
+                        audio.volume = volume;
+                    });
+                    prevButton.addEventListener('click', () => {
+                        if (isPlaying) {
+                            audio.pause();
+                        }
+                        currentSongIndex--;
+                        if (currentSongIndex < 0) {
+                            currentSongIndex = songs.length - 1;
+                        }
+                        loadSong(currentSongIndex);
+                        if (isPlaying) {
+                            audio.play();
+                        }
+                    });
+
+                    nextButton.addEventListener('click', () => {
+                        if (isPlaying) {
+                            audio.pause();
+                        }
+                        currentSongIndex++;
+                        if (currentSongIndex >= songs.length) {
+                            currentSongIndex = 0;
+                        }
+                        loadSong(currentSongIndex);
+                        if (isPlaying) {
+                            audio.play();
+                        }
+                    });
+
+                    audio.addEventListener('ended', () => {
+                        setTimeout(() => {
+                            nextButton.click();
+                        }, 100);
+                    });
+
+                    loadSong(currentSongIndex);
+                    bindPlaySongEvent();
+                    bindPauseSongEvent();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + ': ' + errorThrown);
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+
+
+
+
+
+        $(document).ready(function () {
+            const loopCheckbox = document.getElementById("loop");
+            const autoplayCheckbox = document.getElementById("autoplay");
+
+            loopCheckbox.checked = audio.loop;
+            autoplayCheckbox.checked = audio.autoplay;
+
+            loopCheckbox.addEventListener("change", function () {
+                audio.loop = this.checked;
+            });
+
+            autoplayCheckbox.addEventListener("change", function () {
+                audio.autoplay = this.checked;
+            });
+        });
+    </script>
+
+    <link href="~/Content/toastrRestyle.css" rel="stylesheet" />
 }

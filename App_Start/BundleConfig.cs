@@ -31,7 +31,8 @@ namespace Trippin_Website
                       "~/Content/bootstrap-cyborg.css",
                       "~/content/datatables/css/datatables.bootstrap.css",
                       "~/Content/site.css", "~/Content/Retusuri.css",
-                     "~/Content/typeahead.css"));
+                     "~/Content/typeahead.css",
+                     "~/Content/toastr.css"));
         }
     }
 }

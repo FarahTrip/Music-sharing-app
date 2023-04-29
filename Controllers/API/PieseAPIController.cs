@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Routing;
 using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 
@@ -22,11 +23,15 @@ namespace Trippin_Website.Controllers.API
             _Context = new ApplicationDbContext();
             _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
         }
-        public IEnumerable<Piese> GetPiese()
+
+        [HttpGet]
+        [Route("API/GetAll")]
+        public IEnumerable<string> GetPiese()
         {
-            var piese = _Context.Piese.ToList();
+            var piese = _Context.Piese.OrderByDescending(c => c.DateCreated).Select(c => c.Id.ToString()).ToList();
             return piese;
         }
+        [HttpGet]
         public Piese GetPiesa(Guid id)
         {
             var piesa = _Context.Piese.FirstOrDefault(c => c.Id == id);
@@ -37,19 +42,7 @@ namespace Trippin_Website.Controllers.API
             return piesa;
         }
 
-        [HttpPost]
-        public IHttpActionResult CreatePiesa(Piese PiesaPassed)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
 
-            PiesaPassed.DateCreated = DateTime.Now;
-            _Context.Piese.Add(PiesaPassed);
-            _Context.SaveChanges();
-
-            PiesaPassed.Id = PiesaPassed.Id;
-            return Created(new Uri(Request.RequestUri + "/" + PiesaPassed.Id), PiesaPassed);
-        }
         [HttpPut]
         public void UpdatePiesa(Guid id, Piese piese)
         {
@@ -83,6 +76,18 @@ namespace Trippin_Website.Controllers.API
 
             var userId = User.Identity.GetUserId();
             var user = _userManager.FindById(userId);
+            var likes = _Context.Likes.Where(c => c.UserId == userId);
+            var artistsOnSongs = _Context.WhoIsOnTheSong.Where(c => c.PiesaId == id.ToString());
+            var producersOnSongs = _Context.WhoProducedTheSong.Where(c => c.PiesaId == id.ToString());
+
+            if (likes.Any())
+                _Context.Likes.RemoveRange(likes);
+
+            if (artistsOnSongs.Any())
+                _Context.WhoIsOnTheSong.RemoveRange(artistsOnSongs);
+
+            if (producersOnSongs.Any())
+                _Context.WhoProducedTheSong.RemoveRange(producersOnSongs);
 
             if (piesa.S3ServerPath != null && userId == piesa.UserId || User.IsInRole("Admin"))
             {
@@ -98,5 +103,7 @@ namespace Trippin_Website.Controllers.API
             else
                 return BadRequest();
         }
+
     }
 }
+

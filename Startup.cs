@@ -11,9 +11,6 @@ namespace Trippin_Website
         {
             ConfigureAuth(app);
             app.MapSignalR();
-
-
-
         }
 
     }

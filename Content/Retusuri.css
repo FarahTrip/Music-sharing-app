@@ -1,7 +1,6 @@
 ﻿.TabeleNebune {
-    height: 450px;
-    width: 1300px;
-    overflow: scroll;
+    height: fit-content; 
+    background-color: #0d1117;
 }
 
 
@@ -9,23 +8,27 @@
     margin-top: 70px;
 }
 
-.doctoriclass {
-    background-color: #555555;
-}
 
 .tabelDiv {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    height: fit-content;
-    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    height: 92vh !important;
+    width: 85vw !important;
     border: 30px solid #0d1117;
-    border-radius: 30px;
-    box-shadow: 0px 0px 5px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    background-color: #1d2330;
+    margin-left: 0px;
+    margin-top: 0px !important;
+    left: 10vw;
 }
 .titletabele {
     background-color: #0d1117;
     margin-bottom: unset;
     padding-bottom: 0.6rem;
+}
+#main-container {
+    width: 90vw !important;
+    height: 80vh !important;
 }
 
 a
@@ -38,12 +41,6 @@ a
 }
 
 
-.TabeleNebune {
-    height: 530px;
-    overflow: auto;
-    background-color: #0d1117;
-}
-
 .dataTables_length {
     display: inline;
     background-color: #0d1117;
@@ -55,9 +52,115 @@ a
 }
 
 
+#tabele-container
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #Piese_filter {
     display: inline;
     float: right;
+}
+
+body {
+    background-color: #222;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+
+.dataTables_filter,
+.dataTables_length {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+
+}
+
+    .dataTables_length
+    {
+        margin-left: 0.6rem;
+    }
+        .dataTables_filter
+        {
+            margin-right: 1rem;
+        }
+
+        .dataTables_filter label,
+        .dataTables_length label {
+            display: flex;
+            align-items: center;
+            color: #9933cc;
+            transition: transform 0.4s;
+        }
+
+
+    .dataTables_filter input[type="search"] {
+        width: 100%;
+        max-width: 300px;
+        padding: 6px 20px;
+        font-size: 16px;
+        border: 2px solid #9933cc;
+        outline: none;
+        background-color: #333;
+        color: #fff;
+        border-radius: 30px;
+        transition: max-width 0.4s, background-color 0.4s, border-color 0.4s;
+        margin-left: 10px;
+    }
+
+        .dataTables_filter input[type="search"]::placeholder {
+            color: #999;
+        }
+
+        .dataTables_filter input[type="search"]:focus {
+            max-width: 400px;
+            background-color: #444;
+            border-color: #ff66ff;
+        }
+
+            .dataTables_filter input[type="search"]:focus::placeholder {
+                color: #ff66ff;
+            }
+
+    .dataTables_length select {
+        padding: 6px 12px;
+        font-size: 14px;
+        background-color: #333;
+        color: #fff;
+        border: 2px solid #9933cc;
+        border-radius: 6px;
+        outline: none;
+        transition: background-color 0.4s, border-color 0.4s;
+        margin-left: 10px;
+    }
+
+        .dataTables_length select:focus {
+            background-color: #444;
+            border-color: #ff66ff;
+        }
+
+    .dataTables_filter label:hover,
+    .dataTables_length label:hover {
+        transform: scale(1.1);
+    }
+
+@media (max-width: 480px) {
+    .dataTables_filter,
+    .dataTables_length {
+        display: flex;
+        justify-content: center;
+        margin: 1rem;
+    }
+
+        .dataTables_filter input[type="search"] {
+            max-width: 250px;
+        }
+
+            .dataTables_filter input[type="search"]:focus {
+                max-width: 300px;
+            }
 }
 
 .table.dataTable thead .sorting_asc:after {
@@ -95,7 +198,6 @@ a
     background-repeat: no-repeat;
     background-size: contain;
 }
-
 
 
 #Piese_filter {
@@ -341,6 +443,10 @@ text-align: center;
         justify-content: center;
     }
 
+    .volume-container {
+        display: none !important;
+    }
+
     .filters {
         width: 100%;
         padding: 10px;
@@ -431,12 +537,57 @@ text-align: center;
         margin-right: 0px !important;
         margin-left: auto !important;
     }
+    #phonemenu-indicator {
+        display: flex !important;
+    }
+
 
 
     @media (max-width: 768px) {
         .TabeleNebune th:not(:first-child), .TabeleNebune td:not(:first-child) {
             display: none;
         }
+        #control-container {
+            display: none;
+        }
+
+    }
+
+    #Piese_length {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    #Piese_filter {
+        margin-left: auto !important;
+        margin-right: 5rem !important;
+        margin-top: 0px !important;
+    }
+    #Piese_filter label {
+        float: none !important;
+        left: 10rem !important;
+
+    }
+
+        #Piese_filter input
+        {
+            max-width: 200px;
+        }
+
+        .tabelDiv {
+            border: 0px;
+            margin: 0px !important;
+            width: 100vw !important;
+            height: 80vh !important;
+        }
+
+    .container
+    {
+        padding: 0px;
+    }
+
+    .filter-bar
+    {
+        width: 100vw !important;
     }
 }
 
@@ -479,4 +630,98 @@ text-align: center;
 {
     padding: 0px !important;
     margin: 0px !important;
+}
+
+button
+{
+    margin-left: 8px;
+}
+
+#navbarColor02 {
+    background-color: #060606;
+    width: 100vw;
+}
+
+.container-fluid {
+    padding: 0px;
+    z-index: 99 !important;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px 1px rgba(84, 29, 111, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 15px 2px rgba(84, 29, 111, 2);
+    }
+
+    100% {
+        box-shadow: 0 0 5px 1px rgba(84, 29, 111, 0.5);
+    }
+}
+
+#Conturi_length,
+#Conturi_filter {
+    background-color: transparent !important;
+}
+
+
+@keyframes fav-btn-scale {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fav-btn-animate.fav-btn-animation {
+    animation: fav-btn-scale 0.4s ease-in-out;
+}
+
+@media screen and (max-width: 600px) {
+    .playlist-modal-content {
+        width: 95%;
+    }
+}
+
+@media (max-width: 767px) {
+    #leftMenu {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .section-title {
+        font-size: 1em;
+    }
+
+    .sidebar-button {
+        font-size: 0.9em;
+        padding: 5px;
+        width: calc(100% - 10px);
+    }
+
+    #progressbar
+    {
+        width: 93%;
+    }
+}
+
+@keyframes popup {
+    0% {
+        transform: scale(0.3) translate(-50%, -50%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) translate(-50%, -50%);
+        opacity: 1;
+    }
 }

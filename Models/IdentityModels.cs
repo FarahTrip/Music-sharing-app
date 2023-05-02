@@ -45,6 +45,7 @@ namespace Trippin_Website.Models
         public DbSet<WhoIsOnTheSong> WhoIsOnTheSong { get; set; }
         public DbSet<WhoProducedTheSong> WhoProducedTheSong { get; set; }
         public DbSet<PlayList> PlayList { get; set; }
+        public DbSet<PlaylistContent> PlaylistContent { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -39,20 +39,24 @@ namespace Trippin_Website.Controllers
             var Stiluri = _context.StyleOf.ToList();
             var users = _userManager.Users.ToList();
             var UserId = User.Identity.GetUserId();
-            var playLists = _context.PlayList.Where(c => c.userId == UserId).ToList();
+            var playLists = _context.PlayList.Where(c => c.userId == UserId).OrderByDescending(c => c.DateCreated).ToList();
+
+            /*            var playlistContents = _context.PlaylistContent
+                          .Where(pc => playLists.Any(up => up.Id.ToString() == pc.playlistId))
+                            .ToList();*/
 
             var pieseAllViewModel = new PieseAllViewModel()
             {
                 Piese = piese,
                 Stiluri = Stiluri,
                 Users = users,
-                PlayLists = playLists
+                PlayLists = playLists,
+                /*                PlaylistContent = playlistContents*/
             };
             var pieseIndexViewModel = new PieseIndexViewModel()
             {
                 PieseAllViewModel = pieseAllViewModel,
                 UserManager = _userManager,
-
             };
 
             return View(pieseIndexViewModel);

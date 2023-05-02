@@ -5,7 +5,7 @@
 
     var CurrentDateTime = DateTime.Now;
     var Stiluri = Model.PieseAllViewModel.Stiluri;
-
+    var UserId = User.Identity.GetUserId();
 }
 <head>
 
@@ -629,13 +629,88 @@
             }
 
     #createPlayListBTN {
-        float: left;   
+        float: left;
         margin-bottom: 10px;
         margin-top: 10px;
     }
 
     #glassContDinPlayList {
         justify-content: left;
+    }
+
+    .create-playlist-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .create-playlist-modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 300px;
+        background-color: #1d2330;
+        border-radius: 10px;
+        padding: 20px;
+        z-index: 1001;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    .create-playlist-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+    }
+
+    .create-playlist-modal form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 65%;
+    }
+
+    .create-playlist-modal input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        background-color: transparent;
+        color: #fff;
+    }
+
+        .create-playlist-modal input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+    .create-playlist-btn {
+        padding: 10px;
+        background-color: #9933cc;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .create-playlist-btn:hover {
+            background-color: #4D4351;
+        }
+
+    .playlist-modal-content
+    {
+        max-height: 725px;
+        overflow-y: scroll;
     }
 </style>
 
@@ -712,8 +787,16 @@
         <div class="sidebar-section">
             <h3 class="section-title"><i class="fa-solid fa-compact-disc"></i>Playlist-uri</h3>
             <button class="sidebar-button"><i class="fa-solid fa-heart"></i> Favorite</button>
-            <button class="sidebar-button"><i class="fas fa-music"></i> Playlist 2</button>
-            <button class="sidebar-button"><i class="fas fa-music"></i> Playlist 3</button>
+            @if (Model.PieseAllViewModel.PlayLists != null)
+            {
+                foreach (var playlist in Model.PieseAllViewModel.PlayLists)
+                {
+                  <button playlistIdSidebar="@playlist.Id"  class="sidebar-button"><i class="fas fa-music"></i>@playlist.Name </button>
+                }
+            }
+
+   
+
         </div>
         <div class="sidebar-section">
             <h3 class="section-title"><i class="fas fa-folder"></i> Section 2</h3>
@@ -760,7 +843,7 @@
                 <div class="glass-container">
                     <div class="glass-btn"><a href="@Url.Action("AdaugaNou", "Piese")">Adauga</a></div>
                 </div>
-                                    <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>
+@*                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>*@
             }
             else
             {
@@ -841,18 +924,36 @@
         <span class="playlist-close">&times;</span>
         <h2 id="playlistsHead">Playlists</h2>
         <div id="glassContDinPlayList" class="glass-container">
-            <div id="createPlayListBTN" class="glass-btn"><a href="@Url.Action("AdaugaNou", "Piese")">Creeaza un playlist</a></div>
+            <div id="createPlayListBTN" class="glass-btn"><a href="">Creeaza un playlist</a></div>
         </div>
-        <div class="playlist-container">
-            <div class="playlist-name">
-                <span>Playlist 1</span>
+        @if (Model.PieseAllViewModel.PlayLists != null)
+        {
+            foreach (var playlist in Model.PieseAllViewModel.PlayLists)
+            {
+                <div playlistId="@playlist.Id" class="playlist-container">
+                    <div class="playlist-name">
+                        <span>@playlist.Name</span>
+                    </div>
+                    <span id="addButton" class="plus-button add-song-button"><i class="fa-solid fa-plus" style="margin-right: 2rem;"></i></span>
+                    <span class="plus-button"><i class="fa-solid fa-trash" style="color: #f00f0f;"></i></span>
+
+                    <div class="songs-container" style="display: none;">
+                        <div class="song">Song 1</div>
+                        <div class="song">Song 2</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="playlist-container">
+                <div class="playlist-name">
+                    <span>Nu ai inca nici un playlist adaugat</span>
+                </div>
             </div>
-            <span class="plus-button">+</span>
-            <div class="songs-container" style="display: none;">
-                <div class="song">Song 1</div>
-                <div class="song">Song 2</div>
-            </div>
-        </div>
+        }
+
+
         <!-- Add more playlist containers here -->
         <div class="additional-features">
             <h3>Additional Features</h3>
@@ -861,7 +962,15 @@
         </div>
     </div>
 </div>
-
+<div class="create-playlist-container">
+    <div class="create-playlist-modal">
+        <h2 class="create-playlist-title">Alege numele pentru playlist</h2>
+        <form>
+            <input id="createPlaylistTextArea" type="text" placeholder="Numele playlist-ului" />
+            <button id="createPlaylist" type="submit" class="create-playlist-btn">Creeaza</button>
+        </form>
+    </div>
+</div>
 
 
 @section scripts
@@ -873,11 +982,11 @@
         //Daca vezi asta, nu ar trebuii sa fii aici. Esti perseverent totusi, felicitari, dar nu fura piesela sau beat-urile oamenilor pentru ca nu este frumos.
         //--------------------------------------
         //use this to disable right-click
-/*        document.addEventListener('contextmenu', event => {
-            event.preventDefault();
-            toastr.warning('Click dreapta este dezactivat pe aceasta pagina!', 'Atentie!');
-        });
-*/
+        /*        document.addEventListener('contextmenu', event => {
+                    event.preventDefault();
+                    toastr.warning('Click dreapta este dezactivat pe aceasta pagina!', 'Atentie!');
+                });
+        */
         document.addEventListener("keydown", function (e) {
             if (e.key === "F12") {
                 e.preventDefault();
@@ -937,6 +1046,40 @@
 
 
     <script>
+        var createPlaylistBtn = document.getElementById('createPlayListBTN');
+        var createPlaylistContainer = document.querySelector('.create-playlist-container');
+        var createPlaylistModal = document.querySelector('.create-playlist-modal');
+
+        createPlaylistBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            createPlaylistContainer.style.display = 'flex';
+        });
+
+        createPlaylistContainer.addEventListener('click', function (event) {
+            if (event.target === createPlaylistContainer) {
+                createPlaylistContainer.style.display = 'none';
+            }
+        });
+
+        createPlaylistModal.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                createPlaylistContainer.style.display = 'none';
+            }
+        });
+
+        var createPlaylistForm = document.querySelector('.create-playlist-modal form');
+
+        createPlaylistForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            createPlaylistContainer.style.display = 'none';
+
+        });
+    </script>
+    <script>
         $(document).ready(function () {
             $("#Piese").DataTable({
                 "order": [[3, "desc"]],
@@ -989,6 +1132,9 @@
 
 
     <script>
+
+
+
 
         function triggerFavBtnAnimation() {
             var favBtns = document.querySelectorAll('.fav-btn-animate');
@@ -1200,9 +1346,9 @@
                     }
 
 
+
                     const songs = listOfIds;
                     let currentSongIndex = 0;
-                    //------------------------------------------------------------------------------------------------
                     let currentPieId = null;
                     function loadSong(index) {
                         if (isPlaying) {
@@ -1211,26 +1357,11 @@
 
                         const song = songs[index];
 
-                        $(document).on('keydown', function (event) {
-                            // Check if the pressed key is the spacebar (key code 32)
-                            if (event.keyCode === 32) {
-                                // Check if the search box has focus
-                                if (!$('#Piese_filter input').is(':focus')) {
-                                    event.preventDefault(); // Prevent the default action (scrolling) when pressing the spacebar
-                                    // Toggle the play/pause state of the audio player
-                                    if (isPlaying) {
-                                        audio.pause();
-                                    } else {
-                                        audio.play();
-                                    }
-                                }
-                            }
-                        });
+
                         $(document).on('keydown', function (event) {
 
                             if (event.keyCode === 32) {
-
-                                if (!$('#Piese_filter input').is(':focus')) {
+                                if (!$('#Piese_filter input').is(':focus') && $('.create-playlist-container').css('display') === 'none') {
                                     event.preventDefault();
 
                                     if (isPlaying) {
@@ -1239,7 +1370,8 @@
                                         audio.play();
                                     }
                                 }
-                            } else if (event.keyCode === 38 || event.keyCode === 40) {
+                            }
+                            else if (event.keyCode === 38 || event.keyCode === 40) {
                                 event.preventDefault();
                                 var volume = audio.volume;
                                 if (event.keyCode === 38) {
@@ -1292,6 +1424,81 @@
                                 } else {
                                     artistNameElement.innerText = data.artists.join(', ');
                                 }
+
+                                    $('.add-song-button').each(function () {
+      $(this).off('click').click(function () {
+        var playlistId = $(this).parent().attr('playlistId');
+        var songId = data.id; 
+        var userId = '@Html.Raw(UserId)';
+
+        $.ajax({
+          url: '/AddToPlaylist/' + playlistId + '/' + songId + '/' + userId,
+          type: 'POST',
+          dataType: 'json',
+          contentType: 'application/json',
+          accepts: 'application/json',
+            success: function (data) {
+                if (data.success === true && data.alreadyInPlaylist === false) {
+              toastr.success('Piesa a fost adaugata in playlist cu succes');
+              }
+                if (data.success === true  && data.alreadyInPlaylist === true) {
+                  toastr.success('Piesa exista deja in playlist');
+                }
+ 
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('A aparut o eroare la adaugarea piesei in playlist');
+            console.log(textStatus + ': ' + errorThrown);
+          }
+        });
+      });
+    });
+
+
+$('#createPlaylist').click(function (event) {
+  event.preventDefault();
+
+  var playlistName = $('.create-playlist-modal input[type="text"]').val();
+  const UserId = '@Html.Raw(UserId)';
+
+
+  $.ajax({
+    url: '/CreatePlaylist/' + UserId + '/' + playlistName,
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json',
+    accepts: 'application/json',
+    success: function (data) {
+        if (data.success === true) {
+            toastr.success('Playlist-ul a fost creat cu succes');
+            $('.create-playlist-container').css('display', 'none');
+
+
+            $('.playlist-container:last').before(`
+              <div class="playlist-container">
+                <div class="playlist-name">
+                  <span>${playlistName}</span>
+                </div>
+                <span class="plus-button">+</span>
+                <div class="songs-container" style="display: none;">
+
+                </div>
+              </div>
+            `);
+
+
+            $('.create-playlist-modal input[type="text"]').val('');
+        } else {
+            toastr.error('A aparut o eroare la crearea playlist-ului');
+        }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      toastr.error('A aparut o eroare la crearea playlist-ului');
+      console.log(textStatus + ': ' + errorThrown);
+    }
+  });
+});
+
 
                                 audio.onloadeddata = function () {
                                     if (isPlaying) {

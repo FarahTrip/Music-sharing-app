@@ -452,13 +452,13 @@
     </script>
 
     <script>
-        $('#adaugaForm').submit(function (event) {
+        $('#msform').submit(function (event) {
         event.preventDefault();
         var audio = new Audio('@Url.Content("~/Content/Audio/error-ok.wav")');
         audio.play();
         setTimeout(function () {
-            $('#adaugaForm').unbind('submit').submit();
-        }, 01);
+            $('#msform').unbind('submit').submit();
+        }, 1000);
     });
     </script>
     <script src="~/Scripts/toastr.js"></script>
@@ -529,8 +529,7 @@
             });
         });
 
-
-$("#adaugaForm").submit(function (e) {
+        $("#msform").submit(function (e) {
     e.preventDefault();
 
     if (vm2.artistiIds.length === 0) {
@@ -541,7 +540,7 @@ $("#adaugaForm").submit(function (e) {
     if ($(this).valid()) {
         const songId = '@Html.Raw(GuidId)';
         const dataToSend = { artistIds: vm2.artistiIds, PiesaId: songId };
-        const dataToSend2 = { ProducersIds: vm.producersIds, BeatId: songId }
+        const dataToSend2 = { ProducersIds: vm.producersIds, BeatId: songId };
 
         $.ajax({
             url: "/api/Artists",
@@ -549,18 +548,26 @@ $("#adaugaForm").submit(function (e) {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(dataToSend)
-        });
-
-        $.ajax({
-            url: "/api/Producers",
-            method: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(dataToSend2)
+        }).done(function () {
+            $.ajax({
+                url: "/api/Producers",
+                method: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(dataToSend2)
+            }).done(function () {
+                // Add any success handling here, like showing a success message, redirecting, or refreshing the page.
+                console.log("Both AJAX calls were successful");
+            }).fail(function () {
+                // Add error handling for the second AJAX call here.
+                console.log("Error in the second AJAX call");
+            });
+        }).fail(function () {
+            // Add error handling for the first AJAX call here.
+            console.log("Error in the first AJAX call");
         });
     }
 });
-
     </script>
 
     <script>

@@ -725,3 +725,10 @@ button
         opacity: 1;
     }
 }
+
+@media (max-width: 576px) {
+    .create-playlist-modal {
+        width: 90%;
+        height: 80%;
+    }
+}

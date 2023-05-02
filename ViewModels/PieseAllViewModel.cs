@@ -12,5 +12,6 @@ namespace Trippin_Website.ViewModels
 
         public Likes Likes { get; set; }
         public List<PlayList> PlayLists { get; set; }
+        public List<PlaylistContent> PlaylistContent { get; set; }
     }
 }

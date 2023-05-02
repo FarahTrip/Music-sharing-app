@@ -778,6 +778,22 @@
     <Compile Include="Migrations\202304291349138_AddingBoolsToPiese.designer.cs">
       <DependentUpon>202304291349138_AddingBoolsToPiese.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305010821519_AddingNameToPlaylist.cs" />
+    <Compile Include="Migrations\202305010821519_AddingNameToPlaylist.designer.cs">
+      <DependentUpon>202305010821519_AddingNameToPlaylist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305010950337_playlistContent.cs" />
+    <Compile Include="Migrations\202305010950337_playlistContent.designer.cs">
+      <DependentUpon>202305010950337_playlistContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305020740077_addingDatesToPLaylists.cs" />
+    <Compile Include="Migrations\202305020740077_addingDatesToPLaylists.designer.cs">
+      <DependentUpon>202305020740077_addingDatesToPLaylists.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305020925547_addUserIdToPlaylist.cs" />
+    <Compile Include="Migrations\202305020925547_addUserIdToPlaylist.designer.cs">
+      <DependentUpon>202305020925547_addUserIdToPlaylist.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -826,6 +842,7 @@
     <Compile Include="Models\PieseFileNames.cs" />
     <Compile Include="Models\PieseIndexViewModel.cs" />
     <Compile Include="Models\PlayList.cs" />
+    <Compile Include="Models\PlaylistContent.cs" />
     <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\StyleOf.cs" />
     <Compile Include="Models\Versuri.cs" />
@@ -1420,6 +1437,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304291349138_AddingBoolsToPiese.resx">
       <DependentUpon>202304291349138_AddingBoolsToPiese.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305010821519_AddingNameToPlaylist.resx">
+      <DependentUpon>202305010821519_AddingNameToPlaylist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305010950337_playlistContent.resx">
+      <DependentUpon>202305010950337_playlistContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305020740077_addingDatesToPLaylists.resx">
+      <DependentUpon>202305020740077_addingDatesToPLaylists.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305020925547_addUserIdToPlaylist.resx">
+      <DependentUpon>202305020925547_addUserIdToPlaylist.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

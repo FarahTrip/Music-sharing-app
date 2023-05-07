@@ -12,5 +12,7 @@ namespace Trippin_Website.ViewModels
         public ApplicationUser User { get; set; }
         public bool HasLiked { get; set; }
         public string PresignedUrl { get; set; }
+        public List<WhoIsOnTheSong> WhoIsOnTheSong { get; set; }
+        public List<WhoProducedTheSong> WhoProducedTheSong { get; set; }
     }
 }

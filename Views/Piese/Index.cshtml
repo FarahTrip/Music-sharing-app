@@ -10,6 +10,7 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/piese.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-d7B6txDp8PZj+KryoMmUz5l/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous">
     <link href="~/Content/Side-bar.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -394,14 +395,16 @@
     .playlist-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        /*        align-items: center;*/
         position: relative;
         padding: 10px;
         border-radius: 5px;
         background-color: #2c3440;
         cursor: pointer;
         margin-bottom: 10px;
+        transition: background-color 0.3s;
     }
+
 
         .playlist-container .plus-button {
             background: none;
@@ -427,8 +430,15 @@
         gap: 5px;
     }
 
+    .playlist-name-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
     .playlist-name {
-        font-size: 1.2em;
+        font-size: 1.5em;
     }
 
     .playlist-close {
@@ -468,7 +478,32 @@
     .songs-container .song {
         padding: 5px;
         font-size: 1.1em;
+        background-color: #3a4250;
+        border-radius: 40px;
+        margin: 5px 0;
+        transition: background-color 0.3s;
+        text-align: center;
     }
+
+    .songs-container {
+        max-height: 200px;
+        overflow-y: auto;
+        width: 100%;
+        display: none;
+    }
+
+        .songs-container .song:hover {
+            background-color: #48516a;
+        }
+
+        .songs-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .songs-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
 
     .additional-features {
         margin-top: 10px;
@@ -489,7 +524,6 @@
     }
 
     #leftMenu {
-        display: flex;
         flex-direction: column;
         gap: 10px;
         padding: 20px;
@@ -530,11 +564,9 @@
 
 
     #leftMenu {
-        display: flex;
         flex-direction: column;
         gap: 10px;
         padding: 20px;
-        width: 10vw !important;
         min-height: 100vh;
         box-sizing: border-box;
         background-color: #1d2330;
@@ -547,10 +579,7 @@
         margin: 0px;
     }
 
-    .container {
-        padding: 0px;
-        grid-template-columns: 10vw 1fr;
-    }
+
 
     html, body {
         overflow-x: hidden;
@@ -635,7 +664,8 @@
     }
 
     #glassContDinPlayList {
-        justify-content: left;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .create-playlist-container {
@@ -707,11 +737,243 @@
             background-color: #4D4351;
         }
 
-    .playlist-modal-content
-    {
+    .playlist-modal-content {
         max-height: 725px;
         overflow-y: scroll;
     }
+
+    .text-divider {
+        display: flex;
+        align-items: center;
+        --text-divider-gap: 1rem;
+    }
+
+        .text-divider::before,
+        .text-divider::after {
+            content: '';
+            height: 1px;
+            background-color: silver;
+            flex-grow: 1;
+            margin-left: 36rem;
+            margin-right: 36rem;
+        }
+
+        .text-divider::before {
+            margin-right: var(--text-divider-gap);
+        }
+
+        .text-divider::after {
+            margin-left: var(--text-divider-gap);
+        }
+
+    .playlist-container .plus-button {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .playlist-container .plus-button {
+        display: inline-block !important;
+    }
+
+    .playlist-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .song-count-container {
+        display: inline-block;
+        background-color: #9933cc;
+        border-radius: 50%;
+        padding: 4px 10px;
+        margin-left: 5px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        order: -1;
+        box-shadow: 0 0 7px rgba(153, 51, 204, 0.5);
+    }
+
+        .song-count-container:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(153, 51, 204, 0.8);
+        }
+
+    .song-count {
+        color: #ffffff;
+    }
+
+    .header-container {
+        background-image: url('/Content/Images/gagica-muzical-banner.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .playlist-close {
+        align-self: flex-end;
+    }
+
+    .song {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+    }
+
+    .song-title {
+        /* Adjust the font size and other styles as needed */
+    }
+
+    .song-options {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .fa-ellipsis-v {
+        font-size: 20px;
+        margin-right: 10px;
+        color: #fff;
+    }
+
+    .mini-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: #333;
+        border: 1px solid #555;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        z-index: 1000; /* Add this line */
+    }
+
+        .mini-menu.open {
+            display: block;
+        }
+
+    .delete-btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+        .delete-btn:hover {
+            background-color: #7a4ef7; /* Adjust to your desired purple color */
+        }
+
+    .song {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    .songs-container {
+        overflow: visible;
+    }
+
+    .custom-menu-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .custom-menu-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .custom-menu-content {
+        display: none;
+        position: absolute;
+        background-color: #343a40;
+        min-width: 180px;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        right: 0;
+        border-radius: 6px;
+        margin-top: 5px;
+    }
+
+        .custom-menu-content .custom-menu-item {
+            color: #ffffff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+            .custom-menu-content .custom-menu-item:hover {
+                background-color: #9c27b0;
+            }
+
+    .custom-sterge-btn {
+        color: #ffffff;
+    }
+
+    .custom-menu-content.fixed {
+        position: fixed;
+    }
+
+    .piesa-modal {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .piesa-modal-content {
+        background-color: #2c3440;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 30px;
+        border: 1px solid #888;
+        width: 50%;
+        max-width: 400px;
+        text-align: center;
+        color: white;
+        font-size: 1.3em;
+        border-radius: 6px;
+    }
+
+    #phonePlayListsbtn {
+        display: none;
+    }
+
+    #tabele-container {
+        border-top: 0px !important;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 24px; /* Adjust the font size here to change the size of the close button */
+        cursor: pointer;
+    }
+
 </style>
 
 <script src="~/Scripts/favorite.js"></script>
@@ -782,8 +1044,9 @@
 
 
 
-<div class="container">
+<div id="pieseMainMainContainer" class="container">
     <div class="tabelDiv" id="leftMenu">
+        <button class="close-button"><i class="fas fa-times"></i></button>
         <div class="sidebar-section">
             <h3 class="section-title"><i class="fa-solid fa-compact-disc"></i>Playlist-uri</h3>
             <button class="sidebar-button"><i class="fa-solid fa-heart"></i> Favorite</button>
@@ -791,11 +1054,11 @@
             {
                 foreach (var playlist in Model.PieseAllViewModel.PlayLists)
                 {
-                  <button playlistIdSidebar="@playlist.Id"  class="sidebar-button"><i class="fas fa-music"></i>@playlist.Name </button>
+                    <button playlistIdSidebar="@playlist.Id" class="sidebar-button"><i class="fas fa-music"></i>@playlist.Name </button>
                 }
             }
 
-   
+
 
         </div>
         <div class="sidebar-section">
@@ -837,13 +1100,17 @@
 
     <div class="tabelDiv" id="tabele-container">
         @*    <h2 class="titletabele">Piese</h2>*@
+
         <div class="buttonsForTables" style="background-color: #0d1117">
             @if (User.IsInRole(Trippin_Website.Models.RoleNames.Admin) || User.IsInRole(Trippin_Website.Models.RoleNames.Producer) || User.IsInRole(Trippin_Website.Models.RoleNames.Artist))
             {
                 <div class="glass-container">
                     <div class="glass-btn"><a href="@Url.Action("AdaugaNou", "Piese")">Adauga</a></div>
                 </div>
-@*                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>*@
+                <div id="phonePlayListsbtn" class="glass-container">
+                    <div class="glass-btn"> <a href="">Playlist-uri</a></div>
+                </div>
+                @*                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica", "Modifica", "Piese")</button>*@
             }
             else
             {
@@ -862,84 +1129,134 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    @{ int menuCounter = 0; }
                     @foreach (var piesa in Model.PieseAllViewModel.Piese)
                     {
                         var timeSpan = CurrentDateTime - piesa.DateCreated;
 
-                        <tr>
-                            <td>
-                                <img class="play-icon play-song" piesaId="@piesa.Id" src="/Content/Images/play-fromt-table.png" alt="play" style="display: inline; margin:0.8rem; border-radius : 50%; cursor: pointer">
-                                <img class="pause-icon" src="~/Content/Images/stop-from-table.png" alt="pause" style="display: none; margin:0.8rem; border-radius : 50%; cursor: pointer">
-                                <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
-                                @if (timeSpan.TotalDays < 3)
-                                {
-                                    <span class="badge rounded-pill bg-info">Nou</span>
-                                }
-                                @if (piesa.DateModified != null)
-                                {
-                                    <span class="badge rounded-pill bg-light">Modificat</span>
-                                }
-                                @if (piesa.IsBanger == true)
-                                {
-                                    <span class="badge rounded-pill bg-success">Banger</span>
-                                }
-                            </td>
-                            <td>@piesa.Key</td>
-                            <td>@piesa.Bpm</td>
-                            <td>@piesa.DateCreated</td>
+                        if (piesa.IsPublic)
+                        {
+                            <tr>
+                                <td>
+                                    <img class="play-icon play-song" piesaId="@piesa.Id" src="/Content/Images/play-fromt-table.png" alt="play" style="display: inline; margin:0.8rem; border-radius : 50%; cursor: pointer">
+                                    <img class="pause-icon" src="~/Content/Images/stop-from-table.png" alt="pause" style="display: none; margin:0.8rem; border-radius : 50%; cursor: pointer">
+                                    <a href="@Url.Action("Detalii", "Piese", new { id = piesa.Id })">@piesa.Name</a>
+                                    @if (timeSpan.TotalDays < 3)
+                                    {
+                                        <span class="badge rounded-pill bg-info">Nou</span>
+                                    }
+                                    @if (piesa.DateModified != null)
+                                    {
+                                        <span class="badge rounded-pill bg-light">Modificat</span>
+                                    }
+                                    @if (piesa.IsBanger == true)
+                                    {
+                                        <span class="badge rounded-pill bg-success">Banger</span>
+                                    }
+                                    @if (piesa.UserId.ToString() == UserId || User.IsInRole("Admin"))
+                                    {
+                                        <div class="custom-menu-container">
+                                            <button class="custom-menu-button" onclick="toggleCustomMenu(event, 'customMenuContent-@menuCounter')">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="custom-menu-content" id="customMenuContent-@menuCounter">
+                                                <a class="custom-menu-item custom-modifica-btn" href="@Url.Action("ModificaPiesa", "Piese", new {id = piesa.Id})">Modifica</a>
+                                                <div piesaIdForDelete="@piesa.Id" class="custom-menu-item custom-sterge-btn">Sterge</div>
+                                            </div>
+                                        </div>
+                                    }
 
-                            @{
-                                var userId = User.Identity.GetUserId();
-                            }
+                                </td>
+                                <td>@piesa.Key</td>
+                                <td>@piesa.Bpm</td>
+                                <td>@piesa.DateCreated</td>
+                                @{ menuCounter++; }
+                                @{
+                                    var userId = User.Identity.GetUserId();
+                                }
 
-                            @if (piesa.UserId != null)
-                            {
-                                if (userId == piesa.UserId)
+                                @if (piesa.UserId != null)
                                 {
-                                    <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                    if (userId == piesa.UserId)
+                                    {
+                                        <td> <a id="yourUserID" href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                    }
+
+
                                 }
                                 else
                                 {
-                                    <td> <a href="@Url.Action("Profile", "UsersManagement", new { id = piesa.UserId })">@(Model.UserManager.FindByIdAsync(piesa.UserId).Result.UserName)</a></td>
+                                    <td> </td>
                                 }
 
 
-                            }
-                            else
-                            {
-                                <td> </td>
-                            }
+                            </tr>
+                        }
 
 
-                        </tr>
                     }
                 </tbody>
             </table>
+            <div id="deletePiesaModal" class="piesa-modal">
+                <div class="piesa-modal-content">
+                    <p>Esti sigur ca vrei sa stergi piesa?</p>
+                    <button id="yesDeletePiesaBtn" class="btn btn-success">Da</button>
+                    <button id="noDeletePiesaBtn" class="btn btn-danger">Nu</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="playlist-modal" id="playlistModal">
     <div class="playlist-modal-content">
-        <span class="playlist-close">&times;</span>
-        <h2 id="playlistsHead">Playlists</h2>
-        <div id="glassContDinPlayList" class="glass-container">
-            <div id="createPlayListBTN" class="glass-btn"><a href="">Creeaza un playlist</a></div>
+        <div class="header-container">
+            <span class="playlist-close">&times;</span>
+            <h2 id="playlistsHead">Playlist-uri</h2>
+            <div id="glassContDinPlayList" class="glass-container">
+                <div id="createPlayListBTN" class="glass-btn"><a href="">Creeaza un playlist</a></div>
+            </div>
         </div>
-        @if (Model.PieseAllViewModel.PlayLists != null)
+
+        @{
+            var playlistContents = Model.PieseAllViewModel.PlaylistContent;
+        }
+        @if (Model.PieseAllViewModel.PlaylistContent != null)
         {
             foreach (var playlist in Model.PieseAllViewModel.PlayLists)
             {
+
+
                 <div playlistId="@playlist.Id" class="playlist-container">
-                    <div class="playlist-name">
-                        <span>@playlist.Name</span>
+                    <div class="playlist-name text-divider">
+                        <span>  @playlist.Name </span>
+                        <span class="song-count-container">
+                            <span class="song-count" data-count="0">0</span>
+                        </span>
                     </div>
                     <span id="addButton" class="plus-button add-song-button"><i class="fa-solid fa-plus" style="margin-right: 2rem;"></i></span>
-                    <span class="plus-button"><i class="fa-solid fa-trash" style="color: #f00f0f;"></i></span>
+                    <span id="deletePlaylistBtn" class="plus-button"><i class="fa-solid fa-trash" style="color: #f00f0f;"></i></span>
 
                     <div class="songs-container" style="display: none;">
-                        <div class="song">Song 1</div>
-                        <div class="song">Song 2</div>
+                        @foreach (var item in playlistContents)
+                        {
+                            if (item.playlistId == playlist.Id.ToString())
+                            {
+                                <div song-Id="@item.piesaId" class="song">
+                                    <span class="song-title">@item.SongName</span>
+                                    <div class="song-options">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                        <div class="mini-menu">
+                                            <button id="deleteBtn" class="delete-btn">Sterge</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
                     </div>
                 </div>
             }
@@ -955,11 +1272,11 @@
 
 
         <!-- Add more playlist containers here -->
-        <div class="additional-features">
-            <h3>Additional Features</h3>
-            <div class="feature-placeholder">Feature 1</div>
-            <div class="feature-placeholder">Feature 2</div>
-        </div>
+        @*        <div class="additional-features">
+                <h3>Additional Features</h3>
+                <div class="feature-placeholder">Feature 1</div>
+                <div class="feature-placeholder">Feature 2</div>
+            </div>*@
     </div>
 </div>
 <div class="create-playlist-container">
@@ -976,6 +1293,39 @@
 @section scripts
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(".custom-sterge-btn").click(function () {
+            var piesaIdForDelete = $(this).attr("piesaIdForDelete");
+            $("#deletePiesaModal").show();
+            $("#yesDeletePiesaBtn").data("piesaIdForDelete", piesaIdForDelete);
+        });
+
+        // Close the modal when clicking the "No" button or outside the modal
+        $("#noDeletePiesaBtn, .piesa-modal").click(function () {
+            $("#deletePiesaModal").hide();
+        });
+
+        // Stop event propagation to avoid closing the modal when clicking inside the modal content
+        $(".piesa-modal-content").click(function (event) {
+            event.stopPropagation();
+        });
+
+        // Perform the AJAX call and close the modal when clicking the "Yes" button
+        $("#yesDeletePiesaBtn").click(function () {
+            var button = $(this);
+            var piesaIdForDelete = button.data("piesaIdForDelete");
+            $.ajax({
+                url: "/API/PieseAPI/" + piesaIdForDelete,
+                method: "DELETE",
+                contentType: 'application/json',
+                success: function () {
+                    $("div[piesaIdForDelete='" + piesaIdForDelete + "']").parents("tr").remove();
+                    $("#deletePiesaModal").hide();
+                }
+            });
+        });
+    </script>
     <script>
 
         //Little protection layer
@@ -998,6 +1348,23 @@
             document.getElementById('playlistModal').style.display = 'block';
         });
 
+        $(document).ready(function () {
+            // add click event listener to the button
+            $('#phonePlayListsbtn').click(function (event) {
+                // prevent the default action of refreshing the page
+                event.preventDefault();
+
+                // toggle the display property of the left menu
+                $('#leftMenu').css('display', 'flex');
+
+                // add a slide-in animation using CSS transitions
+                $('#leftMenu').css({
+                    'transition': 'transform 0.3s ease-in-out',
+                    'transform': 'translateX(0)'
+                });
+            });
+        });
+
         document.querySelector('.playlist-close').addEventListener('click', function () {
             const playlistModal = document.getElementById('playlistModal');
             playlistModal.style.display = 'none';
@@ -1018,28 +1385,44 @@
             }
         });
 
-
-        document.querySelectorAll('.playlist-name').forEach(function (name) {
-            name.addEventListener('click', function () {
-                const songsContainer = this.nextElementSibling;
+        // Use event delegation for click events on playlist names
+        document.body.addEventListener('click', function (event) {
+            if (event.target.classList.contains('playlist-name')) {
+                const songsContainer = event.target.nextElementSibling;
                 if (songsContainer.style.display === 'none') {
                     songsContainer.style.display = 'block';
                 } else {
                     songsContainer.style.display = 'none';
                 }
-            });
+            }
         });
-        // Adding the current song to the selected playlist
-        document.querySelectorAll('.playlist-container').forEach(function (container) {
-            container.addEventListener('click', function (event) {
-                if (event.target.classList.contains('plus-button')) return;
+
+        document.body.addEventListener('click', function (event) {
+            // Check if the clicked element or its parent has the 'playlist-container' class
+            const container = event.target.closest('.playlist-container');
+            if (container) {
+                // Ignore clicks on plus-button, song or their child elements
+                if (event.target.closest('.plus-button') || event.target.closest('.song')) {
+                    return;
+                }
+
                 const songsContainer = container.querySelector('.songs-container');
                 if (songsContainer.style.display === 'none') {
                     songsContainer.style.display = 'block';
                 } else {
                     songsContainer.style.display = 'none';
                 }
-            });
+            }
+        });
+        $(document).on('click', '.song-options', function () {
+            $(this).find('.mini-menu').toggleClass('open');
+        });
+
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.song-options').length) {
+                $('.mini-menu.open').removeClass('open');
+            }
         });
 
     </script>
@@ -1077,6 +1460,28 @@
             event.preventDefault();
             createPlaylistContainer.style.display = 'none';
 
+        });
+
+
+        var currentMenuContent;
+
+        function toggleCustomMenu(event, menuId) {
+            var customMenuContent = document.getElementById(menuId);
+
+            if (currentMenuContent && currentMenuContent !== customMenuContent) {
+                currentMenuContent.style.display = "none";
+            }
+
+            customMenuContent.style.display = customMenuContent.style.display === "block" ? "none" : "block";
+            currentMenuContent = customMenuContent;
+
+            event.stopPropagation();
+        }
+
+        document.addEventListener("click", function () {
+            if (currentMenuContent) {
+                currentMenuContent.style.display = "none";
+            }
         });
     </script>
     <script>
@@ -1158,6 +1563,14 @@
                 $("#favBTNPressed").hide();
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var closeButton = document.querySelector(".close-button");
+            closeButton.addEventListener("click", function () {
+                var leftMenu = document.getElementById("leftMenu");
+                leftMenu.style.display = "none";
+            });
+        });
 
         function favorites(pieId, updateOnly) {
             var likeBtn = $("#favorite");
@@ -1345,8 +1758,16 @@
                         }
                     }
 
+                    function getSongCount(playlistContainer) {
+                        return playlistContainer.querySelectorAll('.songs-container .song').length;
+                    }
 
-
+                    function updateSongCountElement(playlistContainer) {
+                        const songCountElement = playlistContainer.querySelector('.song-count');
+                        const newSongCount = getSongCount(playlistContainer);
+                        songCountElement.setAttribute('data-count', newSongCount);
+                        songCountElement.textContent = `${newSongCount}`;
+                    }
                     const songs = listOfIds;
                     let currentSongIndex = 0;
                     let currentPieId = null;
@@ -1404,7 +1825,7 @@
                                 $('#progress').val((currentTime / duration) * 50000);
                             }
                         });
-
+                        var currentSongId = null;
                         $.ajax({
                             url: '/API/MusicPlayer',
                             type: 'GET',
@@ -1413,84 +1834,83 @@
                                 audioId: song
                             },
                             success: function (data) {
-                                audio.src = data.src;
-                                document.title = data.title;
-                                document.getElementById('song-title').textContent = data.title;
-                                hasLiked = data.hasLiked;
-                                const artistNameElement = document.getElementById('artist-name');
-                                artistNameElement.innerHTML = 'Nici un artist adaugat';
-                                if (data.artists.length < 1) {
-                                    artistNameElement.innerText = "Nici un artist adaugat";
-                                } else {
-                                    artistNameElement.innerText = data.artists.join(', ');
-                                }
+                                updateSongInfo(data);
+
+
+                                function updateSongInfo(data) {
+                                    audio.src = data.src;
+                                    document.title = data.title;
+                                    document.getElementById('song-title').textContent = data.title;
+                                    hasLiked = data.hasLiked;
+                                    const artistNameElement = document.getElementById('artist-name');
+                                    artistNameElement.innerHTML = 'Nici un artist adaugat';
+                                    if (data.artists.length < 1) {
+                                        artistNameElement.innerText = "Nici un artist adaugat";
+                                    } else {
+                                        artistNameElement.innerText = data.artists.join(', ');
+                                    }
+
 
                                     $('.add-song-button').each(function () {
-      $(this).off('click').click(function () {
-        var playlistId = $(this).parent().attr('playlistId');
-        var songId = data.id; 
-        var userId = '@Html.Raw(UserId)';
-
-        $.ajax({
-          url: '/AddToPlaylist/' + playlistId + '/' + songId + '/' + userId,
-          type: 'POST',
-          dataType: 'json',
-          contentType: 'application/json',
-          accepts: 'application/json',
-            success: function (data) {
-                if (data.success === true && data.alreadyInPlaylist === false) {
-              toastr.success('Piesa a fost adaugata in playlist cu succes');
-              }
-                if (data.success === true  && data.alreadyInPlaylist === true) {
-                  toastr.success('Piesa exista deja in playlist');
-                }
- 
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            toastr.error('A aparut o eroare la adaugarea piesei in playlist');
-            console.log(textStatus + ': ' + errorThrown);
-          }
-        });
-      });
-    });
+                                        var songId = data.id;
+                                        $(this).off('click').click(function () {
+                                            addToPlaylist(songId, $(this));
+                                        });
+                                    });
+                                    currentSongId = data.id;
+                                    registerAddSongButtonClickEvent();
+                                }
+                                $(document).on('click', '.addButton', function () {
+                                    addToPlaylist(currentSongId, $(this));
+                                });
 
 
-$('#createPlaylist').click(function (event) {
+
+
+                                $('#createPlaylist').click(function (event) {
   event.preventDefault();
 
   var playlistName = $('.create-playlist-modal input[type="text"]').val();
   const UserId = '@Html.Raw(UserId)';
 
+    //--------------------------------------------------------------------------
+                                    $.ajax({
+                                        url: '/CreatePlaylist/' + UserId + '/' + playlistName,
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        contentType: 'application/json',
+                                        accepts: 'application/json',
+                                        success: function (data) {
+                                            if (data.success === true) {
+                                                toastr.success('Playlist-ul a fost creat cu succes');
+                                                $('.create-playlist-container').css('display', 'none');
 
-  $.ajax({
-    url: '/CreatePlaylist/' + UserId + '/' + playlistName,
-    type: 'POST',
-    dataType: 'json',
-    contentType: 'application/json',
-    accepts: 'application/json',
-    success: function (data) {
-        if (data.success === true) {
-            toastr.success('Playlist-ul a fost creat cu succes');
-            $('.create-playlist-container').css('display', 'none');
-
-
-            $('.playlist-container:last').before(`
-              <div class="playlist-container">
-                <div class="playlist-name">
-                  <span>${playlistName}</span>
+                                                $('.playlist-container:first').before(`
+                <div playlistid="${data.playlistId}" class="playlist-container">
+                    <div class="playlist-name text-divider">
+                        <span class="playlist-title">${playlistName}</span>
+                        <span class="song-count-container">
+                            <span class="song-count" data-count="0">0</span>
+                        </span>
+                    </div>
+                    <span class="addButton plus-button add-song-button"><i class="fa-solid fa-plus" style="margin-right: 2rem;"></i></span>
+                    <span id="deletePlaylistBtn" class="plus-button"><i class="fa-solid fa-trash" style="color: #f00f0f;"></i></span>
+                    <div class="songs-container" style="display: none;">
+                    </div>
                 </div>
-                <span class="plus-button">+</span>
-                <div class="songs-container" style="display: none;">
-
-                </div>
-              </div>
             `);
 
+                                                const newPlaylistContainer = document.querySelector(`div[playlistId="${data.playlistId}"]`);
+                                                const newSongsContainer = newPlaylistContainer.querySelector('.songs-container');
 
-            $('.create-playlist-modal input[type="text"]').val('');
-        } else {
-            toastr.error('A aparut o eroare la crearea playlist-ului');
-        }
+                                                songCountObserver.observe(newSongsContainer, { childList: true });
+
+                                                updateSongCountElement(newPlaylistContainer);
+
+                                                $('.create-playlist-modal input[type="text"]').val('');
+                                            } else {
+                                                toastr.error('A aparut o eroare la crearea playlist-ului');
+                                            }
     },
     error: function (jqXHR, textStatus, errorThrown) {
       toastr.error('A aparut o eroare la crearea playlist-ului');
@@ -1500,6 +1920,66 @@ $('#createPlaylist').click(function (event) {
 });
 
 
+
+
+function addToPlaylist(songId, addSongButtonElement) {
+
+    var playlistId = addSongButtonElement.parent().attr('playlistId');
+    var userId = '@Html.Raw(UserId)';
+
+    $.ajax({
+        url: '/AddToPlaylist/' + playlistId + '/' + songId + '/' + userId,
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        accepts: 'application/json',
+        success: function (data) {
+            if (data.success === true && data.alreadyInPlaylist === false) {
+                toastr.success('Piesa a fost adaugata in playlist cu succes');
+
+                var songsContainer = $(`div[playlistId=${playlistId}]`).find('.songs-container');
+
+                var newSongDiv = $('<div>')
+                    .attr('song-Id', songId)
+                    .addClass('song');
+
+                var songTitle = $('<span>')
+                    .addClass('song-title')
+                    .text(data.songName);
+
+                var songOptions = $('<div>')
+                    .addClass('song-options')
+                    .append($('<i>').addClass('fa fa-ellipsis-v'));
+
+                var miniMenu = $('<div>')
+                    .addClass('mini-menu')
+                    .append($('<button>')
+                        .attr('id', 'deleteBtn')
+                        .addClass('delete-btn')
+                        .text('Sterge')
+                    );
+
+                songOptions.append(miniMenu);
+                newSongDiv.append(songTitle, songOptions);
+
+                songsContainer.append(newSongDiv);
+
+
+                const playlistContainer = addSongButtonElement.closest('.playlist-container');
+                const songCountElement = playlistContainer.querySelector('.song-count');
+                const newSongCount = getSongCount(playlistContainer);
+                songCountElement.setAttribute('data-count', newSongCount);
+                songCountElement.textContent = `(${newSongCount})`;
+            } else if (data.success === true && data.alreadyInPlaylist === true) {
+                toastr.success('Piesa exista deja in playlist');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('A aparut o eroare la adaugarea piesei in playlist');
+            console.log(textStatus + ': ' + errorThrown);
+        }
+    });
+}
                                 audio.onloadeddata = function () {
                                     if (isPlaying) {
                                         audio.play();
@@ -1526,6 +2006,33 @@ $('#createPlaylist').click(function (event) {
                                 alert('Actiunea a esuat');
                                 console.log(textStatus + ': ' + errorThrown);
                             }
+                        });
+                    }
+
+                    document.querySelectorAll('.playlist-container').forEach((playlistContainer) => {
+                        updateSongCountElement(playlistContainer);
+                    });
+
+                    const songCountObserver = new MutationObserver((mutations) => {
+                        mutations.forEach((mutation) => {
+                            if (mutation.type === 'childList' && mutation.target.classList.contains('songs-container')) {
+                                const playlistContainer = mutation.target.closest('.playlist-container');
+                                const songCountElement = playlistContainer.querySelector('.song-count');
+                                const newSongCount = getSongCount(playlistContainer);
+                                songCountElement.setAttribute('data-count', newSongCount);
+                                songCountElement.textContent = `${newSongCount}`;
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('.songs-container').forEach((songsContainer) => {
+                        songCountObserver.observe(songsContainer, { childList: true });
+                    });
+
+                    function registerAddSongButtonClickEvent() {
+                        $('.add-song-button').one('click', function () {
+                            addToPlaylist(currentSongId, $(this));
+                            registerAddSongButtonClickEvent();
                         });
                     }
 
@@ -1590,12 +2097,12 @@ $('#createPlaylist').click(function (event) {
                 }
             });
         });
-
+        document.querySelectorAll('.playlist-container').forEach(function (container) {
+            updatePlaylistTitleSongCount(container);
+        });
     </script>
 
     <script>
-
-
 
 
 
@@ -1616,5 +2123,66 @@ $('#createPlaylist').click(function (event) {
         });
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.plus-button', function () {
+                if ($(this).attr('id') === 'deletePlaylistBtn') {
+                    var playlistId = $(this).closest('.playlist-container').attr('playlistId');
+
+                    var userId = '@Html.Raw(UserId)';
+                    $.ajax({
+                        url: `/DeletePlaylist/${playlistId}/${userId}`,
+                        type: 'DELETE',
+                        success: function (response) {
+                            if (response.success) {
+                                $(`div[playlistId=${playlistId}]`).remove();
+                                toastr.success('Playlist-ul a fost sters cu success!')
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error('A aparut o eroare la stergerea playlistului!')
+                            console.log("Error: ", xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+        $(document).on('click', '.delete-btn', function () {
+    var songElement = $(this).closest('.song');
+    var songId = songElement.attr('song-Id');
+    var playlistElement = songElement.closest('.playlist-container');
+    var playlistId = playlistElement.attr('playlistId');
+    var userId = '@Html.Raw(UserId)';
+
+    $.ajax({
+        url: '/DeletePlaylist/' + playlistId + '/' + songId + '/' + userId,
+        type: 'DELETE',
+        dataType: 'json',
+        contentType: 'application/json',
+        accepts: 'application/json',
+        success: function (data) {
+            if (data.success === true) {
+                toastr.success('Piesa a fost stearsa cu succes');
+                songElement.remove();
+
+                const playlistContainer = songElement.closest('.playlist-container');
+                const songCountElement = playlistContainer.querySelector('.song-count');
+                const newSongCount = getSongCount(playlistContainer);
+                songCountElement.setAttribute('data-count', newSongCount);
+                songCountElement.textContent = `(${newSongCount})`;
+
+            } else {
+                toastr.error('A aparut o eroare la stergerea piesei');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('A aparut o eroare la stergerea piesei');
+            console.log(textStatus + ': ' + errorThrown);
+        }
+    });
+});
+    </script>
+
     <link href="~/Content/toastrRestyle.css" rel="stylesheet" />
+
 }

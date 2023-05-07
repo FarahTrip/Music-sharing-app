@@ -259,3 +259,7 @@
 .alert-success .alert-message {
     margin-left: 35px !important;
 }
+
+@media (max-width: 767px) {
+ 
+}

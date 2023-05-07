@@ -581,6 +581,7 @@
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="DTOS\PieseDTO.cs" />
+    <Compile Include="DTOS\PlayListContentsDTO.cs" />
     <Compile Include="DTOS\UsersDTO.cs" />
     <Compile Include="Helper_Classes\musicPlayerSongOrBeat.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
@@ -989,6 +990,7 @@
     <Content Include="Content\Images\add-to-playlist.png" />
     <Content Include="Content\Images\fav-pressed.png" />
     <Content Include="Content\Images\fav-unpressed.png" />
+    <Content Include="Content\Images\gagica-muzical-banner.jpg" />
     <Content Include="Content\Images\Galaxie.png" />
     <Content Include="Content\Image-Carrousel\banner-la-misto.jpg" />
     <Content Include="Content\Images\accessdenied.svg" />
@@ -1030,6 +1032,7 @@
     <Content Include="Content\IsolatedStyles.css" />
     <Content Include="Content\KeyFinder.css" />
     <Content Include="Content\pattern cut.mp4" />
+    <Content Include="Content\piese.css" />
     <Content Include="Content\Retusuri.css" />
     <Content Include="Content\Side-bar.css" />
     <Content Include="Content\toastr.css" />

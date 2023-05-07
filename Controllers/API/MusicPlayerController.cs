@@ -58,5 +58,7 @@ namespace Trippin_Website.Controllers.API
 
             return Json(new { title = piesa.Name, src = path, hasLiked = HasLiked, piesa.Id });
         }
+
+
     }
 }

@@ -1,0 +1,18 @@
+﻿
+.container {
+    padding: 0px;
+    grid-template-columns: 10vw 1fr;
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding: 0px;
+        grid-template-columns: 0vw 1fr !important;
+    }
+ 
+}
+
+.glass-container {
+    margin-top: 25px !important;
+}
+

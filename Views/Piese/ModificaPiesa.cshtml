@@ -1,14 +1,17 @@
-﻿
-@model Trippin_Website.ViewModels.PieseViewModel
-
+﻿@model Trippin_Website.ViewModels.PieseViewModel
 @{
-    ViewBag.Title = "AdaugaNou";
+    ViewBag.Title = "Modifica piesa";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    var piesaId = Html.HiddenFor(m => m.Piese.Id);
 }
 
-
 <style>
+
+    :root {
+        --sos: #9933cc;
+        --bgColor: bisque;
+    }
+
     .field-validation-error {
         width: 100%;
         margin-top: 0.25rem;
@@ -19,59 +22,604 @@
     .input-validation-error {
         border: 2px solid rgb(237, 36, 29, 0.91);
     }
+
+    #uploadButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222;
+        padding: 20px;
+        border-radius: 5px;
+        width: 280px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .file-input input[type="file"] {
+        display: none;
+    }
+
+    .file-input label {
+        display: inline-block;
+        padding: 8px 20px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .form-message {
+        color: red;
+        font-style: italic;
+        text-align: center;
+    }
+
+    #submitBtn {
+        border-radius: 20px;
+    }
+
+    #formWrapper {
+        width: fit-content;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .main-container {
+        background-image: linear-gradient(135deg, #0d1117 0%, #172739 50%, #0d1117 100%);
+        border: solid 2px;
+        border-color: #2a3441;
+        box-shadow: -50px -50px 0 -44px var(--sos), 50px 50px 0 -44px var(--sos);
+        border-radius: 0px !important;
+        transition: all 0.5s ease-in-out;
+        margin-left: auto;
+        margin-right: auto;
+        min-width: 350px;
+        width: 30vw;
+        justify-content: center !important;
+        display: flex;
+        align-items: center;
+    }
+
+        .main-container:hover {
+            box-shadow: -20px -20px 0 -10px var(--sos), 20px 20px 0 -10px var(--sos), 0 0 20px var(--sos), 0 0 40px var(--sos), 0 0 60px var(--sos);
+        }
 </style>
 
-<div style="background-color: #0d1117; display: flex; padding: 20px; margin-top:25px; border-radius: 10px; justify-content: center; align-items: center;">
 
 
-    @using (Html.BeginForm("ModificaSaved", "Piese"))
-    {
-        <h2 style="text-align: center; display:block">Modifica piesa</h2>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Piese.Name)
-            @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Piese.Name)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Piese.Key)
-            @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Piese.Key)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Piese.Bpm)
-            @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
-            @Html.ValidationMessageFor(m => m.Piese.Bpm)
-        </div>
-        <div class="form-group">
-            <label for="Description">Descriere</label>
-            @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control", @TextMode = "MultiLine" })
-        </div>
-        <div class="form-group">
-            <label for="StyleId">Stilul</label>
-            @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
-        </div>
-        if (User.IsInRole("Admin"))
-        {
-            <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
-                @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
-            </div>
+
+<style>
+
+
+    #msform {
+        text-align: center;
+        position: relative;
+        margin-top: 30px;
+    }
+
+
+        #msform fieldset:not(:first-of-type) {
+            display: none;
         }
-        @Html.HiddenFor(m => m.Piese.Id)
 
-        <button type="submit" class="btn btn-secondary">
-            Submit
-        </button>
-        @Html.AntiForgeryToken()
+        /*inputs*/
+
+
+
+
+        /*buttons*/
+        #msform .action-button {
+            width: 100px;
+            background: #702299;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 25px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+            #msform .action-button:hover, #msform .action-button:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px #ee0979;
+            }
+
+        #msform .action-button-previous {
+            width: 100px;
+            background: #C5C5F1;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 25px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+            #msform .action-button-previous:hover, #msform .action-button-previous:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px #C5C5F1;
+            }
+
+    /*headings*/
+    .fs-title {
+        font-size: 18px;
+        text-transform: uppercase;
+        color: white;
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+        font-weight: bold;
+    }
+
+    .fs-subtitle {
+        font-weight: normal;
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .main-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    #progressbar {
+        overflow: hidden;
+        counter-reset: step;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 200%;
+        padding-left: 0;
+        margin-top: 10px;
+    }
+
+        #progressbar li {
+            list-style-type: none;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+            #progressbar li::before {
+                content: counter(step);
+                counter-increment: step;
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                display: inline-block;
+                text-align: center;
+                margin: 0 auto 10px auto;
+                border-radius: 50%;
+                background-color: white;
+            }
+
+            #progressbar li:nth-child(2).active::before {
+                background-color: #9933cc;
+            }
+
+
+            #progressbar li.active::before,
+            #progressbar li.active::after {
+                background-color: #9933cc;
+                color: white;
+            }
+
+            #progressbar li.active + li::before {
+                background-color: #dddddd;
+            }
+
+            #progressbar li::after {
+                content: "";
+                width: 150%; /* Increase this value to increase the length of the line */
+                height: 2px;
+                background: #9933cc;
+                position: absolute;
+                left: -50%;
+                top: 15px;
+                z-index: 1;
+            }
+
+            #progressbar li:first-child::after {
+                content: "";
+                left: 66%;
+            }
+
+            #progressbar li:last-child::after {
+                content: none;
+            }
+
+    .dme_link {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+        .dme_link a {
+            background: #FFF;
+            font-weight: bold;
+            color: #ee0979;
+            border: 0 none;
+            border-radius: 25px;
+            cursor: pointer;
+            padding: 5px 25px;
+            font-size: 12px;
+        }
+
+            .dme_link a:hover, .dme_link a:focus {
+                background: #C5C5F1;
+                text-decoration: none;
+            }
+
+    .step {
+        text-align: center;
+        width: 17rem;
+    }
+
+    .remove-artist {
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        position: absolute;
+        right: 8px;
+    }
+    #artistiList li {
+        list-style: none;
+        padding: 5px 10px;
+        position: relative;
+    }
+
+</style>
+
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+
+
+<link href="~/Content/Retusuri.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<body>
+
+    @using (Html.BeginForm("ModificaPiesa", "Piese", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+    {
+
+        <div class="main-container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <ul id="progressbar">
+                        <li class="active">Pasul 1</li>
+                        <li>Pasul 2</li>
+                    </ul>
+                    <fieldset class="step">
+
+                        <h2 class="fs-title">Pasul 1</h2>
+                        <h3 class="fs-subtitle">Modifica detaliile</h3>
+                        <div id="formWrapper">
+                            @Html.HiddenFor(m => m.Piese.UserId)
+                            @Html.HiddenFor(m => m.Piese.Id)
+
+                            @Html.HiddenFor(m => m.Piese.DateCreated, new { @Value = DateTime.Now })
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Piese.Name)
+                                @Html.TextBoxFor(m => m.Piese.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Piese.Name)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Piese.Key)
+                                @Html.TextBoxFor(m => m.Piese.Key, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Piese.Key)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Piese.Bpm)
+                                @Html.TextBoxFor(m => m.Piese.Bpm, new { @class = "form-control", @type = "number" })
+                                @Html.ValidationMessageFor(m => m.Piese.Bpm)
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Descriere</label>
+                                @Html.TextAreaFor(m => m.Piese.Description, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="StyleId">Stilul</label>
+                                @Html.DropDownListFor(m => m.Piese.StyleId, new SelectList(Model.Style, "Id", "Name"), new { @class = "form-control" })
+                            </div>
+
+                            <div id="uploadButton" class="form-group">
+                                <div class="file-input">
+                                    <label for="file">Incarca piesa</label>
+                                    @Html.TextBox("file", "", new { type = "file", id = "file", required = "required" })
+                                </div>
+                            </div>
+                            <p id="numeFisier"></p>
+                            <p>@ViewBag.Message</p>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class=“checkbox” style="margin-top: 15px; margin-bottom:15px ">
+                                    @Html.CheckBoxFor(m => m.Piese.IsBanger)	Este banger?
+                                </div>
+                            }
+                            @Html.AntiForgeryToken()
+
+                            <input type="button" name="next" class="next action-button" value="Urmatorul" />
+                    </fieldset>
+                    <fieldset class="step" style="display: none;">
+                        <h2 class="fs-title">Pasul 2</h2>
+                        <h3 class="fs-subtitle">Adauga toti contribuitorii</h3>
+                        <div class="form-group">
+                            <label id="artistiLabel" for="artisti">Artisti</label>
+                            <input class="form-control" id="artisti" type="text" name="name" value="" />
+                        </div>
+                        <ul id="artistiList" class="list-group"></ul>
+                        <div class="form-group">
+                            <label id="produceriLabel" for="produceri">Produceri</label>
+                            <input class="form-control" id="produceri" type="text" name="name" value="" />
+                        </div>
+                        <ul id="produceriList" class="list-group"></ul>
+                        <label for="IsPublic">Vrei ca piesa sa fie publica?</label>
+                        @Html.DropDownListFor(m => m.Piese.IsPublic, new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Da", Value = "True", Selected = (Model.Piese != null && Model.Piese.IsPublic) },
+                            new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsPublic) },
+                        }, new { @class = "form-control", @id = "isPublicDropdown" })
+                        <div id="isJustForMyGroupWrapper">
+                            <label for="IsJustForMyGroup">Vrei sa fie vizibil pentru grupul din care faci parte?</label>
+                            @Html.DropDownListFor(m => m.Piese.IsJustForMyGroup, new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Da", Value = "True", Selected = (Model.Piese != null && Model.Piese.IsJustForMyGroup) },
+                                new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsJustForMyGroup) },
+                            }, new { @class = "form-control" })
+                        </div>
+
+                        <input type="button" name="previous" class="previous action-button-previous" value="Inapoi" />
+                        <button type="submit" id="submitBtn" class="btn btn-secondary submit action-button">
+                            Submit
+                        </button>
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
 
 
     }
 
 
-</div>
+</body>
 
+<footer>
+</footer>
 @section scripts
 {
+    <script>
+        $(document).ready(function () {
+            var fileInput = document.getElementById('file');
+
+
+            fileInput.addEventListener('change', function () {
+                var isAudio = this.files[0].type.startsWith('audio/');
+
+                var uploadButton = document.getElementById('uploadButton');
+
+                if (isAudio) {
+                    uploadButton.style.backgroundImage = 'linear-gradient(to right,#662d91 0%, #9933cc 50%, #662d91 100%)';
+                } else {
+                    uploadButton.style.backgroundImage = 'linear-gradient(to right,#ff0000 0%, #ff3333 50%, #ff0000 100%)';
+                }
+            });
+        });
+        const fileInput = document.getElementById("file");
+
+        fileInput.addEventListener("change", function () {
+            const fileName = this.value.split("\\").pop();
+
+            if (fileName.endsWith(".mp3") || fileName.endsWith(".wav")) {
+                document.getElementById("numeFisier").textContent = fileName;
+            } else {
+                document.getElementById("numeFisier").textContent = "Te rog alege un fisier .WAV sau .MP3";
+            }
+        });
+
+        function addArtistToList(artist) {
+            if (vm2.artistiIds.indexOf(artist.userId) === -1) {
+                var listItem = $("<div id='divforlist'><li>" + artist.userName + "<button class='remove-artist'>&times;</button></li></div>");
+                listItem.find(".remove-artist").on("click", function () {
+                    vm2.artistiIds.splice(vm2.artistiIds.indexOf(artist.userId), 1);
+                    listItem.remove();
+                    toastr.success("Artistul a fost eliminat cu succes!");
+                });
+                $("#artistiList").append(listItem);
+                vm2.artistiIds.push(artist.userId);
+                toastr.success("Ai adaugat artistul cu succes!");
+            } else {
+                toastr.error("Nu poti adauga de doua ori acelasi artist!");
+            }
+        }
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            var current_fs, next_fs, previous_fs;
+            var piesaName = document.getElementById("$")
+            var opacity;
+
+            $(".next").click(function () {
+                current_fs = $(this).closest('.step');
+                next_fs = current_fs.next('.step');
+
+                $("#progressbar li").eq($("fieldset.step").index(next_fs)).addClass("active");
+
+                current_fs.hide();
+                next_fs.css({ opacity: 0 });
+                next_fs.show();
+                next_fs.animate({ opacity: 1 }, { duration: 600 });
+
+            });
+
+            $(".previous").click(function () {
+                current_fs = $(this).closest('.step');
+                previous_fs = current_fs.prev('.step');
+
+                $("#progressbar li").eq($("fieldset.step").index(current_fs)).removeClass("active");
+
+                current_fs.hide();
+                previous_fs.css({ opacity: 0 });
+                previous_fs.show();
+                previous_fs.animate({ opacity: 1 }, { duration: 600 });
+            });
+        });
+
+            $(document).ready(function () {
+            $.ajax({
+                url: "/GetContribuitors/" + "@Html.Raw(Model.Piese.Id)",
+                method: "GET",
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data && data.artistiFetch && data.artistiFetch.length > 0) {
+                        data.artistiFetch.forEach(function (artist) {
+                            addArtistToList(artist);
+                        });
+                    } else {
+                        toastr.success('YEP');
+                    }
+                }
+            });
+            });
+
+
+    </script>
+
+    <script>
+        $('#msform').submit(function (event) {
+        event.preventDefault();
+        var audio = new Audio('@Url.Content("~/Content/Audio/error-ok.wav")');
+        audio.play();
+        setTimeout(function () {
+            $('#msform').unbind('submit').submit();
+        }, 1000);
+    });
+    </script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script>
+
+
+    var vm = {
+        producersIds: []
+    };
+
+    $(document).ready(function () {
+        var produceri = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/Conturi?query=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('#produceri').typeahead(
+            null, {
+            name: 'produceri',
+            display: 'userName',
+            source: produceri
+        }).on('typeahead:select', function (e, producer) {
+
+            if (vm.producersIds.indexOf(producer.userId) === -1) {
+                $("#produceriList").append("<div id='divforlist'><li>" + producer.userName + "</li></div>");
+                $("#produceri").typeahead("val", "");
+                vm.producersIds.push(producer.userId);
+                toastr.success("Ai adaugat producatorul cu succes!")
+            } else {
+                toastr.error("Nu poti adauga de doua ori acelasi producator!")
+            }
+        });
+    });
+
+        var vm2 = {
+            artistiIds: []
+        };
+        $(document).ready(function () {
+            var artisti = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/Conturi?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#artisti').typeahead(
+                null, {
+                name: 'artisti',
+                display: 'userName',
+                source: artisti
+            }).on('typeahead:select', function (e, artist) {
+                addArtistToList(artist);
+                $("#artisti").typeahead("val", "");
+            });
+        });
+
+        $("#msform").submit(function (e) {
+    e.preventDefault();
+
+    if (vm2.artistiIds.length === 0) {
+        toastr.error("Adauga cel putin un artist!");
+        return;
+    }
+
+    if ($(this).valid()) {
+        const songId = '@Html.Raw(piesaId)';
+        const dataToSend = { artistIds: vm2.artistiIds, PiesaId: songId };
+        const dataToSend2 = { ProducersIds: vm.producersIds, BeatId: songId };
+
+        $.ajax({
+            url: "/api/Artists",
+            method: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(dataToSend)
+        }).done(function () {
+            $.ajax({
+                url: "/api/Producers",
+                method: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(dataToSend2)
+            }).done(function () {
+                console.log("Both AJAX calls were successful");
+            }).fail(function () {
+                console.log("Error in the second AJAX call");
+            });
+        }).fail(function () {
+            console.log("Error in the first AJAX call");
+        });
+    }
+});
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var isPublicDropdown = $("#isPublicDropdown");
+            var isJustForMyGroupWrapper = $("#isJustForMyGroupWrapper");
+
+            // Hide/show the second dropdown based on the value of the first dropdown
+            isPublicDropdown.change(function () {
+                if (isPublicDropdown.val() === "False") {
+                    isJustForMyGroupWrapper.show();
+                } else {
+                    isJustForMyGroupWrapper.hide();
+                }
+            });
+
+            // Hide the second dropdown by default
+            isJustForMyGroupWrapper.hide();
+        });
+    </script>
+
+
+
     @Scripts.Render("~/bundles/jqueryval")
- 
 }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -44,7 +45,7 @@ namespace Trippin_Website.Controllers.API
             _context.PlayList.Add(playlist);
             await _context.SaveChangesAsync();
 
-            return Ok(new { success = true });
+            return Ok(new { success = true, playlistId = playlist.Id });
         }
 
         [HttpPost]
@@ -52,7 +53,7 @@ namespace Trippin_Website.Controllers.API
         public async Task<IHttpActionResult> AddToPlaylist(string playListId, string songId, string userId)
         {
             var currentUserId = User.Identity.GetUserId();
-            var isAlreadyInThePlaylist = _context.PlaylistContent.Any(c => c.UserId == userId && c.playlistId == c.playlistId && c.playlistId == playListId);
+            var isAlreadyInThePlaylist = _context.PlaylistContent.Any(c => c.piesaId == songId && c.playlistId == playListId);
 
             if (!ModelState.IsValid || userId == null)
                 return BadRequest();
@@ -69,13 +70,81 @@ namespace Trippin_Website.Controllers.API
                 UserId = currentUserId
             };
 
-            if (isAlreadyInThePlaylist)
-                return Ok(new { success = true, alreadyInPlaylist = true });
+            var song = _context.Piese.SingleOrDefault(c => c.Id.ToString() == playlistContent.piesaId);
 
-            _context.PlaylistContent.Add(playlistContent);
+            if (song == null)
+            {
+                return BadRequest("Piesa nu a fost gasita!");
+            }
+
+            if (isAlreadyInThePlaylist)
+                return Ok(new { success = true, alreadyInPlaylist = true, songName = song.Name });
+
+            try
+            {
+                _context.PlaylistContent.Add(playlistContent);
+                await _context.SaveChangesAsync();
+                return Ok(new { success = true, alreadyInPlaylist = false, songName = song.Name });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = true, alreadyInPlaylist = false, songName = song.Name, exception = ex.Message });
+            }
+
+
+
+        }
+
+        [HttpDelete]
+        [Route("DeletePlaylist/{playListId}/{userId}")]
+        public async Task<IHttpActionResult> DeletePlayList(string playListId, string userId)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var playlist = _context.PlayList.SingleOrDefault(c => c.Id.ToString() == playListId);
+            var songsInThatPlaylist = _context.PlaylistContent.Where(c => c.playlistId == playListId);
+
+            if (!ModelState.IsValid || userId == null)
+                return BadRequest();
+            if (currentUserId != userId)
+                return BadRequest();
+            if (playlist == null)
+                return BadRequest();
+
+            if (songsInThatPlaylist != null)
+                _context.PlaylistContent.RemoveRange(songsInThatPlaylist);
+
+            _context.PlayList.Remove(playlist);
             await _context.SaveChangesAsync();
 
-            return Ok(new { success = true, alreadyInPlaylist = false });
+
+            return Ok(new { success = true });
         }
+
+        [HttpDelete]
+        [Route("DeletePlaylist/{playListId}/{songId}/{userId}")]
+        public async Task<IHttpActionResult> DeleteContent(string playListId, string songId, string userId)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var playlist = _context.PlayList.SingleOrDefault(c => c.Id.ToString() == playListId);
+            var theSongExist = _context.PlaylistContent.Any(c => c.piesaId == songId && c.playlistId == playListId);
+
+            if (!ModelState.IsValid || userId == null)
+                return BadRequest();
+            if (currentUserId != userId)
+                return BadRequest("Nu esti autorizat sa faci asta!");
+            if (playlist == null)
+                return BadRequest("PLaylist-ul nu exista!");
+
+            if (theSongExist)
+            {
+                var song = await _context.PlaylistContent.SingleOrDefaultAsync(c => c.piesaId == songId && c.playlistId == playListId);
+                _context.PlaylistContent.Remove(song);
+                await _context.SaveChangesAsync();
+
+            }
+
+            return Ok(new { success = true });
+        }
+
     }
 }

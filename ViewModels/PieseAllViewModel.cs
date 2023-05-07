@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Trippin_Website.DTOS;
 using Trippin_Website.Models;
 
 namespace Trippin_Website.ViewModels
@@ -12,6 +13,6 @@ namespace Trippin_Website.ViewModels
 
         public Likes Likes { get; set; }
         public List<PlayList> PlayLists { get; set; }
-        public List<PlaylistContent> PlaylistContent { get; set; }
+        public List<PlayListContentsDTO> PlaylistContent { get; set; }
     }
 }

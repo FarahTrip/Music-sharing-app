@@ -104,6 +104,32 @@ namespace Trippin_Website.Controllers.API
                 return BadRequest();
         }
 
+
+        [HttpGet]
+        [Route("GetContribuitors/{Id}")]
+        public IHttpActionResult GetContribuitors(string Id)
+        {
+            var WhoIsOnTheSong = _Context.WhoIsOnTheSong
+                .Join(_Context.Users, w => w.ArtistId, u => u.Id, (w, u) => new { w, u })
+                .Where(m => m.w.PiesaId == Id)
+                .Select(m => new
+                {
+                    Id = m.w.Id,
+                    PiesaId = m.w.PiesaId,
+                    UserId = m.w.ArtistId,
+                    UserName = m.u.UserName
+                })
+                .ToList();
+            var WhoProducedTheSong = _Context.WhoProducedTheSong.Where(m => m.PiesaId == Id).ToList();
+
+            if (Id == null)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            return Ok(new { artistiFetch = WhoIsOnTheSong, produceriFetch = WhoIsOnTheSong });
+        }
     }
 }
 

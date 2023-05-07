@@ -5,12 +5,14 @@ using Amazon.S3.Transfer;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Trippin_Website.DTOS;
 using Trippin_Website.Logic_classes;
 using Trippin_Website.Models;
 using Trippin_Website.ViewModels;
@@ -41,9 +43,29 @@ namespace Trippin_Website.Controllers
             var UserId = User.Identity.GetUserId();
             var playLists = _context.PlayList.Where(c => c.userId == UserId).OrderByDescending(c => c.DateCreated).ToList();
 
-            /*            var playlistContents = _context.PlaylistContent
-                          .Where(pc => playLists.Any(up => up.Id.ToString() == pc.playlistId))
-                            .ToList();*/
+            var playlistContents = _context.PlaylistContent.Where(c => c.UserId == UserId).ToList();
+            var playlistContentsDTO = new List<PlayListContentsDTO>();
+
+            if (playlistContents != null)
+            {
+                foreach (var content in playlistContents)
+                {
+                    var song = piese.SingleOrDefault(c => c.Id.ToString() == content.piesaId);
+                    if (song != null)
+                    {
+                        playlistContentsDTO.Add(new PlayListContentsDTO()
+                        {
+                            Id = content.Id,
+                            UserId = UserId,
+                            playlistId = content.playlistId,
+                            piesaId = content.piesaId,
+                            beatId = content.beatId,
+                            DateAdded = content.DateAdded,
+                            SongName = song.Name,
+                        });
+                    }
+                }
+            }
 
             var pieseAllViewModel = new PieseAllViewModel()
             {
@@ -51,7 +73,7 @@ namespace Trippin_Website.Controllers
                 Stiluri = Stiluri,
                 Users = users,
                 PlayLists = playLists,
-                /*                PlaylistContent = playlistContents*/
+                PlaylistContent = playlistContentsDTO
             };
             var pieseIndexViewModel = new PieseIndexViewModel()
             {
@@ -233,6 +255,8 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
         [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult ModificaPiesa(Guid id)
         {
+            var userId = User.Identity.GetUserId();
+
             if (!ModelState.IsValid)
             {
                 var piesaForValidation = _context.Piese.SingleOrDefault(c => c.Id == id);
@@ -245,11 +269,21 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
             }
             var piesa = _context.Piese.SingleOrDefault(c => c.Id == id);
             var stiluri = _context.StyleOf.ToList();
+            var WhoIsOnTheSong = _context.WhoIsOnTheSong.Where(m => m.PiesaId == piesa.Id.ToString()).ToList();
+            var WhoProducedTheSong = _context.WhoProducedTheSong.Where(m => m.PiesaId == piesa.Id.ToString()).ToList();
+
             var Model = new PieseViewModel()
             {
                 Piese = piesa,
-                Style = stiluri
+                Style = stiluri,
+                WhoIsOnTheSong = WhoIsOnTheSong,
+                WhoProducedTheSong = WhoProducedTheSong
+
             };
+
+            if (piesa.UserId != userId && !User.IsInRole("Admin"))
+                return RedirectToAction("Index");
+
             return View(Model);
         }
 
@@ -257,8 +291,15 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
         [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult ModificaSaved(PieseViewModel PiesaModel)
         {
+            var userId = User.Identity.GetUserId();
+
             var CurrentDateTime = DateTime.Now;
             var PieseInDb = _context.Piese.Single(c => c.Id == PiesaModel.Piese.Id);
+
+            if (PieseInDb.UserId != userId && !User.IsInRole("Admin"))
+                return RedirectToAction("Index", "Piese");
+
+
             PieseInDb.Name = PiesaModel.Piese.Name;
             PieseInDb.Key = PiesaModel.Piese.Key;
             PieseInDb.StyleId = PiesaModel.Piese.StyleId;

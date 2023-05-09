@@ -795,6 +795,10 @@
     <Compile Include="Migrations\202305020925547_addUserIdToPlaylist.designer.cs">
       <DependentUpon>202305020925547_addUserIdToPlaylist.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305071950326_addingProgressToPiese.cs" />
+    <Compile Include="Migrations\202305071950326_addingProgressToPiese.designer.cs">
+      <DependentUpon>202305071950326_addingProgressToPiese.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -988,6 +992,7 @@
     <Content Include="Content\galaxie2.png" />
     <Content Include="Content\homepage.css" />
     <Content Include="Content\Images\add-to-playlist.png" />
+    <Content Include="Content\Images\banner-playlist.jpg" />
     <Content Include="Content\Images\fav-pressed.png" />
     <Content Include="Content\Images\fav-unpressed.png" />
     <Content Include="Content\Images\gagica-muzical-banner.jpg" />
@@ -1452,6 +1457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305020925547_addUserIdToPlaylist.resx">
       <DependentUpon>202305020925547_addUserIdToPlaylist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305071950326_addingProgressToPiese.resx">
+      <DependentUpon>202305071950326_addingProgressToPiese.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

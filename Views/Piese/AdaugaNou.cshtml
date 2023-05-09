@@ -259,6 +259,40 @@
        width: 17rem;
     }
 
+    .remove-artist {
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        position: absolute;
+        right: 8px;
+    }
+
+    #artistiList li {
+        list-style: none;
+        padding: 5px 10px;
+        position: relative;
+    }
+
+    #produceriList li {
+        list-style: none;
+        padding: 5px 10px;
+        position: relative;
+    }
+
+    .remove-producer {
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        position: absolute;
+        right: 8px;
+    }
+
 </style>
 
 <script src="~/Scripts/jquery-3.6.0.min.js"></script>
@@ -351,14 +385,23 @@
                             new SelectListItem { Text = "Da", Value = "True", Selected = (Model.Piese != null && Model.Piese.IsPublic) },
                             new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsPublic) },
                         }, new { @class = "form-control", @id = "isPublicDropdown" })
-                    <div id="isJustForMyGroupWrapper">
-                        <label for="IsJustForMyGroup">Vrei sa fie vizibil pentru grupul din care faci parte?</label>
-                        @Html.DropDownListFor(m => m.Piese.IsJustForMyGroup, new List<SelectListItem>
+                        <div id="isJustForMyGroupWrapper">
+                            <label for="IsJustForMyGroup">Vrei sa fie vizibil pentru grupul din care faci parte?</label>
+                            @Html.DropDownListFor(m => m.Piese.IsJustForMyGroup, new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Da", Value = "True", Selected = (Model.Piese != null && Model.Piese.IsJustForMyGroup) },
+                                new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsJustForMyGroup) },
+                            }, new { @class = "form-control" })
+                        </div>
+                        <label for="currentProgress">In ce stadiu este piesa?</label>
+                        @Html.DropDownListFor(m => m.Piese.Currentprogress, new List<SelectListItem>
                         {
-                            new SelectListItem { Text = "Da", Value = "True", Selected = (Model.Piese != null && Model.Piese.IsJustForMyGroup) },
-                            new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsJustForMyGroup) },
-                        }, new { @class = "form-control" })
-                    </div>
+                            new SelectListItem { Text = "Demo", Value = "Demo" },
+                            new SelectListItem { Text = "Trebuie terminata", Value = "Trebuie terminata" },
+                            new SelectListItem { Text = "Inregistrata", Value = "Inregistrata"},
+                            new SelectListItem { Text = "Mastered", Value = "Mastered"},
+                            new SelectListItem { Text = "Lansata", Value = "Lansata"},
+                        }, new { @class = "form-control", @id = "currentProgress" })
 
                         <input type="button" name="previous" class="previous action-button-previous" value="Inapoi" />
                         <button type="submit" id="submitBtn" class="btn btn-secondary submit action-button">
@@ -467,35 +510,7 @@
 
     var vm = {
         producersIds: []
-    };
-
-    $(document).ready(function () {
-        var produceri = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/api/Conturi?query=%QUERY',
-                wildcard: '%QUERY'
-            }
-        });
-
-        $('#produceri').typeahead(
-            null, {
-            name: 'produceri',
-            display: 'userName',
-            source: produceri
-        }).on('typeahead:select', function (e, producer) {
-
-            if (vm.producersIds.indexOf(producer.userId) === -1) {
-                $("#produceriList").append("<div id='divforlist'><li>" + producer.userName + "</li></div>");
-                $("#produceri").typeahead("val", "");
-                vm.producersIds.push(producer.userId);
-                toastr.success("Ai adaugat producatorul cu succes!")
-            } else {
-                toastr.error("Nu poti adauga de doua ori acelasi producator!")
-            }
-        });
-    });
+        };
 
         var vm2 = {
             artistiIds: []
@@ -518,8 +533,15 @@
             }).on('typeahead:select', function (e, artist) {
 
                 if (vm2.artistiIds.indexOf(artist.userId) === -1) {
-                    $("#artistiList").append("<div id='divforlist'><li>" + artist.userName + "</li></div>");
+                    var listItem = $("<div id='divforlist'><li>" + artist.userName + "<button class='remove-artist'>&times;</button></li></div>");
+                    listItem.find(".remove-artist").on("click", function () {
+                        vm2.artistiIds.splice(vm2.artistiIds.indexOf(artist.userId), 1);
+                        listItem.remove();
+                        toastr.success("Artistul a fost eliminat cu succes!");
+                    });
+                    $("#artistiList").append(listItem);
                     $("#artisti").typeahead("val", "");
+
                     vm2.artistiIds.push(artist.userId);
                     toastr.success("Ai adaugat artistul cu succes!")
                 } else {
@@ -527,6 +549,41 @@
                     toastr.error("Nu poti adauga de doua ori acelasi artist!")
                 }
             });
+        });
+
+    $(document).ready(function () {
+        var produceri = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('userName'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/Conturi?query=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('#produceri').typeahead(
+            null, {
+            name: 'produceri',
+            display: 'userName',
+            source: produceri
+        }).on('typeahead:select', function (e, producer) {
+
+            if (vm.producersIds.indexOf(producer.userId) === -1) {
+                $("#produceri").typeahead("val", "");
+                vm.producersIds.push(producer.userId);
+                $("#produceriList").append("<div id='divforlist'><li><span>" + producer.userName + "</span> <button class='remove-producer' data-id='" + producer.userId + "'>&times;</button></li></div>");
+                toastr.success("Ai adaugat producatorul cu succes!")
+            } else {
+                toastr.error("Nu poti adauga de doua ori acelasi producator!")
+            }
+        });
+    });
+
+        $(document).on('click', '.remove-producer', function () {
+            const producerId = $(this).data('id');
+            vm.producersIds.splice(vm.producersIds.indexOf(producerId), 1);
+            $(this).closest('li').remove();
+            toastr.success("Ai sters producatorul cu succes!");
         });
 
         $("#msform").submit(function (e) {
@@ -540,7 +597,10 @@
     if ($(this).valid()) {
         const songId = '@Html.Raw(GuidId)';
         const dataToSend = { artistIds: vm2.artistiIds, PiesaId: songId };
-        const dataToSend2 = { ProducersIds: vm.producersIds, BeatId: songId };
+        const dataToSend2 = { ProducersIds: vm.producersIds, PiesaId: songId };
+
+        console.log(dataToSend2)
+
 
         $.ajax({
             url: "/api/Artists",
@@ -549,22 +609,26 @@
             dataType: "json",
             data: JSON.stringify(dataToSend)
         }).done(function () {
-            $.ajax({
-                url: "/api/Producers",
-                method: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify(dataToSend2)
-            }).done(function () {
-                // Add any success handling here, like showing a success message, redirecting, or refreshing the page.
-                console.log("Both AJAX calls were successful");
-            }).fail(function () {
-                // Add error handling for the second AJAX call here.
-                console.log("Error in the second AJAX call");
-            });
-        }).fail(function () {
-            // Add error handling for the first AJAX call here.
-            console.log("Error in the first AJAX call");
+        
+            console.log("First AJAX call (Artists) was successful");
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            console.log("Error in the first AJAX call (Artists):", textStatus, errorThrown, jqXHR.responseText);
+        });
+
+
+        $.ajax({
+            url: "/api/Producers",
+            method: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(dataToSend2)
+        }).done(function () {
+    
+            console.log("Second AJAX call (Producers) was successful");
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            console.log("Error in the second AJAX call (Producers):", textStatus, errorThrown, jqXHR.responseText);
         });
     }
 });

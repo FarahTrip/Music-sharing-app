@@ -307,6 +307,10 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
             PieseInDb.Bpm = PiesaModel.Piese.Bpm;
             PieseInDb.IsBanger = PiesaModel.Piese.IsBanger;
             PieseInDb.DateModified = CurrentDateTime;
+            PieseInDb.Currentprogress = PiesaModel.Piese.Currentprogress;
+            PieseInDb.IsJustForMyGroup = PiesaModel.Piese.IsJustForMyGroup;
+            PieseInDb.IsPublic = PiesaModel.Piese.IsPublic;
+
             _context.SaveChanges();
             return RedirectToAction("Index", "Piese");
         }

@@ -41,6 +41,7 @@ namespace Trippin_Website
 
         public bool IsPublic { get; set; }
         public bool IsJustForMyGroup { get; set; }
+        public string Currentprogress { get; set; }
 
     }
 }

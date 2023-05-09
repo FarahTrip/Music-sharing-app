@@ -6,5 +6,6 @@ namespace Trippin_Website.ViewModels
     {
         public List<string> ProducersIds { get; set; }
         public string BeatId { get; set; }
+        public string PiesaId { get; set; }
     }
 }

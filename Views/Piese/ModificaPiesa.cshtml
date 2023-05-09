@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Modifica piesa";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var piesaId = Html.HiddenFor(m => m.Piese.Id);
+    var piesaId = Model.Piese.Id;
 }
 
 <style>
@@ -275,6 +275,56 @@
         position: relative;
     }
 
+    #produceriList li {
+        list-style: none;
+        padding: 5px 10px;
+        position: relative;
+    }
+
+    .remove-producer {
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        position: absolute;
+        right: 8px;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        width: 80%;
+        max-width: 400px; /* Adjust the value as needed */
+        border-radius: 4px;
+    }
+    .modal-button {
+        margin-top: 20px;
+        padding: 8px 16px;
+        border: 2px solid;
+        border-radius: 4px;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+        .modal-button:hover {
+            opacity: 0.8;
+        }
 </style>
 
 <script src="~/Scripts/jquery-3.6.0.min.js"></script>
@@ -284,7 +334,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <body>
 
-    @using (Html.BeginForm("ModificaPiesa", "Piese", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("ModificaSaved", "Piese", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
     {
 
         <div class="main-container">
@@ -329,7 +379,7 @@
 
                             <div id="uploadButton" class="form-group">
                                 <div class="file-input">
-                                    <label for="file">Incarca piesa</label>
+                                    <label for="file">Incarca varianta noua</label>
                                     @Html.TextBox("file", "", new { type = "file", id = "file", required = "required" })
                                 </div>
                             </div>
@@ -372,6 +422,15 @@
                                 new SelectListItem { Text = "Nu", Value = "False", Selected = (Model.Piese != null && !Model.Piese.IsJustForMyGroup) },
                             }, new { @class = "form-control" })
                         </div>
+                        <label for="currentProgress">In ce stadiu este piesa?</label>
+                        @Html.DropDownListFor(m => m.Piese.Currentprogress, new List<SelectListItem>
+                      {
+                          new SelectListItem { Text = "Demo", Value = "Demo" },
+                          new SelectListItem { Text = "Trebuie terminata", Value = "Trebuie terminata" },
+                          new SelectListItem { Text = "Inregistrata", Value = "Inregistrata"},
+                          new SelectListItem { Text = "Mastered", Value = "Mastered"},
+                          new SelectListItem { Text = "Lansata", Value = "Lansata"},
+                      }, new { @class = "form-control", @id = "currentProgress" })
 
                         <input type="button" name="previous" class="previous action-button-previous" value="Inapoi" />
                         <button type="submit" id="submitBtn" class="btn btn-secondary submit action-button">
@@ -383,7 +442,19 @@
             </div>
         </div>
 
-
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content" style="background-color: #2c3440;">
+                <p>Esti sigur ca vrei sa inlocuiesti audio-ul piesei cu o noua versiune? Actiunea este ireversibila</p>
+                <button id="yesButton" class="modal-button" style="background-color: #21262d; border-color: green;">Da</button>
+                <button id="noButton" class="modal-button" style="background-color: #21262d; border-color: red;">Nu</button>
+            </div>
+        </div>
+        <div id="messageModal" class="modal">
+            <div class="modal-content" style="background-color: #2c3440;">
+                <p id="messageModalText"></p>
+                <button id="okButton" class="modal-button" style="background-color: #21262d; border-color: green;">Ok</button>
+            </div>
+        </div>
     }
 
 
@@ -397,10 +468,22 @@
         $(document).ready(function () {
             var fileInput = document.getElementById('file');
 
+            var confirmationModal = document.getElementById('confirmationModal');
+            var yesButton = document.getElementById('yesButton');
+            var noButton = document.getElementById('noButton');
+            yesButton.setAttribute('type', 'button');
+            noButton.setAttribute('type', 'button');
+            var piesaId = "@Html.Raw(Model.Piese.Id)";
 
-            fileInput.addEventListener('change', function () {
+            var okButton = document.getElementById('okButton');
+            okButton.setAttribute('type', 'button');
+
+            okButton.addEventListener("click", function () {
+                document.getElementById('messageModal').style.display = "none";
+            });
+
+            fileInput.addEventListener("change", function () {
                 var isAudio = this.files[0].type.startsWith('audio/');
-
                 var uploadButton = document.getElementById('uploadButton');
 
                 if (isAudio) {
@@ -408,19 +491,54 @@
                 } else {
                     uploadButton.style.backgroundImage = 'linear-gradient(to right,#ff0000 0%, #ff3333 50%, #ff0000 100%)';
                 }
+
+                const fileName = this.value.split("\\").pop();
+
+                if (fileName.endsWith(".mp3") || fileName.endsWith(".wav")) {
+                    document.getElementById("numeFisier").textContent = fileName;
+                    confirmationModal.style.display = "block";
+                } else {
+                    document.getElementById("numeFisier").textContent = "Te rog alege un fisier .WAV sau .MP3";
+                }
+            });
+
+            yesButton.addEventListener("click", function () {
+                confirmationModal.style.display = "none";
+                sendPiesaId(piesaId);
+            });
+            noButton.addEventListener("click", function () {
+                confirmationModal.style.display = "none";
             });
         });
-        const fileInput = document.getElementById("file");
 
-        fileInput.addEventListener("change", function () {
-            const fileName = this.value.split("\\").pop();
+        function sendPiesaId(piesaId) {
+            var fileInput = document.getElementById('file');
+            var file = fileInput.files[0];
 
-            if (fileName.endsWith(".mp3") || fileName.endsWith(".wav")) {
-                document.getElementById("numeFisier").textContent = fileName;
-            } else {
-                document.getElementById("numeFisier").textContent = "Te rog alege un fisier .WAV sau .MP3";
-            }
-        });
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("Id", piesaId);
+
+            $.ajax({
+                url: '/UpdatePiesaAudio/' + piesaId,
+                type: 'POST',
+                processData: false, // Don't process the files
+                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                data: formData,
+                success: function (response) {
+                    if (response.mesaj) {
+                        // Display the message in the modal
+                        document.getElementById('messageModalText').textContent = response.mesaj;
+                        document.getElementById('messageModal').style.display = "block";
+                    } else {
+                        console.log("PiesaId and file sent successfully.", response);
+                    }
+                },
+                error: function (error) {
+                    console.error("Failed to send PiesaId and file.", error);
+                }
+            });
+        }
 
         function addArtistToList(artist) {
             if (vm2.artistiIds.indexOf(artist.userId) === -1) {
@@ -432,7 +550,6 @@
                 });
                 $("#artistiList").append(listItem);
                 vm2.artistiIds.push(artist.userId);
-                toastr.success("Ai adaugat artistul cu succes!");
             } else {
                 toastr.error("Nu poti adauga de doua ori acelasi artist!");
             }
@@ -471,22 +588,32 @@
             });
         });
 
-            $(document).ready(function () {
-            $.ajax({
-                url: "/GetContribuitors/" + "@Html.Raw(Model.Piese.Id)",
-                method: "GET",
-                contentType: 'application/json',
-                success: function (data) {
-                    if (data && data.artistiFetch && data.artistiFetch.length > 0) {
-                        data.artistiFetch.forEach(function (artist) {
-                            addArtistToList(artist);
-                        });
-                    } else {
-                        toastr.success('YEP');
-                    }
-                }
-            });
-            });
+$(document).ready(function () {
+    $.ajax({
+        url: "/GetContribuitors/" + "@Html.Raw(Model.Piese.Id)",
+        method: "GET",
+        contentType: 'application/json',
+        success: function (data) {
+            // For artists
+            if (data && data.artistiFetch && data.artistiFetch.length > 0) {
+                data.artistiFetch.forEach(function (artist) {
+                    addArtistToList(artist);
+                });
+            } else {
+/*                toastr.error('YEP');*/
+            }
+
+            // For producers
+            if (data && data.produceriFetch && data.produceriFetch.length > 0) {
+                data.produceriFetch.forEach(function (producer) {
+                    addProducerToList(producer);
+                });
+            } else {
+              /*  toastr.error('YEP');*/
+            }
+        }
+    });
+});
 
 
     </script>
@@ -498,11 +625,22 @@
         audio.play();
         setTimeout(function () {
             $('#msform').unbind('submit').submit();
-        }, 1000);
+        }, 100);
     });
     </script>
     <script src="~/Scripts/toastr.js"></script>
     <script>
+
+        function addProducerToList(producer) {
+            if (vm.producersIds.indexOf(producer.userId) === -1) {
+                $("#produceriList").append("<div id='divforlist'><li><span>" + producer.userName + "</span> <button class='remove-producer' data-id='" + producer.userId + "'>&times;</button></li></div>");
+                $("#produceri").typeahead("val", "");
+                vm.producersIds.push(producer.userId);
+            } else {
+                toastr.error("Nu poti adauga de doua ori acelasi producator!");
+            }
+        }
+
 
 
     var vm = {
@@ -519,6 +657,7 @@
             }
         });
 
+        //------------------------
         $('#produceri').typeahead(
             null, {
             name: 'produceri',
@@ -527,14 +666,13 @@
         }).on('typeahead:select', function (e, producer) {
 
             if (vm.producersIds.indexOf(producer.userId) === -1) {
-                $("#produceriList").append("<div id='divforlist'><li>" + producer.userName + "</li></div>");
-                $("#produceri").typeahead("val", "");
-                vm.producersIds.push(producer.userId);
-                toastr.success("Ai adaugat producatorul cu succes!")
+                addProducerToList(producer);
+
             } else {
                 toastr.error("Nu poti adauga de doua ori acelasi producator!")
             }
         });
+
     });
 
         var vm2 = {
@@ -572,17 +710,17 @@
     if ($(this).valid()) {
         const songId = '@Html.Raw(piesaId)';
         const dataToSend = { artistIds: vm2.artistiIds, PiesaId: songId };
-        const dataToSend2 = { ProducersIds: vm.producersIds, BeatId: songId };
+        const dataToSend2 = { ProducersIds: vm.producersIds, PiesaId: songId };
 
         $.ajax({
-            url: "/api/Artists",
+            url: "/ModificaArtisti",
             method: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(dataToSend)
-        }).done(function () {
+         });
             $.ajax({
-                url: "/api/Producers",
+                url: "/ModificaProduceri",
                 method: "POST",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -591,7 +729,7 @@
                 console.log("Both AJAX calls were successful");
             }).fail(function () {
                 console.log("Error in the second AJAX call");
-            });
+      
         }).fail(function () {
             console.log("Error in the first AJAX call");
         });
@@ -615,6 +753,13 @@
 
             // Hide the second dropdown by default
             isJustForMyGroupWrapper.hide();
+        });
+
+        $(document).on('click', '.remove-producer', function () {
+            const producerId = $(this).data('id');
+            vm.producersIds.splice(vm.producersIds.indexOf(producerId), 1);
+            $(this).closest('li').remove();
+            toastr.success("Ai sters producatorul cu succes!");
         });
     </script>
 

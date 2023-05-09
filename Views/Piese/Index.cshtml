@@ -738,7 +738,7 @@
         }
 
     .playlist-modal-content {
-        max-height: 725px;
+        max-height: 600px;
         overflow-y: scroll;
     }
 
@@ -801,15 +801,15 @@
     }
 
     .header-container {
-        background-image: url('/Content/Images/gagica-muzical-banner.jpg');
-        background-position: center;
+        background-image: url('/Content/Images/banner-playlist.jpg');
+        background-position: top;
         background-repeat: no-repeat;
         background-size: cover;
         padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 23px;
     }
 
     .playlist-close {
@@ -973,7 +973,6 @@
         font-size: 24px; /* Adjust the font size here to change the size of the close button */
         cursor: pointer;
     }
-
 </style>
 
 <script src="~/Scripts/favorite.js"></script>
@@ -1050,11 +1049,12 @@
         <div class="sidebar-section">
             <h3 class="section-title"><i class="fa-solid fa-compact-disc"></i>Playlist-uri</h3>
             <button class="sidebar-button"><i class="fa-solid fa-heart"></i> Favorite</button>
+            <button class="sidebar-button"><i class="fa-sharp fa-solid fa-eye-slash"></i>Private</button>
             @if (Model.PieseAllViewModel.PlayLists != null)
             {
                 foreach (var playlist in Model.PieseAllViewModel.PlayLists)
                 {
-                    <button playlistIdSidebar="@playlist.Id" class="sidebar-button"><i class="fas fa-music"></i>@playlist.Name </button>
+                    <button id="playlistSidebar" playlistIdSidebar="@playlist.Id" class="sidebar-button"><i class="fas fa-music"></i>@playlist.Name </button>
                 }
             }
 
@@ -1076,13 +1076,17 @@
 <div class="tabelDiv" id="main-container">
     <div class="filter-bar">
         <div class="filter-option">
-            <label for="filter1">Filter 1:</label>
+            <label for="filter1">Stadiu:</label>
             <select name="filter1" id="filter1">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
+                <option value="all">All</option>
+                <option value="Demo">Demo</option>
+                <option value="Trebuie terminata">Trebuie terminata</option>
+                <option value="Inregistrata">Inregistrata</option>
+                <option value="Mastered">Mastered</option>
+                <option value="Lansata">Lansata</option>
             </select>
         </div>
-        <div class="filter-option">
+@*        <div class="filter-option">
             <label for="filter2">Filter 2:</label>
             <select name="filter2" id="filter2">
                 <option value="option1">Option 1</option>
@@ -1095,7 +1099,7 @@
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
             </select>
-        </div>
+        </div>*@
     </div>
 
     <div class="tabelDiv" id="tabele-container">
@@ -1145,9 +1149,25 @@
                                     {
                                         <span class="badge rounded-pill bg-info">Nou</span>
                                     }
-                                    @if (piesa.DateModified != null)
+                                    @if (piesa.Currentprogress == "Demo")
                                     {
-                                        <span class="badge rounded-pill bg-light">Modificat</span>
+                                  <span id="stadiu1" class="progress-badge badge rounded-pill bg-light">Demo</span>
+                                    }
+                                    @if (piesa.Currentprogress == "Trebuie terminata")
+                                    {
+                                        <span id="stadiu2" class="progress-badge badge rounded-pill bg-light">Trebuie terminata</span>
+                                    }
+                                    @if (piesa.Currentprogress == "Inregistrata")
+                                    {
+                                        <span id="stadiu3" class="progress-badge  badge rounded-pill bg-light">Inregistrata</span>
+                                    }
+                                    @if (piesa.Currentprogress == "Mastered")
+                                    {
+                                        <span id="stadiu4" class="progress-badge  badge rounded-pill bg-light">Mastered</span>
+                                    }
+                                    @if (piesa.Currentprogress == "Lansata")
+                                    {
+                                        <span id="stadiu5" class="progress-badge  badge rounded-pill bg-light">Lansata</span>
                                     }
                                     @if (piesa.IsBanger == true)
                                     {
@@ -1217,7 +1237,7 @@
             <span class="playlist-close">&times;</span>
             <h2 id="playlistsHead">Playlist-uri</h2>
             <div id="glassContDinPlayList" class="glass-container">
-                <div id="createPlayListBTN" class="glass-btn"><a href="">Creeaza un playlist</a></div>
+                <div id="createPlayListBTN" class="glass-btn"><a href="">Creeaza playlist</a></div>
             </div>
         </div>
 
@@ -1485,8 +1505,9 @@
         });
     </script>
     <script>
+       /* ---------------------------------------- datatables*/
         $(document).ready(function () {
-            $("#Piese").DataTable({
+            var table = $("#Piese").DataTable({
                 "order": [[3, "desc"]],
                 language: {
                     lengthMenu: 'Arata _MENU_ piese',
@@ -1497,6 +1518,28 @@
                         next: 'Pagina urmatoare'
                     },
                 }
+            });
+
+            $('#filter1').on('change', function () {
+                var selectedOption = $(this).val();
+
+                // Show all rows within tbody
+                if (selectedOption === 'all') {
+                    table.$('tbody tr').show();
+                } else {
+                    // Hide all rows within tbody
+                    table.$('tbody tr').hide();
+
+                    // Show rows that match the selected option
+                    table.$('tbody tr').each(function () {
+                        var currentProgress = $(this).find('span.progress-badge').text();
+                        if (currentProgress.includes(selectedOption)) {
+                            $(this).show();
+                        }
+                    });
+                }
+
+                table.draw(false); // Redraw the table without resetting the paging
             });
         });
         $(document).ready(function () {
@@ -1884,7 +1927,7 @@
                                             if (data.success === true) {
                                                 toastr.success('Playlist-ul a fost creat cu succes');
                                                 $('.create-playlist-container').css('display', 'none');
-
+                                                $(`<button id="playlistSidebar" playlistIdSidebar="${data.playlistId}" class="sidebar-button"><i class="fas fa-music"></i>${playlistName}</button>`).insertBefore($('#leftMenu #playlistSidebar').first());
                                                 $('.playlist-container:first').before(`
                 <div playlistid="${data.playlistId}" class="playlist-container">
                     <div class="playlist-name text-divider">
@@ -2136,6 +2179,7 @@ function addToPlaylist(songId, addSongButtonElement) {
                         success: function (response) {
                             if (response.success) {
                                 $(`div[playlistId=${playlistId}]`).remove();
+                                $(`#leftMenu #playlistSidebar[playlistIdSidebar=${playlistId}]`).remove();
                                 toastr.success('Playlist-ul a fost sters cu success!')
                             }
                         },
@@ -2182,6 +2226,8 @@ function addToPlaylist(songId, addSongButtonElement) {
     });
 });
     </script>
+    @*  filltering*@
+
 
     <link href="~/Content/toastrRestyle.css" rel="stylesheet" />
 

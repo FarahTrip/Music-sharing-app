@@ -784,6 +784,16 @@ button
             width: 90%;
             height: 80%;
         }
+
+        .playlist-name.text-divider::before,
+        .playlist-name.text-divider::after {
+            content: "" !important;
+            display: none !important;
+        }
+        .playlist-modal-content
+        {
+            width: 100vw !important;
+        }
     }
 
     /*Cod pentru ecrane wide*/
@@ -799,4 +809,27 @@ button
 
 
 
+
+
+
+
+#stadiu1 {
+    background-color: #2d378f !important;
+}
+
+#stadiu2 {
+    background-color: #414fcc !important;
+}
+
+#stadiu3 {
+    background-color: #bb33cc !important;
+}
+
+#stadiu4 {
+    background-color: #4e248f !important;
+}
+
+#stadiu5 {
+    background-color: #6f33cc !important;
+}
 

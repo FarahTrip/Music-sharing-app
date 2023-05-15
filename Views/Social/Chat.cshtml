@@ -1,0 +1,481 @@
+﻿
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        margin: 0px !important;
+        padding: 0px !important;
+    }
+
+    .chat-container {
+        width: 100vw;
+        height: 91vh;
+        background-color: #333;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+    }
+
+    .chat-header {
+        background-color: #1d232f;
+        color: #fff;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    .chat-messages {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .chat-message {
+        position: relative;
+        background-color: #2e2e2e;
+        color: #fff;
+        padding: 10px;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+        animation: fadeIn 0.3s ease-in;
+        max-width: 80%;
+        word-wrap: break-word;
+        min-width: 40%;
+    }
+
+        .chat-message img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chat-message .message-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .chat-message .message-text .message-author {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+    .chat-footer {
+        background-color: #1d232f;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+        .chat-footer form {
+            display: flex;
+            width: 80%;
+        }
+
+        .chat-footer input {
+            flex-grow: 1;
+            border: none;
+            padding: 19px;
+            border-radius: 30px;
+            outline: none;
+            background-color: #444;
+            color: #fff;
+        }
+
+        .chat-footer button {
+            background-color: #4b0082;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+    input {
+        max-width: 80vw !important;
+    }
+
+    footer {
+        display: none;
+    }
+
+    .chat-message.self {
+        background-color: #302c52;
+        align-self: flex-end;
+    }
+
+    #sendmessage {
+        width: 26vw !important;
+        max-width: 200px !important;
+        margin-left: 10px;
+    }
+
+    .chat-container {
+        background-color: #0d1117 !important;
+    }
+
+    .self {
+        margin-right: 20px;
+    }
+
+    .container {
+        align-items: normal !important;
+    }
+
+    .chat-container {
+        height: 92vh;
+        width: 100vw;
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    .fa-eye {
+        font-size: large;
+        margin-left: auto;
+        margin-top: auto;
+    }
+
+    .message-author {
+        margin-right: 7px;
+    }
+
+    .read {
+        color: #ff51d1 !important;
+    }
+
+        .read ::before {
+            box-shadow: 0 0 50px 15px #48abe0;
+        }
+
+
+    .scroll-to-bottom {
+        display: none;
+        position: fixed;
+        bottom: 12vh;
+        right: 50vw;
+        padding: 10px 20px;
+        border-radius: 50px;
+        background: #302c52;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .scroll-to-bottom:hover {
+            background: #9933cc;
+        }
+
+        .scroll-to-bottom i {
+            margin-left: 10px;
+        }
+
+    .modal-content {
+        background-color: #2c3440; /* Changing the modal background color */
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        color: #fff; /* Adjusting text color to white for contrast */
+    }
+
+    #confirm-clear-chat, #cancel-clear-chat {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        transition-duration: 0.4s;
+    }
+
+        #confirm-clear-chat:hover {
+            background-color: #45a049;
+        }
+    /* Darker green */
+    #cancel-clear-chat {
+        background-color: #f44336; /* Red */
+    }
+
+        #cancel-clear-chat:hover {
+            background-color: #da190b;
+        }
+    /* Darker red */
+
+    #clear-chat-header {
+        position: fixed;
+        right: 0.7rem;
+        display: inline;
+        font-size: x-large;
+        height: 100%; /* Set height to 100% for vertical centering to work */
+    }
+
+    #clear-chat-button {
+        border: none;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        padding: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        #clear-chat-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.5);
+        }
+</style>
+
+@{
+    ViewBag.Title = "Chat";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-d7B6txDp8PZj+KryoMmUz5l/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div id="chatCointainer" class="container">
+    <div class="chat-container">
+        <div class="chat-header"> @ViewBag.otherUserName </div>
+        <div id="clear-chat-header">
+            <button id="clear-chat-button">
+                <i class="fa-solid fa-broom" style="color: #ffffff;"></i> <!-- You can replace this with any icon you prefer -->
+            </button>
+        </div>
+        <ul class="chat-messages" id="discussion">
+            @Html.Raw(ViewBag.ChatHistoryHtml)
+        </ul>
+        <div class="chat-footer">
+            <form id="message-form">
+                <input type="text" id="message" placeholder="Scrie aici...">
+                <input type="button" id="sendmessage" value="Trimite">
+                <input type="hidden" id="displayname" />
+            </form>
+        </div>
+    </div>
+</div>
+<div id="clearChatModal" class="modal">
+    <div class="modal-content">
+        <h2>Esti sigur ca vrei sa stergi toate mesajele?</h2>
+        <p>Aceasta actiune va sterge mesajele pentru toti participantii la aceasta conversatie si este ireversibila</p>
+        <button id="confirm-clear-chat">Da</button>
+        <button id="cancel-clear-chat">Nu</button>
+    </div>
+</div>
+<button id="scrollToBottom" class="scroll-to-bottom">Vezi mesaje noi <i class="fas fa-arrow-down"></i></button>
+@section scripts {
+    <!--Script references. -->
+    <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
+    <!--Reference the SignalR library. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <!--SignalR script to update the chat page and send messages.-->
+    <script>
+
+      $(function () {
+    // Reference the auto-generated proxy for the hub.
+ var chat = $.connection.chatHub;
+
+    var isChatTabActive = true;
+    var messageIds = [];
+    var chatId = '@Html.Raw(ViewBag.chatId)';
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') {
+            isChatTabActive = true;
+            if (messageIds.length > 0) {
+                markMessagesAsRead(messageIds, chatId, messageIds.length);
+                messageIds = [];
+            }
+        } else {
+            isChatTabActive = false;
+        }
+    });
+
+          chat.client.addNewMessageToPage = function (name, message, profilePictureUrl, messageId) {
+              var isSelf = name === $('#displayname').val();
+              var messageClass = isSelf ? 'chat-message self' : 'chat-message';
+
+              var eyeIconHtml = isSelf ? '<i id="eye-icon-' + messageId + '" class="fa-regular fa-eye"></i>' : "";
+              var messageHtml = '<div class="' + messageClass + '"><img src="' + profilePictureUrl + '" alt="Profile Picture"><div class="message-text"><div class="message-author">' + htmlEncode(name) + '</div><div class="message-body">' + htmlEncode(message) + '</div></div>' + eyeIconHtml + '</div>';
+
+              $('#discussion').append(messageHtml);
+
+              if (!isSelf) {
+                  // If the message is not from the current user, mark all messages as read
+                  $(".fa-eye").addClass('read');
+              }
+
+              setTimeout(function () {
+                  // Check if user is scrolled to the bottom after the new message is appended
+                  var isScrolledToBottom = $('#discussion').scrollTop() + $('#discussion').innerHeight() >= $('#discussion')[0].scrollHeight;
+
+                  // Scroll to bottom if already at bottom, otherwise show the "Scroll to Bottom" button
+                  if (isScrolledToBottom || isSelf) {
+                      $('#discussion').animate({ scrollTop: $('#discussion')[0].scrollHeight }, 'slow');
+                      $('#scrollToBottom').fadeOut('slow');
+                  } else {
+                      $('#scrollToBottom').fadeIn('slow');
+                  }
+              }, 0);
+          };
+
+          $('#scrollToBottom').click(function () {
+              $('#discussion').animate({ scrollTop: $('#discussion')[0].scrollHeight }, 'slow');
+              $(this).fadeOut('slow');
+          });
+
+
+    // Get the user name and store it to prepend to messages.
+    $('#displayname').val('@Html.Raw(ViewBag.currentUserName)');
+    // Set initial focus to message input box.
+    $('#message').focus();
+
+    // Start the connection.
+    $.connection.hub.start().done(function () {
+        // Join the chat group
+        $('#discussion').scrollTop($('#discussion')[0].scrollHeight);
+        chat.server.joinGroup('@Html.Raw(ViewBag.chatId)');
+               currentUserId = '@Html.Raw(ViewBag.currentUserID)';
+        $('#sendmessage').click(function () {
+            // Call the Send method on the hub.
+            chat.server.send($('#displayname').val(), $('#message').val(), '/Content/Images/User Profiles Images/@Html.Raw(ViewBag.profilePicture)', '@Html.Raw(ViewBag.chatId)', currentUserId, '@Html.Raw(ViewBag.OtherUserId)' );
+            // Clear text box and reset focus for next comment.
+            $('#message').val('').focus();
+            $('#discussion').animate({ scrollTop: $('#discussion')[0].scrollHeight }, 'slow');
+            $('#scrollToBottom').fadeOut('slow');
+        });
+
+
+        if (isChatTabActive && !isSelf) {
+
+        markMessageAsRead(messageId);
+    }
+
+
+    });
+      });
+
+        $(window).on('beforeunload', function() {
+    var chatId = '@Html.Raw(ViewBag.chatId)';
+    var currentUserId = '@Html.Raw(ViewBag.currentUserId)';
+
+    $.ajax({
+        url: '/MarkAllAsRead/' + chatId + '/' + currentUserId,
+        type: 'POST',
+        success: function () {
+
+        },
+        error: function (error) {
+            console.log('Error marking all messages as read:', error);
+        }
+    });
+});
+
+        function markMessageAsRead(messageId) {
+            console.log('Sending request to mark message as read: ' + messageId);
+            $.ajax({
+                url: '/MarkThisMessageAsRead/' + messageId,
+                type: 'POST',
+                data: { messageId: messageId },
+                success: function () {
+
+                    $('#eye-icon-' + messageId).addClass('read'); // update UI here
+                },
+                error: function (error) {
+                    console.log('Error marking message as read:', error);
+                }
+            });
+        }
+
+        // New function to mark multiple messages as read
+        function markMessagesAsRead(Ids, chatId, howMany) {
+            $.ajax({
+                url: '/MarkMessagesAsRead/' + chatId + '/' + howMany,
+                type: 'POST',
+                data: { Ids: Ids },
+                success: function () {
+                    console.log('Messages marked as read');
+                },
+                error: function (error) {
+                    console.log('Error marking messages as read:', error);
+                }
+            });
+        }
+// This optional function html-encodes messages for display in the page.
+function htmlEncode(value) {
+    var encodedValue = $('<div />').text(value).html();
+    return encodedValue;
+        }
+
+
+
+$('#message').keypress(function (e) {
+    if (e.keyCode === 13) { // Enter key
+        e.preventDefault();
+        $('#sendmessage').click();
+    }
+});
+
+
+    </script>
+
+    <script>
+        $('#clear-chat-button').click(function () {
+            // Show the modal
+            $('#clearChatModal').show();
+        });
+
+        $('#cancel-clear-chat').click(function () {
+            // Hide the modal
+            $('#clearChatModal').hide();
+        });
+
+        $('#confirm-clear-chat').click(function () {
+            $.ajax({
+                url: '/ClearChat/' + '@Html.Raw(ViewBag.ChatId)',
+                type: 'POST',
+                success: function () {
+                    toastr.success('chat-ul a fost sters cu success.')
+                    $('#clearChatModal').hide();
+                },
+                error: function (error) {
+                    console.log('Error clearing chat:', error);
+                }
+            });
+        });
+
+        var modal = document.getElementById('clearChatModal');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+}
+
+<style>
+</style>

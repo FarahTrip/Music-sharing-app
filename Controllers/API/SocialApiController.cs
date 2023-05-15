@@ -110,5 +110,6 @@ namespace Trippin_Website.Controllers.API
                 return Json(new { success = true, action = "unlike", count = _context.Likes.Where(c => c.PiesaId == Id).Count() });
             }
         }
+
     }
 }

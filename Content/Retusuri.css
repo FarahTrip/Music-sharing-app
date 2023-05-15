@@ -784,6 +784,11 @@ button
             width: 90%;
             height: 80%;
         }
+        .chat-message::after {
+            left: -3px !important;
+            top: 52px !important;
+
+        }
 
         .playlist-name.text-divider::before,
         .playlist-name.text-divider::after {
@@ -805,12 +810,24 @@ button
         .container {
             grid-template-columns: 13vw 1fr !important;
         }
+
+
     }
 
 
 
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 
 #stadiu1 {
@@ -833,3 +850,20 @@ button
     background-color: #6f33cc !important;
 }
 
+@media screen and (min-width: 1024px) {
+    .chat-message {
+        min-width: 20%;
+    }
+}
+
+.Profile-wrapper {
+    background-color: #132032 !important;
+}
+
+@media (max-width: 600px) {
+    .scroll-to-bottom {
+        bottom: 10px;
+        right: calc(50% - 50px) !important;/* Center the button horizontally */
+        width: 100px; /* Set a fixed width */
+    }
+}

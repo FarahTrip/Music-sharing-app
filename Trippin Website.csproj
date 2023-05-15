@@ -563,6 +563,7 @@
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\API\ArtistsController.cs" />
     <Compile Include="Controllers\API\BeaturiAPIController.cs" />
+    <Compile Include="Controllers\API\ChatController.cs" />
     <Compile Include="Controllers\API\ConturiController.cs" />
     <Compile Include="Controllers\API\MusicPlayerController.cs" />
     <Compile Include="Controllers\API\PieseAPIController.cs" />
@@ -584,7 +585,7 @@
     <Compile Include="DTOS\PlayListContentsDTO.cs" />
     <Compile Include="DTOS\UsersDTO.cs" />
     <Compile Include="Helper_Classes\musicPlayerSongOrBeat.cs" />
-    <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="ChatHub.cs" />
     <Compile Include="Logic_classes\AmazonHelper.cs" />
     <Compile Include="Logic_classes\AmazonReturnState.cs" />
     <Compile Include="Logic_classes\DigitalStorage.cs" />
@@ -799,6 +800,37 @@
     <Compile Include="Migrations\202305071950326_addingProgressToPiese.designer.cs">
       <DependentUpon>202305071950326_addingProgressToPiese.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202305101112500_addingChatModels.cs" />
+    <Compile Include="Migrations\202305101112500_addingChatModels.designer.cs">
+      <DependentUpon>202305101112500_addingChatModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305101119500_ForgotTheChatId.cs" />
+    <Compile Include="Migrations\202305101119500_ForgotTheChatId.designer.cs">
+      <DependentUpon>202305101119500_ForgotTheChatId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305111020394_ChatNavigations.cs" />
+    <Compile Include="Migrations\202305111020394_ChatNavigations.designer.cs">
+      <DependentUpon>202305111020394_ChatNavigations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305111241436_addingChatIdToChatContents.cs" />
+    <Compile Include="Migrations\202305111241436_addingChatIdToChatContents.designer.cs">
+      <DependentUpon>202305111241436_addingChatIdToChatContents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305111257203_AddingUsernameToChatContents.cs" />
+    <Compile Include="Migrations\202305111257203_AddingUsernameToChatContents.designer.cs">
+      <DependentUpon>202305111257203_AddingUsernameToChatContents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305121253388_AddingIsReadToMessages.cs" />
+    <Compile Include="Migrations\202305121253388_AddingIsReadToMessages.designer.cs">
+      <DependentUpon>202305121253388_AddingIsReadToMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305141403316_AddingReceiverId.cs" />
+    <Compile Include="Migrations\202305141403316_AddingReceiverId.designer.cs">
+      <DependentUpon>202305141403316_AddingReceiverId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Chat.cs" />
+    <Compile Include="Models\ChatContents.cs" />
+    <Compile Include="Models\ChatMembers.cs" />
     <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -853,6 +885,7 @@
     <Compile Include="Models\Versuri.cs" />
     <Compile Include="Models\WhoIsOnTheSong.cs" />
     <Compile Include="Models\WhoProducedTheSong.cs" />
+    <Compile Include="NotificationHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\ArtistsViewModel.cs" />
@@ -875,6 +908,7 @@
     <Content Include="Content\Audio\error-ok.wav" />
     <Content Include="Content\Audio\error.mp3" />
     <Content Include="Content\Audio\Like-sound.mp3" />
+    <Content Include="Content\Audio\message-sound.mp3" />
     <Content Include="Content\Audio\show-share.mp3" />
     <Content Include="Content\Audio\upload-piesa.wav" />
     <Content Include="Content\bootstrap-cyborg.css" />
@@ -1036,6 +1070,7 @@
     <Content Include="Content\Images\volume.png" />
     <Content Include="Content\IsolatedStyles.css" />
     <Content Include="Content\KeyFinder.css" />
+    <Content Include="Content\Images\message-noti-icon.png" />
     <Content Include="Content\pattern cut.mp4" />
     <Content Include="Content\piese.css" />
     <Content Include="Content\Retusuri.css" />
@@ -1254,20 +1289,22 @@
     <Content Include="Views\Home\PleaseConfirmEmal.cshtml" />
     <Content Include="Views\UsersManagement\Versuri.cshtml" />
     <Content Include="Views\UsersManagement\ChatRoomTest.cshtml" />
+    <Content Include="Views\Social\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\PieseFolder\" />
     <Folder Include="Content\Images\User Profiles Images\" />
+    <Folder Include="Hubs\" />
     <Folder Include="Piese-Uploaded\" />
     <Folder Include="Views\Artists\" />
     <Folder Include="Views\BeaturiAPI\" />
+    <Folder Include="Views\Chat\" />
     <Folder Include="Views\Conturi\" />
     <Folder Include="Views\Grupuri\" />
     <Folder Include="Views\MusicPlayer\" />
     <Folder Include="Views\Playlists\" />
     <Folder Include="Views\Producers\" />
     <Folder Include="Views\SocialApi\" />
-    <Folder Include="Views\Social\" />
     <Folder Include="Views\Upload\" />
   </ItemGroup>
   <ItemGroup>
@@ -1460,6 +1497,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305071950326_addingProgressToPiese.resx">
       <DependentUpon>202305071950326_addingProgressToPiese.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305101112500_addingChatModels.resx">
+      <DependentUpon>202305101112500_addingChatModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305101119500_ForgotTheChatId.resx">
+      <DependentUpon>202305101119500_ForgotTheChatId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305111020394_ChatNavigations.resx">
+      <DependentUpon>202305111020394_ChatNavigations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305111241436_addingChatIdToChatContents.resx">
+      <DependentUpon>202305111241436_addingChatIdToChatContents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305111257203_AddingUsernameToChatContents.resx">
+      <DependentUpon>202305111257203_AddingUsernameToChatContents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305121253388_AddingIsReadToMessages.resx">
+      <DependentUpon>202305121253388_AddingIsReadToMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305141403316_AddingReceiverId.resx">
+      <DependentUpon>202305141403316_AddingReceiverId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

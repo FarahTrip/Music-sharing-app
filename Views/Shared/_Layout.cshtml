@@ -79,7 +79,8 @@
         margin: 0 auto;
     }
 
-    #noti_Container {
+    #noti_Container,
+    #notificationSpan {
         position: relative;
         width: 31px;
         height: 16px;
@@ -115,11 +116,12 @@
     .notification-container {
         position: absolute;
         top: 86px;
-        right: 10px;
+        right: 12px;
+        height: 29em;
         background-color: white;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         border-radius: 5px;
-        min-width: 200px;
+        min-width: 336px;
         z-index: 1;
         display: none;
         padding: 10px;
@@ -180,6 +182,81 @@
     {
         font-size: medium;
     }
+    .notification-container .notification-item {
+        padding: 10px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        background-color: #2a2f36;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .notification-container .notification-item:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+
+        .notification-container .notification-item p {
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+        .notification-container .notification-item a {
+            color: #888888;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+            .notification-container .notification-item a:hover {
+                color: black;
+            }
+
+
+
+    .notification-container .message-notification {
+        padding: 10px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        background-color: #2a2f36;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .notification-container .message-notification:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+
+        .notification-container .message-notification h6 {
+            margin-top: 0px;
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #888;
+        }
+
+        .notification-container .message-notification p {
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+            .notification-container .message-notification p strong {
+                color: #fff;
+                font-weight: bold;
+            }
+
+        .notification-container .message-notification a {
+            color: #888888;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+            .notification-container .message-notification a:hover {
+                color: #fff;
+            }
+
+
 </style>
 <body>
     <nav  id="theNAVBAR"  class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -268,14 +345,19 @@
 
 
                         <div id="notification-wrapper">
-                            <span id="noti_Container" onclick="toggleNotification()">
+                            <span class="notification" id="notificationSpan">
                                 <img id="notification-icon" src="~/Content/Images/notification-icon.png" alt="Alternate Text" />
                                 <div class="noti_bubble">2</div>
                             </span>
-                            <span id="noti_Container" onclick="toggleNotification()">
+                            <span class="message-icon" id="noti_Container">
+                                <img id="notification-icon" src="~/Content/Images/message-noti-icon.png" alt="Alternate Text" />
+                                <div class="noti_bubble">0</div>
+                            </span>
+                            <span id="noti_Container">
                                 <img id="notification-icon" src="~/Content/Images/Galaxie.png" alt="Alternate Text" />
                                 <div class="noti_bubble">0</div>
                             </span>
+
 
                             <img id="profilepic" src="" alt="Alternate Text" onclick="toggleMenu()" />
 
@@ -336,10 +418,22 @@
                 </div>
                 <div class="notification-container" id="notification-container">
                     <h5>Notifications</h5>
-                    <p>You have a new message from John Doe</p>
+                    <div class="notification-item">
+                        <p>You have a new message from John Doe</p>
+                        <a href="#">View notification</a>
+                    </div>
                     <a href="#">View all notifications</a>
                 </div>
-
+                <div class="notification-container" id="message-container">
+                    <h5>Mesaje</h5>
+                    <div class="message-notification">
+                        <h6>John Doe</h6>
+                        <p>Ai <strong>5</strong> mesaje necitite</p>
+                        <p>Last message: "Hello, how are you?"</p>
+                        <a href="#">View conversation</a>
+                    </div>
+                    <a href="#">View all notifications</a>
+                </div>
 
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
@@ -411,26 +505,51 @@
         </footer>
     </div>
 
-
+    <script src="~/Scripts/jquery-3.4.1.min.js">
+    </script>
     @if (User.Identity.IsAuthenticated)
     {
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            $(document).ready(function () {
+                // Toggle notification-container when notificationSpan is clicked
+                $('#notificationSpan').click(function (event) {
+                    event.stopPropagation();
+                    $('#message-container').slideUp("fast"); // Hide the other container
+                    $('#notification-container').slideToggle("fast");
+                });
+
+                // Hide notification-container when clicking outside of it or notificationSpan
+                $(document).click(function (event) {
+                    var target = $(event.target);
+                    if (!target.closest('#notificationSpan').length && !target.closest('#notification-container').length) {
+                        $('#notification-container').slideUp("fast");
+                    }
+                });
+
+                // Toggle message-container when noti_Container is clicked
+                $('#noti_Container').click(function (event) {
+                    event.stopPropagation();
+                    $('#notification-container').slideUp("fast"); // Hide the other container
+                    $('#message-container').slideToggle("fast");
+                });
+
+                // Hide message-container when clicking outside of it or noti_Container
+                $(document).click(function (event) {
+                    var target = $(event.target);
+                    if (!target.closest('#noti_Container').length && !target.closest('#message-container').length) {
+                        $('#message-container').slideUp("fast");
+                    }
+                });
+            });
+
+
     let subMenu = document.getElementById("subMenu");
     let navbar = document.getElementById("navbar-toggler");
     let notificationContainer = document.getElementById("notification-container");
     let phoneMenuNavBar = document.getElementById("navbarColor02");
 
 
-    function toggleNotification() {
-        if (notificationContainer.style.display === "none") {
-            notificationContainer.style.display = "block";
-            subMenu.classList.remove("open-menu"); 
-        } else {
-            notificationContainer.style.display = "none";
-        }
-    }
 
             function phoneToggleMenu() {
                 if (phoneMenuNavBar.style.display === "none") {
@@ -448,7 +567,8 @@
             subMenu.classList.add("open-menu");
             notificationContainer.style.display = "none"; 
         }
-    }
+            }
+
 
     $(document).ready(function () {
         var userId = "@userId";

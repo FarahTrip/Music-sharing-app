@@ -21,7 +21,9 @@ namespace Trippin_Website.Controllers
 {
     public class PieseController : Controller
     {
+
         private ApplicationDbContext _context;
+
         private readonly UserManager<ApplicationUser> _userManager;
         protected override void Dispose(bool disposing)
         {
@@ -252,6 +254,8 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
             return View(pieseModel);
         }
 
+
+
         [Authorize(Roles = "Admin, Producer, Artist")]
         public ActionResult ModificaPiesa(Guid id)
         {
@@ -314,6 +318,20 @@ Daca eroarea persista va rog sa anuntati suportul din pagina de contanct.";
             _context.SaveChanges();
             return RedirectToAction("Index", "Piese");
         }
+
+
+        public async Task<ActionResult> VerifyChat(string user)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(user)) { return RedirectToAction("Index", "Piese"); };
+
+
+
+            return View();
+
+        }
+
+
         private bool IsAudio(HttpPostedFileBase file)
         {
             if (file == null) { return false; }

@@ -175,9 +175,9 @@
             }
 
 
-        #show-more-btn:hover {
-            background-color: #2c5282;
-        }
+    #show-more-btn:hover {
+        background-color: #2c5282;
+    }
 
     .song-card {
         background-color: #34445C;
@@ -229,20 +229,23 @@
 
 
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-d7B6txDp8PZj+KryoMmUz5l/6en8XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
     .noelementsinlist {
         margin-left: auto;
         margin-right: auto;
         color: #9933CC;
     }
-    #show-more-btn{
-        height: 3rem;
-    }
-    #show-more-btn2 {
+
+    #show-more-btn {
         height: 3rem;
     }
 
+    #show-more-btn2 {
+        height: 3rem;
+    }
 </style>
 
 
@@ -283,13 +286,13 @@
 
         <p>@ViewBag.Message</p>
 
-        <h4 class="owner-message">Esti cel care detine acest cont</h4>
+
     }
     else
     {
         <h2 class="user-name">@Model.User.UserName</h2>
         <p class="user-id">@Model.User.Id</p>
-        <h4 class="not-owner-message">Nu esti cel care detine acest cont!</h4>
+        <button type="button" class="btn btn-primary send-message-button"> <i class="fa-solid fa-message"></i> <a href="@Url.Action("ChatWithUser", "Social", new { otherUserId = Model.User.Id})">Trimite un mesaj</a></button>
     }
 
 
@@ -393,14 +396,14 @@
                         }
                     }
                     else
-                {
-            <h4 class="noelementsinlist">Userul nu a incarcat nici un beat pana acum</h4>
-                }
+                    {
+                        <h4 class="noelementsinlist">Userul nu a incarcat nici un beat pana acum</h4>
+                    }
                 }
 
 
             </div>
-            <button id="show-more-btn2" class="btn btn-outline-info" >Arata mai mult</button>
+            <button id="show-more-btn2" class="btn btn-outline-info">Arata mai mult</button>
         </div>
 
         <div class="Profile-wrapper text-center">
@@ -429,7 +432,7 @@
                     }
                     else
                     {
-            <h4 class="noelementsinlist" >User nu a incarcat nici o piesa pana acum</h4>
+                        <h4 class="noelementsinlist">User nu a incarcat nici o piesa pana acum</h4>
                     }
 
 
@@ -475,7 +478,7 @@
             button.style.display = 'none';
         }
 
-     
+
     });
 
     const songs2 = document.querySelectorAll('.beaturi-card');

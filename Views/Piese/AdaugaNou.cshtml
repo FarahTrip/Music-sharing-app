@@ -197,6 +197,7 @@
                 border-radius: 50%;
                 background-color: white;
             }
+
             #progressbar li:nth-child(2).active::before {
                 background-color: #9933cc;
             }
@@ -253,10 +254,9 @@
                 text-decoration: none;
             }
 
-    .step
-    {
-       text-align: center;
-       width: 17rem;
+    .step {
+        text-align: center;
+        width: 17rem;
     }
 
     .remove-artist {
@@ -292,7 +292,6 @@
         position: absolute;
         right: 8px;
     }
-
 </style>
 
 <script src="~/Scripts/jquery-3.6.0.min.js"></script>
@@ -300,6 +299,7 @@
 
 <link href="~/Content/Retusuri.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
 <body>
 
     @using (Html.BeginForm("Creeaza", "Piese", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
@@ -365,7 +365,7 @@
                             @Html.AntiForgeryToken()
 
                             <input type="button" name="next" class="next action-button" value="Urmatorul" />
-</fieldset>
+                    </fieldset>
                     <fieldset class="step" style="display: none;">
                         <h2 class="fs-title">Pasul 2</h2>
                         <h3 class="fs-subtitle">Adauga toti contribuitorii</h3>
@@ -403,6 +403,7 @@
                             new SelectListItem { Text = "Lansata", Value = "Lansata"},
                         }, new { @class = "form-control", @id = "currentProgress" })
 
+
                         <input type="button" name="previous" class="previous action-button-previous" value="Inapoi" />
                         <button type="submit" id="submitBtn" class="btn btn-secondary submit action-button">
                             Submit
@@ -423,6 +424,34 @@
 </footer>
 @section scripts
 {
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            // Reference the hub
+            var loadingHub = $.connection.loadingHub;
+
+            // Register a function to be called by the server
+            loadingHub.client.receiveProgress = function (percentage) {
+                console.log("ReceiveProgress called with percentage: " + percentage);
+                $("#progressbar").css("width", percentage + "%").attr("aria-valuenow", percentage).text(percentage + "%");
+            };
+
+            // Add an event handler for the stateChanged event
+            $.connection.hub.stateChanged(function (change) {
+                console.log('SignalR state changed from: ' + $.signalR.connectionState[change.oldState] + ' to: ' + $.signalR.connectionState[change.newState]);
+            });
+
+            // Start the connection to the hub
+            $.connection.hub.start().done(function () {
+                console.log("Connected to the hub");
+            }).fail(function (error) {
+                console.log("Error connecting to the hub: " + error);
+            });
+        });
+
+
+    </script>
     <script>
         $(document).ready(function () {
             // Get the file input element
@@ -501,7 +530,7 @@
         audio.play();
         setTimeout(function () {
             $('#msform').unbind('submit').submit();
-        }, 1000);
+        }, 20000);
     });
     </script>
     <script src="~/Scripts/toastr.js"></script>
@@ -609,7 +638,7 @@
             dataType: "json",
             data: JSON.stringify(dataToSend)
         }).done(function () {
-        
+
             console.log("First AJAX call (Artists) was successful");
         }).fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -624,7 +653,7 @@
             dataType: "json",
             data: JSON.stringify(dataToSend2)
         }).done(function () {
-    
+
             console.log("Second AJAX call (Producers) was successful");
         }).fail(function (jqXHR, textStatus, errorThrown) {
 

@@ -88,7 +88,8 @@ namespace Trippin_Website.Controllers
             var Model = new User_Content_ViewModel
             {
                 User = user,
-                Piese = _context.Piese.ToList()
+                Piese = _context.Piese.OrderByDescending(c => c.DateCreated).ToList(),
+                Beaturi = _context.Beaturi.OrderByDescending(c => c.Created).ToList(),
             };
 
             string path = Path.Combine(Server.MapPath("~/Content/Images/User Profiles Images/"), user.ProfilePicture);
@@ -98,6 +99,16 @@ namespace Trippin_Website.Controllers
             }
             user.ProfilePicture = null;
             _userManager.Update(user);
+            var ProfileUser = _userManager.FindById(user.Id);
+
+            if (ProfileUser.Roles.Any(c => c.RoleId == "47db5674-87ba-471d-ad7c-7c4aae7958d8"))
+                ViewBag.UserProfileRole = "Admin";
+
+            if (ProfileUser.Roles.Any(c => c.RoleId == "60996260-1397-4b73-b5d4-a4b484fb554d"))
+                ViewBag.UserProfileRole = "Artist";
+
+            if (ProfileUser.Roles.Any(c => c.RoleId == "90ae9446-6d60-44e7-99b7-97a7031b1d2c"))
+                ViewBag.UserProfileRole = "Producer";
 
             return View("Profile", Model);
         }

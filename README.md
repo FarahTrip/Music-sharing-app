@@ -1,7 +1,6 @@
 Project overview: 
 
-Trippin is a music collaboration platform for artists and producers to share their ideas and make new connetions. 
-This project serves as a demo or MVP in terms of functionality for what the real product that is in development at this time will be.
+This is a fictional  a music collaboration platform for artists and producers to share their ideas and make new connetions. 
 
 ![image](https://github.com/FarahTrip/Trippin-Website/assets/121116598/b101a574-95fe-4a04-9c17-b2bd3093a51a)
 
